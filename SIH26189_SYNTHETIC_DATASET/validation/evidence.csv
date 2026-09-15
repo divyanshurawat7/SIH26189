@@ -1,0 +1,80 @@
+evidence_id,case_id,evidence_type,source_record_id,entity_id,related_entity_id,timestamp,description,reliability,confidence,supports_relationship,ground_truth_status
+EVID_000017,CASE_0003,CDR,CALL_000029,PHONE_00486,PHONE_01343,2025-10-15 07:13:43,Call record linking PHONE_00486 and PHONE_01343 in the coordination chain.,0.935,0.613,,CONFIRMED
+EVID_000018,CASE_0003,CDR,CALL_000030,PHONE_01343,PHONE_00833,2025-10-15 07:22:43,Call record linking PHONE_01343 and PHONE_00833 in the coordination chain.,0.865,0.767,,CONFIRMED
+EVID_000019,CASE_0003,CDR,CALL_000031,PHONE_00833,PHONE_01232,2025-10-15 07:35:43,Call record linking PHONE_00833 and PHONE_01232 in the coordination chain.,0.893,0.661,,CONFIRMED
+EVID_000020,CASE_0003,CDR,CALL_000032,PHONE_01232,PHONE_00833,2025-10-15 09:50:43,Call record linking PHONE_01232 and PHONE_00833 in the coordination chain.,0.905,0.559,,CONFIRMED
+EVID_000021,CASE_0003,CDR,CALL_000033,PHONE_00833,PHONE_01343,2025-10-15 10:12:43,Call record linking PHONE_00833 and PHONE_01343 in the coordination chain.,0.876,0.931,,CONFIRMED
+EVID_000022,CASE_0003,CDR,CALL_000034,PHONE_01343,PHONE_00486,2025-10-15 10:29:43,Call record linking PHONE_01343 and PHONE_00486 in the coordination chain.,0.901,0.884,,CONFIRMED
+EVID_000023,CASE_0003,CDR,CALL_000035,PHONE_01343,PHONE_01232,2025-09-21 10:03:43,Call record linking PHONE_01343 and PHONE_01232 in the coordination chain.,0.907,0.845,,CONFIRMED
+EVID_000024,CASE_0003,CDR,CALL_000036,PHONE_01232,PHONE_00486,2025-09-02 22:03:43,Call record linking PHONE_01232 and PHONE_00486 in the coordination chain.,0.911,0.964,,CONFIRMED
+EVID_000033,CASE_0005,CDR,CALL_000051,PHONE_01008,PHONE_00105,2025-05-14 13:11:21,Call record linking PHONE_01008 and PHONE_00105 in the coordination chain.,0.883,0.945,,CONFIRMED
+EVID_000034,CASE_0005,CDR,CALL_000052,PHONE_00105,PHONE_01002,2025-05-14 13:25:21,Call record linking PHONE_00105 and PHONE_01002 in the coordination chain.,0.913,0.908,,CONFIRMED
+EVID_000035,CASE_0005,CDR,CALL_000053,PHONE_01002,PHONE_01269,2025-05-14 13:31:21,Call record linking PHONE_01002 and PHONE_01269 in the coordination chain.,0.886,0.61,,CONFIRMED
+EVID_000036,CASE_0005,CDR,CALL_000054,PHONE_01269,PHONE_01002,2025-05-14 16:23:21,Call record linking PHONE_01269 and PHONE_01002 in the coordination chain.,0.935,0.601,,CONFIRMED
+EVID_000037,CASE_0005,CDR,CALL_000055,PHONE_01002,PHONE_00105,2025-05-14 16:33:21,Call record linking PHONE_01002 and PHONE_00105 in the coordination chain.,0.924,0.536,,CONFIRMED
+EVID_000038,CASE_0005,CDR,CALL_000056,PHONE_00105,PHONE_01008,2025-05-14 16:53:21,Call record linking PHONE_00105 and PHONE_01008 in the coordination chain.,0.934,0.703,,CONFIRMED
+EVID_000039,CASE_0005,CDR,CALL_000057,PHONE_00105,PHONE_01269,2025-05-11 10:02:21,Call record linking PHONE_00105 and PHONE_01269 in the coordination chain.,0.864,0.913,,CONFIRMED
+EVID_000040,CASE_0005,CDR,CALL_000058,PHONE_01269,PHONE_01002,2025-04-26 09:02:21,Call record linking PHONE_01269 and PHONE_01002 in the coordination chain.,0.918,0.649,,CONFIRMED
+EVID_000106,CASE_0003,TRANSACTION,TXN_000010,ACCOUNT_00027,ACCOUNT_00089,2025-10-07 09:03:43,Financial transfer of amount 30265.51 possibly linked to network operation funding.,0.926,0.821,,CONFIRMED
+EVID_000107,CASE_0003,TRANSACTION,TXN_000011,ACCOUNT_00089,ACCOUNT_00040,2025-10-07 21:03:43,Financial transfer of amount 26131.41 possibly linked to network operation funding.,0.909,0.889,,CONFIRMED
+EVID_000108,CASE_0003,TRANSACTION,TXN_000012,ACCOUNT_00040,ACCOUNT_00108,2025-10-08 10:03:43,Financial transfer of amount 21999.04 possibly linked to network operation funding.,0.954,0.808,,CONFIRMED
+EVID_000109,CASE_0003,TRANSACTION,TXN_000013,ACCOUNT_00098,ACCOUNT_00027,2025-10-22 09:03:43,Financial transfer of amount 5657.51 possibly linked to network operation funding.,0.972,0.953,,CONFIRMED
+EVID_000114,CASE_0005,TRANSACTION,TXN_000018,ACCOUNT_00003,ACCOUNT_00002,2025-05-12 15:02:21,Financial transfer of amount 6807.9 possibly linked to network operation funding.,0.939,0.916,,CONFIRMED
+EVID_000115,CASE_0005,TRANSACTION,TXN_000019,ACCOUNT_00002,ACCOUNT_00061,2025-05-13 08:02:21,Financial transfer of amount 4179.6 possibly linked to network operation funding.,0.972,0.706,,CONFIRMED
+EVID_000116,CASE_0005,TRANSACTION,TXN_000020,ACCOUNT_00061,ACCOUNT_00157,2025-05-14 13:02:21,Financial transfer of amount 2664.36 possibly linked to network operation funding.,0.943,0.886,,CONFIRMED
+EVID_000117,CASE_0005,TRANSACTION,TXN_000021,ACCOUNT_00139,ACCOUNT_00003,2025-05-19 15:02:21,Financial transfer of amount 753.2 possibly linked to network operation funding.,0.958,0.532,,CONFIRMED
+EVID_000174,CASE_0003,FIR,FIR_0003,PERSON_0833,PERSON_0481,2025-10-16 02:03:43,Complainant stated that an associate of the accused was present at LOCATION_0203 shortly before the incident.,0.771,0.656,,CONFIRMED
+EVID_000176,CASE_0005,FIR,FIR_0005,PERSON_1468,PERSON_0978,2025-05-14 16:02:21,Complainant stated that an associate of the accused was present at LOCATION_0155 shortly before the incident.,0.624,0.742,,CONFIRMED
+EVID_000192,CASE_0021,FIR,FIR_0021,PERSON_1312,PERSON_0533,2025-11-22 04:20:11,Standalone synthetic case; limited relational clues in narrative.,0.566,0.748,,CONFIRMED
+EVID_000203,CASE_0032,FIR,FIR_0032,PERSON_1045,PERSON_0160,2025-10-21 13:32:41,Standalone synthetic case; limited relational clues in narrative.,0.737,0.926,,CONFIRMED
+EVID_000210,CASE_0039,FIR,FIR_0039,PERSON_0374,PERSON_1472,2025-03-25 18:32:00,Standalone synthetic case; limited relational clues in narrative.,0.725,0.715,,CONFIRMED
+EVID_000216,CASE_0045,FIR,FIR_0045,PERSON_0514,PERSON_0770,2026-01-15 06:55:48,Standalone synthetic case; limited relational clues in narrative.,0.755,0.918,,CONFIRMED
+EVID_000221,CASE_0050,FIR,FIR_0050,PERSON_0704,PERSON_0646,2024-12-26 14:22:56,Standalone synthetic case; limited relational clues in narrative.,0.646,0.629,,CONFIRMED
+EVID_000226,CASE_0055,FIR,FIR_0055,PERSON_1266,PERSON_0621,2025-05-10 01:12:03,Standalone synthetic case; limited relational clues in narrative.,0.701,0.737,,CONFIRMED
+EVID_000227,CASE_0056,FIR,FIR_0056,PERSON_0014,PERSON_0192,2025-11-30 10:30:37,Standalone synthetic case; limited relational clues in narrative.,0.736,0.524,,CONFIRMED
+EVID_000229,CASE_0058,FIR,FIR_0058,PERSON_0388,PERSON_0555,2024-09-16 09:36:09,Standalone synthetic case; limited relational clues in narrative.,0.584,0.569,,CONFIRMED
+EVID_000234,CASE_0063,FIR,FIR_0063,PERSON_0262,PERSON_1156,2024-12-12 23:02:13,Standalone synthetic case; limited relational clues in narrative.,0.691,0.73,,CONFIRMED
+EVID_000236,CASE_0065,FIR,FIR_0065,PERSON_1196,PERSON_0843,2025-11-14 15:36:57,Standalone synthetic case; limited relational clues in narrative.,0.562,0.954,,CONFIRMED
+EVID_000244,CASE_0073,FIR,FIR_0073,PERSON_1482,PERSON_1342,2025-07-21 10:07:06,Standalone synthetic case; limited relational clues in narrative.,0.783,0.606,,CONFIRMED
+EVID_000253,CASE_0082,FIR,FIR_0082,PERSON_0715,PERSON_1240,2025-11-11 21:23:34,Standalone synthetic case; limited relational clues in narrative.,0.59,0.506,,CONFIRMED
+EVID_000256,CASE_0085,FIR,FIR_0085,PERSON_1154,PERSON_0877,2024-12-21 09:22:03,Standalone synthetic case; limited relational clues in narrative.,0.72,0.539,,CONFIRMED
+EVID_000264,CASE_0093,FIR,FIR_0093,PERSON_0476,PERSON_1089,2024-11-17 05:26:56,Standalone synthetic case; limited relational clues in narrative.,0.651,0.89,,CONFIRMED
+EVID_000269,CASE_0098,FIR,FIR_0098,PERSON_0873,PERSON_1452,2025-01-26 16:22:54,Standalone synthetic case; limited relational clues in narrative.,0.707,0.92,,CONFIRMED
+EVID_000271,CASE_0100,FIR,FIR_0100,PERSON_0230,PERSON_0875,2024-10-10 19:47:14,Standalone synthetic case; limited relational clues in narrative.,0.573,0.565,,CONFIRMED
+EVID_000279,CASE_0108,FIR,FIR_0108,PERSON_1448,PERSON_1424,2024-11-09 00:36:26,Standalone synthetic case; limited relational clues in narrative.,0.614,0.591,,CONFIRMED
+EVID_000281,CASE_0110,FIR,FIR_0110,PERSON_1111,PERSON_0443,2025-09-03 00:07:39,Standalone synthetic case; limited relational clues in narrative.,0.532,0.667,,CONFIRMED
+EVID_000294,CASE_0123,FIR,FIR_0123,PERSON_0656,PERSON_0812,2026-04-12 05:45:41,Standalone synthetic case; limited relational clues in narrative.,0.632,0.548,,CONFIRMED
+EVID_000295,CASE_0124,FIR,FIR_0124,PERSON_0063,PERSON_0747,2024-07-29 16:46:21,Standalone synthetic case; limited relational clues in narrative.,0.533,0.822,,CONFIRMED
+EVID_000296,CASE_0125,FIR,FIR_0125,PERSON_0492,PERSON_0263,2025-10-09 07:18:28,Standalone synthetic case; limited relational clues in narrative.,0.654,0.949,,CONFIRMED
+EVID_000303,CASE_0132,FIR,FIR_0132,PERSON_1454,PERSON_0291,2026-01-18 06:32:56,Standalone synthetic case; limited relational clues in narrative.,0.728,0.848,,CONFIRMED
+EVID_000305,CASE_0134,FIR,FIR_0134,PERSON_0322,PERSON_1238,2026-01-27 14:22:36,Standalone synthetic case; limited relational clues in narrative.,0.692,0.776,,CONFIRMED
+EVID_000306,CASE_0135,FIR,FIR_0135,PERSON_0597,PERSON_0278,2026-01-23 09:27:42,Standalone synthetic case; limited relational clues in narrative.,0.744,0.643,,CONFIRMED
+EVID_000318,CASE_0147,FIR,FIR_0147,PERSON_0546,PERSON_0802,2025-02-22 11:42:07,Standalone synthetic case; limited relational clues in narrative.,0.513,0.548,,CONFIRMED
+EVID_000320,CASE_0149,FIR,FIR_0149,PERSON_0520,PERSON_0066,2024-10-22 06:25:26,Standalone synthetic case; limited relational clues in narrative.,0.595,0.564,,CONFIRMED
+EVID_000325,CASE_0154,FIR,FIR_0154,PERSON_1086,PERSON_1182,2024-08-18 07:06:58,Standalone synthetic case; limited relational clues in narrative.,0.717,0.908,,CONFIRMED
+EVID_000329,CASE_0158,FIR,FIR_0158,PERSON_0296,PERSON_0627,2024-10-01 08:35:51,Standalone synthetic case; limited relational clues in narrative.,0.553,0.781,,CONFIRMED
+EVID_000332,CASE_0161,FIR,FIR_0161,PERSON_0474,PERSON_1281,2025-11-18 17:18:54,Standalone synthetic case; limited relational clues in narrative.,0.597,0.606,,CONFIRMED
+EVID_000337,CASE_0166,FIR,FIR_0166,PERSON_0036,PERSON_1055,2024-12-20 06:38:18,Standalone synthetic case; limited relational clues in narrative.,0.574,0.844,,CONFIRMED
+EVID_000349,CASE_0178,FIR,FIR_0178,PERSON_0663,PERSON_0289,2025-12-15 07:48:51,Standalone synthetic case; limited relational clues in narrative.,0.685,0.867,,CONFIRMED
+EVID_000363,CASE_0192,FIR,FIR_0192,PERSON_1397,PERSON_0636,2026-01-31 01:16:02,Standalone synthetic case; limited relational clues in narrative.,0.514,0.81,,CONFIRMED
+EVID_000370,CASE_0199,FIR,FIR_0199,PERSON_1465,PERSON_1370,2024-10-28 21:11:24,Standalone synthetic case; limited relational clues in narrative.,0.713,0.638,,CONFIRMED
+EVID_000374,CASE_0203,FIR,FIR_0203,PERSON_0942,PERSON_0810,2024-08-13 07:10:39,Standalone synthetic case; limited relational clues in narrative.,0.762,0.837,,CONFIRMED
+EVID_000383,CASE_0212,FIR,FIR_0212,PERSON_1137,PERSON_0949,2026-03-29 15:03:41,Standalone synthetic case; limited relational clues in narrative.,0.562,0.586,,CONFIRMED
+EVID_000388,CASE_0217,FIR,FIR_0217,PERSON_1326,PERSON_1387,2025-05-25 00:14:51,Standalone synthetic case; limited relational clues in narrative.,0.799,0.801,,CONFIRMED
+EVID_000394,CASE_0223,FIR,FIR_0223,PERSON_0024,PERSON_1165,2025-10-25 00:16:41,Standalone synthetic case; limited relational clues in narrative.,0.543,0.502,,CONFIRMED
+EVID_000396,CASE_0225,FIR,FIR_0225,PERSON_1408,PERSON_0751,2025-11-18 22:29:05,Standalone synthetic case; limited relational clues in narrative.,0.51,0.781,,CONFIRMED
+EVID_000418,CASE_0247,FIR,FIR_0247,PERSON_0815,PERSON_0164,2026-05-06 06:49:32,Standalone synthetic case; limited relational clues in narrative.,0.662,0.849,,CONFIRMED
+EVID_000431,CASE_0260,FIR,FIR_0260,PERSON_1128,PERSON_1082,2024-12-25 03:25:19,Standalone synthetic case; limited relational clues in narrative.,0.775,0.644,,CONFIRMED
+EVID_000432,CASE_0261,FIR,FIR_0261,PERSON_0654,PERSON_1116,2024-10-23 17:53:29,Standalone synthetic case; limited relational clues in narrative.,0.52,0.73,,CONFIRMED
+EVID_000434,CASE_0263,FIR,FIR_0263,PERSON_0354,PERSON_0170,2024-11-20 21:50:08,Standalone synthetic case; limited relational clues in narrative.,0.613,0.861,,CONFIRMED
+EVID_000470,CASE_0299,FIR,FIR_0299,PERSON_0155,PERSON_1264,2026-01-31 13:33:14,Standalone synthetic case; limited relational clues in narrative.,0.637,0.827,,CONFIRMED
+EVID_000478,CASE_0003,SURVEILLANCE,SURV_00007,Manju Joshi,VEHICLE_00015,2026-04-30 14:29:22,Manju Joshi was clearly identified near LOCATION_0293 meeting with an associate.,0.885,0.966,,LIKELY
+EVID_000479,CASE_0003,SURVEILLANCE,SURV_00008,Deepak Verma,,2025-02-02 07:08:20,A male individual resembling Deepak Verma was observed near LOCATION_0203.,0.862,0.742,,LIKELY
+EVID_000480,CASE_0003,SURVEILLANCE,SURV_00009,Ritu Singh,VEHICLE_00016,2026-02-12 07:42:52,Ritu Singh was clearly identified near LOCATION_0233 meeting with an associate.,0.694,0.632,,LIKELY
+EVID_000484,CASE_0005,SURVEILLANCE,SURV_00013,Preeti Reddy,VEHICLE_00032,2026-01-15 05:33:51,Preeti Reddy was clearly identified near LOCATION_0105 meeting with an associate.,0.785,0.633,,LIKELY
+EVID_000485,CASE_0005,SURVEILLANCE,SURV_00014,Karan Nair,VEHICLE_00454,2025-11-21 00:35:04,Karan Nair was clearly identified near LOCATION_0095 meeting with an associate.,0.743,0.534,,LIKELY
+EVID_000486,CASE_0005,SURVEILLANCE,SURV_00015,Rohit Singh,VEHICLE_00033,2026-04-05 19:11:59,Rohit Singh was clearly identified near LOCATION_0245 meeting with an associate.,0.843,0.815,,LIKELY
+EVID_000512,CASE_0003,INTELLIGENCE_REPORT,INTEL_00005,PERSON_0486,ORG_0028,2025-05-09 03:13:32,Source indicates the subject may be coordinating activities with an associate network.,0.744,0.673,,UNKNOWN
+EVID_000513,CASE_0003,INTELLIGENCE_REPORT,INTEL_00006,PERSON_1232,ORG_0028,2025-05-15 06:07:39,Low-confidence tip regarding possible involvement in ongoing case activity.,0.597,0.649,,LIKELY
+EVID_000516,CASE_0005,INTELLIGENCE_REPORT,INTEL_00009,PERSON_1008,ORG_0017,2026-02-26 04:13:35,Field source reports subject was seen meeting with unidentified associates.,0.589,0.702,,UNKNOWN
+EVID_000517,CASE_0005,INTELLIGENCE_REPORT,INTEL_00010,PERSON_1269,ORG_0017,2025-01-22 04:05:42,Field source reports subject was seen meeting with unidentified associates.,0.699,0.634,,UNKNOWN

@@ -1,0 +1,301 @@
+case_id,fir_id,crime_type,city,status,opened_date
+CASE_0001,FIR_0001,financial fraud,Delhi,closed,2025-08-29 19:24:50
+CASE_0002,FIR_0002,smuggling,Jaipur,under_investigation,2025-07-31 01:37:23
+CASE_0003,FIR_0003,extortion,Lucknow,under_investigation,2025-10-15 09:03:43
+CASE_0004,FIR_0004,illegal betting,Chandigarh,closed,2025-11-18 15:19:44
+CASE_0005,FIR_0005,forgery,Ahmedabad,under_investigation,2025-05-14 15:02:21
+CASE_0006,FIR_0006,cyber fraud,Mumbai,closed,2025-12-31 19:52:31
+CASE_0007,FIR_0007,organized theft,Pune,chargesheet_filed,2025-01-19 19:26:00
+CASE_0008,FIR_0008,smuggling,Indore,closed,2025-05-12 05:08:40
+CASE_0009,FIR_0009,cyber fraud,Bhopal,under_investigation,2025-12-02 15:55:34
+CASE_0010,FIR_0010,organized theft,Hyderabad,under_investigation,2025-10-20 14:19:44
+CASE_0011,FIR_0011,robbery,Delhi,chargesheet_filed,2025-06-17 18:34:20
+CASE_0012,FIR_0012,financial fraud,Jaipur,under_investigation,2025-04-05 12:34:43
+CASE_0013,FIR_0013,smuggling,Jaipur,under_investigation,2025-09-17 05:27:59
+CASE_0014,FIR_0014,vehicle theft,Indore,closed,2026-03-14 07:09:19
+CASE_0015,FIR_0015,forgery,Delhi,under_investigation,2025-04-28 19:38:55
+CASE_0016,FIR_0016,smuggling,Jaipur,under_investigation,2025-05-15 04:26:48
+CASE_0017,FIR_0017,smuggling,Delhi,under_investigation,2024-07-12 01:28:49
+CASE_0018,FIR_0018,illegal betting,Indore,under_investigation,2024-08-13 02:52:35
+CASE_0019,FIR_0019,financial fraud,Delhi,chargesheet_filed,2025-02-13 07:32:16
+CASE_0020,FIR_0020,financial fraud,Chandigarh,closed,2024-09-05 01:54:30
+CASE_0021,FIR_0021,organized theft,Chandigarh,closed,2025-11-21 13:20:11
+CASE_0022,FIR_0022,vehicle theft,Hyderabad,under_investigation,2024-09-05 19:41:02
+CASE_0023,FIR_0023,organized theft,Chandigarh,chargesheet_filed,2026-02-13 11:51:46
+CASE_0024,FIR_0024,illegal betting,Jaipur,chargesheet_filed,2024-06-29 07:15:55
+CASE_0025,FIR_0025,vehicle theft,Bhopal,closed,2025-10-10 01:13:46
+CASE_0026,FIR_0026,vehicle theft,Hyderabad,chargesheet_filed,2024-10-25 17:05:28
+CASE_0027,FIR_0027,cyber fraud,Indore,closed,2024-08-25 05:38:57
+CASE_0028,FIR_0028,extortion,Indore,chargesheet_filed,2024-11-27 16:58:33
+CASE_0029,FIR_0029,smuggling,Hyderabad,chargesheet_filed,2024-07-17 22:29:57
+CASE_0030,FIR_0030,robbery,Pune,under_investigation,2024-06-21 02:57:03
+CASE_0031,FIR_0031,organized financial crime,Hyderabad,chargesheet_filed,2025-05-01 16:38:38
+CASE_0032,FIR_0032,cyber fraud,Chandigarh,under_investigation,2025-10-20 19:32:41
+CASE_0033,FIR_0033,vehicle theft,Jaipur,chargesheet_filed,2024-08-28 00:57:46
+CASE_0034,FIR_0034,extortion,Lucknow,chargesheet_filed,2025-09-19 01:18:49
+CASE_0035,FIR_0035,organized theft,Ahmedabad,chargesheet_filed,2024-09-05 02:09:41
+CASE_0036,FIR_0036,organized financial crime,Pune,under_investigation,2024-06-22 21:22:49
+CASE_0037,FIR_0037,forgery,Ahmedabad,under_investigation,2025-12-19 14:57:25
+CASE_0038,FIR_0038,smuggling,Indore,chargesheet_filed,2026-04-23 09:33:21
+CASE_0039,FIR_0039,organized financial crime,Indore,chargesheet_filed,2025-03-25 12:32:00
+CASE_0040,FIR_0040,robbery,Delhi,closed,2025-10-27 12:40:40
+CASE_0041,FIR_0041,illegal betting,Jaipur,under_investigation,2024-07-03 17:20:46
+CASE_0042,FIR_0042,organized financial crime,Mumbai,chargesheet_filed,2024-09-24 13:49:17
+CASE_0043,FIR_0043,smuggling,Lucknow,closed,2025-01-31 00:39:33
+CASE_0044,FIR_0044,vehicle theft,Hyderabad,chargesheet_filed,2024-12-10 00:15:46
+CASE_0045,FIR_0045,organized theft,Ahmedabad,closed,2026-01-15 05:55:48
+CASE_0046,FIR_0046,cyber fraud,Hyderabad,chargesheet_filed,2026-01-12 04:53:20
+CASE_0047,FIR_0047,organized financial crime,Delhi,under_investigation,2024-09-12 08:08:26
+CASE_0048,FIR_0048,smuggling,Hyderabad,chargesheet_filed,2026-01-31 00:50:01
+CASE_0049,FIR_0049,forgery,Bhopal,under_investigation,2025-10-01 16:09:40
+CASE_0050,FIR_0050,illegal betting,Lucknow,chargesheet_filed,2024-12-26 08:22:56
+CASE_0051,FIR_0051,organized financial crime,Ahmedabad,closed,2025-05-27 11:46:10
+CASE_0052,FIR_0052,illegal betting,Delhi,closed,2026-05-28 09:51:44
+CASE_0053,FIR_0053,smuggling,Bhopal,chargesheet_filed,2025-10-11 05:55:54
+CASE_0054,FIR_0054,cyber fraud,Jaipur,chargesheet_filed,2026-03-30 11:02:20
+CASE_0055,FIR_0055,forgery,Hyderabad,under_investigation,2025-05-09 11:12:03
+CASE_0056,FIR_0056,organized theft,Hyderabad,closed,2025-11-30 06:30:37
+CASE_0057,FIR_0057,cyber fraud,Bhopal,under_investigation,2025-08-10 22:59:06
+CASE_0058,FIR_0058,forgery,Mumbai,under_investigation,2024-09-16 02:36:09
+CASE_0059,FIR_0059,organized theft,Ahmedabad,closed,2024-06-19 18:36:43
+CASE_0060,FIR_0060,forgery,Pune,chargesheet_filed,2025-03-10 15:54:33
+CASE_0061,FIR_0061,forgery,Ahmedabad,under_investigation,2025-04-18 07:19:47
+CASE_0062,FIR_0062,organized theft,Chandigarh,under_investigation,2025-09-20 07:15:06
+CASE_0063,FIR_0063,financial fraud,Mumbai,closed,2024-12-12 04:02:13
+CASE_0064,FIR_0064,cyber fraud,Indore,closed,2025-01-21 23:06:35
+CASE_0065,FIR_0065,smuggling,Delhi,chargesheet_filed,2025-11-14 03:36:57
+CASE_0066,FIR_0066,extortion,Pune,closed,2025-08-11 20:32:38
+CASE_0067,FIR_0067,cyber fraud,Delhi,closed,2025-05-07 19:34:16
+CASE_0068,FIR_0068,smuggling,Mumbai,chargesheet_filed,2025-06-10 17:03:49
+CASE_0069,FIR_0069,organized theft,Pune,closed,2025-10-12 08:26:24
+CASE_0070,FIR_0070,organized financial crime,Indore,under_investigation,2026-02-27 21:38:32
+CASE_0071,FIR_0071,financial fraud,Mumbai,closed,2025-01-19 13:29:46
+CASE_0072,FIR_0072,forgery,Indore,chargesheet_filed,2025-04-01 19:16:24
+CASE_0073,FIR_0073,illegal betting,Pune,chargesheet_filed,2025-07-21 03:07:06
+CASE_0074,FIR_0074,forgery,Indore,chargesheet_filed,2024-10-08 13:16:33
+CASE_0075,FIR_0075,extortion,Ahmedabad,closed,2024-07-20 03:29:44
+CASE_0076,FIR_0076,financial fraud,Ahmedabad,closed,2024-12-17 16:23:59
+CASE_0077,FIR_0077,organized financial crime,Indore,chargesheet_filed,2025-09-05 12:30:16
+CASE_0078,FIR_0078,robbery,Bhopal,chargesheet_filed,2025-03-02 18:23:39
+CASE_0079,FIR_0079,smuggling,Indore,closed,2025-05-23 02:59:43
+CASE_0080,FIR_0080,smuggling,Pune,under_investigation,2025-02-14 08:20:31
+CASE_0081,FIR_0081,vehicle theft,Chandigarh,closed,2024-09-17 23:03:00
+CASE_0082,FIR_0082,forgery,Mumbai,chargesheet_filed,2025-11-11 16:23:34
+CASE_0083,FIR_0083,organized theft,Mumbai,closed,2024-10-25 13:25:35
+CASE_0084,FIR_0084,robbery,Mumbai,chargesheet_filed,2024-11-02 15:20:54
+CASE_0085,FIR_0085,forgery,Mumbai,closed,2024-12-20 20:22:03
+CASE_0086,FIR_0086,financial fraud,Hyderabad,under_investigation,2025-01-16 07:48:18
+CASE_0087,FIR_0087,forgery,Lucknow,closed,2024-11-18 15:55:19
+CASE_0088,FIR_0088,organized theft,Mumbai,chargesheet_filed,2025-11-02 16:12:59
+CASE_0089,FIR_0089,forgery,Lucknow,under_investigation,2024-10-12 10:26:04
+CASE_0090,FIR_0090,cyber fraud,Lucknow,chargesheet_filed,2026-03-13 02:17:12
+CASE_0091,FIR_0091,robbery,Ahmedabad,under_investigation,2024-07-31 01:02:18
+CASE_0092,FIR_0092,extortion,Mumbai,under_investigation,2026-02-19 15:29:09
+CASE_0093,FIR_0093,robbery,Indore,under_investigation,2024-11-16 13:26:56
+CASE_0094,FIR_0094,vehicle theft,Jaipur,chargesheet_filed,2026-05-23 18:59:00
+CASE_0095,FIR_0095,organized theft,Hyderabad,under_investigation,2024-08-22 18:12:19
+CASE_0096,FIR_0096,financial fraud,Bhopal,under_investigation,2025-10-30 16:47:31
+CASE_0097,FIR_0097,forgery,Indore,under_investigation,2026-03-19 07:39:03
+CASE_0098,FIR_0098,organized theft,Bhopal,closed,2025-01-26 15:22:54
+CASE_0099,FIR_0099,cyber fraud,Hyderabad,closed,2024-12-03 16:27:59
+CASE_0100,FIR_0100,financial fraud,Ahmedabad,under_investigation,2024-10-10 03:47:14
+CASE_0101,FIR_0101,robbery,Jaipur,closed,2026-03-05 02:04:36
+CASE_0102,FIR_0102,illegal betting,Mumbai,closed,2025-08-18 19:48:29
+CASE_0103,FIR_0103,financial fraud,Chandigarh,under_investigation,2025-03-18 22:40:51
+CASE_0104,FIR_0104,organized financial crime,Lucknow,closed,2025-12-03 05:35:00
+CASE_0105,FIR_0105,smuggling,Jaipur,chargesheet_filed,2025-07-14 04:59:04
+CASE_0106,FIR_0106,illegal betting,Hyderabad,under_investigation,2024-12-30 00:16:01
+CASE_0107,FIR_0107,robbery,Ahmedabad,under_investigation,2025-09-30 23:56:56
+CASE_0108,FIR_0108,financial fraud,Chandigarh,closed,2024-11-08 15:36:26
+CASE_0109,FIR_0109,financial fraud,Delhi,under_investigation,2025-07-03 14:53:45
+CASE_0110,FIR_0110,extortion,Mumbai,under_investigation,2025-09-02 08:07:39
+CASE_0111,FIR_0111,extortion,Delhi,closed,2024-08-06 00:20:56
+CASE_0112,FIR_0112,smuggling,Delhi,under_investigation,2025-03-02 16:20:54
+CASE_0113,FIR_0113,vehicle theft,Chandigarh,closed,2026-01-30 02:40:40
+CASE_0114,FIR_0114,cyber fraud,Pune,under_investigation,2025-06-18 19:07:54
+CASE_0115,FIR_0115,illegal betting,Bhopal,closed,2025-02-23 04:27:12
+CASE_0116,FIR_0116,organized financial crime,Mumbai,chargesheet_filed,2025-07-09 19:50:47
+CASE_0117,FIR_0117,smuggling,Lucknow,closed,2025-02-17 20:31:43
+CASE_0118,FIR_0118,extortion,Delhi,closed,2026-03-22 23:22:56
+CASE_0119,FIR_0119,smuggling,Ahmedabad,closed,2025-06-21 13:25:37
+CASE_0120,FIR_0120,vehicle theft,Mumbai,closed,2025-11-01 15:31:41
+CASE_0121,FIR_0121,smuggling,Pune,chargesheet_filed,2025-05-06 22:48:31
+CASE_0122,FIR_0122,cyber fraud,Mumbai,chargesheet_filed,2026-02-25 00:17:44
+CASE_0123,FIR_0123,illegal betting,Indore,under_investigation,2026-04-12 01:45:41
+CASE_0124,FIR_0124,forgery,Ahmedabad,closed,2024-07-29 02:46:21
+CASE_0125,FIR_0125,smuggling,Chandigarh,closed,2025-10-08 23:18:28
+CASE_0126,FIR_0126,forgery,Delhi,chargesheet_filed,2024-10-04 17:25:44
+CASE_0127,FIR_0127,organized financial crime,Mumbai,under_investigation,2025-08-31 01:49:41
+CASE_0128,FIR_0128,financial fraud,Hyderabad,under_investigation,2025-05-20 05:24:37
+CASE_0129,FIR_0129,cyber fraud,Chandigarh,chargesheet_filed,2024-09-05 21:00:23
+CASE_0130,FIR_0130,financial fraud,Pune,chargesheet_filed,2025-06-08 13:20:06
+CASE_0131,FIR_0131,forgery,Hyderabad,chargesheet_filed,2025-03-09 13:24:45
+CASE_0132,FIR_0132,cyber fraud,Lucknow,closed,2026-01-18 01:32:56
+CASE_0133,FIR_0133,organized financial crime,Lucknow,closed,2025-08-23 09:16:31
+CASE_0134,FIR_0134,robbery,Lucknow,under_investigation,2026-01-27 11:22:36
+CASE_0135,FIR_0135,organized theft,Pune,under_investigation,2026-01-22 14:27:42
+CASE_0136,FIR_0136,smuggling,Lucknow,closed,2025-09-08 02:06:25
+CASE_0137,FIR_0137,vehicle theft,Lucknow,under_investigation,2024-06-11 01:28:09
+CASE_0138,FIR_0138,financial fraud,Pune,closed,2025-06-19 02:15:19
+CASE_0139,FIR_0139,financial fraud,Mumbai,under_investigation,2024-07-17 13:48:31
+CASE_0140,FIR_0140,vehicle theft,Ahmedabad,under_investigation,2024-12-07 20:24:19
+CASE_0141,FIR_0141,cyber fraud,Delhi,closed,2026-04-25 12:12:21
+CASE_0142,FIR_0142,extortion,Ahmedabad,chargesheet_filed,2026-02-22 20:08:31
+CASE_0143,FIR_0143,robbery,Chandigarh,under_investigation,2025-01-24 18:56:41
+CASE_0144,FIR_0144,financial fraud,Lucknow,closed,2026-01-09 07:17:42
+CASE_0145,FIR_0145,organized theft,Hyderabad,chargesheet_filed,2025-02-17 03:56:41
+CASE_0146,FIR_0146,financial fraud,Hyderabad,under_investigation,2026-03-21 01:38:24
+CASE_0147,FIR_0147,vehicle theft,Ahmedabad,closed,2025-02-22 00:42:07
+CASE_0148,FIR_0148,cyber fraud,Delhi,under_investigation,2025-11-20 14:00:51
+CASE_0149,FIR_0149,vehicle theft,Delhi,under_investigation,2024-10-21 21:25:26
+CASE_0150,FIR_0150,extortion,Jaipur,under_investigation,2024-07-19 09:33:38
+CASE_0151,FIR_0151,extortion,Chandigarh,chargesheet_filed,2024-10-30 21:20:52
+CASE_0152,FIR_0152,financial fraud,Chandigarh,closed,2025-01-24 06:23:54
+CASE_0153,FIR_0153,extortion,Delhi,chargesheet_filed,2024-11-03 16:32:04
+CASE_0154,FIR_0154,vehicle theft,Mumbai,closed,2024-08-18 06:06:58
+CASE_0155,FIR_0155,organized theft,Chandigarh,closed,2025-03-15 10:33:57
+CASE_0156,FIR_0156,vehicle theft,Chandigarh,under_investigation,2025-03-27 20:49:16
+CASE_0157,FIR_0157,robbery,Lucknow,under_investigation,2024-12-30 12:47:10
+CASE_0158,FIR_0158,organized theft,Ahmedabad,closed,2024-09-30 13:35:51
+CASE_0159,FIR_0159,extortion,Mumbai,closed,2025-04-10 00:54:29
+CASE_0160,FIR_0160,smuggling,Mumbai,closed,2025-09-09 14:05:15
+CASE_0161,FIR_0161,forgery,Chandigarh,under_investigation,2025-11-18 14:18:54
+CASE_0162,FIR_0162,vehicle theft,Ahmedabad,under_investigation,2025-04-18 14:54:42
+CASE_0163,FIR_0163,extortion,Bhopal,closed,2024-07-09 19:24:57
+CASE_0164,FIR_0164,financial fraud,Delhi,chargesheet_filed,2025-06-01 05:34:38
+CASE_0165,FIR_0165,illegal betting,Ahmedabad,under_investigation,2024-07-19 09:22:54
+CASE_0166,FIR_0166,smuggling,Jaipur,closed,2024-12-19 17:38:18
+CASE_0167,FIR_0167,robbery,Bhopal,chargesheet_filed,2024-10-10 01:07:40
+CASE_0168,FIR_0168,forgery,Ahmedabad,under_investigation,2025-11-20 16:33:13
+CASE_0169,FIR_0169,robbery,Lucknow,chargesheet_filed,2025-05-29 15:53:03
+CASE_0170,FIR_0170,illegal betting,Pune,chargesheet_filed,2025-10-16 09:59:26
+CASE_0171,FIR_0171,organized theft,Jaipur,chargesheet_filed,2024-08-16 12:44:17
+CASE_0172,FIR_0172,vehicle theft,Indore,under_investigation,2024-11-28 18:44:43
+CASE_0173,FIR_0173,illegal betting,Bhopal,closed,2025-08-29 11:23:13
+CASE_0174,FIR_0174,organized theft,Delhi,under_investigation,2024-06-30 17:50:58
+CASE_0175,FIR_0175,forgery,Pune,under_investigation,2025-05-28 20:52:11
+CASE_0176,FIR_0176,robbery,Mumbai,under_investigation,2025-09-15 22:03:36
+CASE_0177,FIR_0177,cyber fraud,Lucknow,chargesheet_filed,2026-03-27 15:28:14
+CASE_0178,FIR_0178,forgery,Pune,closed,2025-12-14 21:48:51
+CASE_0179,FIR_0179,illegal betting,Jaipur,chargesheet_filed,2025-02-15 10:57:41
+CASE_0180,FIR_0180,illegal betting,Hyderabad,chargesheet_filed,2025-01-31 05:39:51
+CASE_0181,FIR_0181,organized financial crime,Ahmedabad,closed,2026-05-16 20:35:01
+CASE_0182,FIR_0182,organized theft,Delhi,closed,2025-06-13 06:28:28
+CASE_0183,FIR_0183,illegal betting,Ahmedabad,chargesheet_filed,2024-11-11 02:03:08
+CASE_0184,FIR_0184,illegal betting,Indore,under_investigation,2025-03-15 08:41:07
+CASE_0185,FIR_0185,smuggling,Hyderabad,under_investigation,2025-08-29 23:08:10
+CASE_0186,FIR_0186,financial fraud,Ahmedabad,under_investigation,2025-10-28 03:34:23
+CASE_0187,FIR_0187,cyber fraud,Indore,closed,2025-11-27 13:06:50
+CASE_0188,FIR_0188,smuggling,Mumbai,under_investigation,2024-07-02 00:38:25
+CASE_0189,FIR_0189,organized financial crime,Lucknow,under_investigation,2025-01-18 00:50:33
+CASE_0190,FIR_0190,extortion,Pune,under_investigation,2024-10-26 23:43:43
+CASE_0191,FIR_0191,financial fraud,Chandigarh,under_investigation,2024-06-11 17:44:29
+CASE_0192,FIR_0192,organized theft,Jaipur,closed,2026-01-30 14:16:02
+CASE_0193,FIR_0193,forgery,Mumbai,chargesheet_filed,2026-01-12 04:16:49
+CASE_0194,FIR_0194,illegal betting,Hyderabad,chargesheet_filed,2025-06-28 18:24:12
+CASE_0195,FIR_0195,organized theft,Indore,chargesheet_filed,2025-04-08 11:21:07
+CASE_0196,FIR_0196,extortion,Pune,chargesheet_filed,2025-11-01 17:05:17
+CASE_0197,FIR_0197,forgery,Lucknow,closed,2025-07-31 04:56:18
+CASE_0198,FIR_0198,extortion,Delhi,chargesheet_filed,2024-09-02 22:20:21
+CASE_0199,FIR_0199,forgery,Bhopal,closed,2024-10-28 12:11:24
+CASE_0200,FIR_0200,cyber fraud,Lucknow,chargesheet_filed,2024-11-01 01:40:07
+CASE_0201,FIR_0201,extortion,Pune,chargesheet_filed,2024-11-14 04:43:29
+CASE_0202,FIR_0202,robbery,Mumbai,closed,2026-03-05 16:18:47
+CASE_0203,FIR_0203,smuggling,Lucknow,closed,2024-08-12 11:10:39
+CASE_0204,FIR_0204,forgery,Ahmedabad,chargesheet_filed,2025-05-21 21:19:00
+CASE_0205,FIR_0205,cyber fraud,Pune,closed,2025-02-02 00:50:44
+CASE_0206,FIR_0206,extortion,Delhi,closed,2026-05-02 12:17:53
+CASE_0207,FIR_0207,illegal betting,Ahmedabad,chargesheet_filed,2025-04-26 11:19:55
+CASE_0208,FIR_0208,organized financial crime,Jaipur,under_investigation,2025-05-31 07:39:23
+CASE_0209,FIR_0209,extortion,Hyderabad,under_investigation,2025-08-12 02:58:51
+CASE_0210,FIR_0210,forgery,Delhi,chargesheet_filed,2024-08-13 16:08:57
+CASE_0211,FIR_0211,extortion,Bhopal,closed,2024-06-14 19:23:07
+CASE_0212,FIR_0212,smuggling,Bhopal,under_investigation,2026-03-29 05:03:41
+CASE_0213,FIR_0213,illegal betting,Bhopal,chargesheet_filed,2025-09-08 09:05:58
+CASE_0214,FIR_0214,organized theft,Lucknow,chargesheet_filed,2026-04-13 03:53:47
+CASE_0215,FIR_0215,cyber fraud,Indore,chargesheet_filed,2024-07-29 01:51:51
+CASE_0216,FIR_0216,smuggling,Jaipur,chargesheet_filed,2025-07-19 13:18:18
+CASE_0217,FIR_0217,robbery,Jaipur,under_investigation,2025-05-24 06:14:51
+CASE_0218,FIR_0218,vehicle theft,Indore,under_investigation,2026-02-11 12:31:23
+CASE_0219,FIR_0219,robbery,Delhi,chargesheet_filed,2024-11-09 08:11:08
+CASE_0220,FIR_0220,smuggling,Delhi,under_investigation,2025-08-23 16:47:49
+CASE_0221,FIR_0221,organized financial crime,Jaipur,under_investigation,2025-03-21 08:38:57
+CASE_0222,FIR_0222,cyber fraud,Chandigarh,closed,2024-10-12 19:44:56
+CASE_0223,FIR_0223,forgery,Delhi,closed,2025-10-24 18:16:41
+CASE_0224,FIR_0224,extortion,Indore,under_investigation,2026-04-05 19:28:26
+CASE_0225,FIR_0225,forgery,Lucknow,chargesheet_filed,2025-11-18 16:29:05
+CASE_0226,FIR_0226,extortion,Pune,chargesheet_filed,2025-07-26 06:32:13
+CASE_0227,FIR_0227,vehicle theft,Jaipur,chargesheet_filed,2026-04-29 20:57:46
+CASE_0228,FIR_0228,cyber fraud,Chandigarh,chargesheet_filed,2025-01-21 19:08:30
+CASE_0229,FIR_0229,extortion,Jaipur,closed,2024-10-13 06:02:49
+CASE_0230,FIR_0230,forgery,Lucknow,under_investigation,2024-11-06 00:04:41
+CASE_0231,FIR_0231,forgery,Chandigarh,under_investigation,2025-03-11 05:43:44
+CASE_0232,FIR_0232,financial fraud,Indore,under_investigation,2025-03-24 18:57:55
+CASE_0233,FIR_0233,cyber fraud,Delhi,chargesheet_filed,2024-07-16 06:46:34
+CASE_0234,FIR_0234,illegal betting,Hyderabad,chargesheet_filed,2025-05-24 07:41:35
+CASE_0235,FIR_0235,vehicle theft,Hyderabad,chargesheet_filed,2025-05-12 15:15:03
+CASE_0236,FIR_0236,organized theft,Lucknow,closed,2025-10-15 16:09:03
+CASE_0237,FIR_0237,cyber fraud,Mumbai,under_investigation,2025-12-06 10:22:54
+CASE_0238,FIR_0238,vehicle theft,Indore,under_investigation,2025-12-11 13:34:17
+CASE_0239,FIR_0239,forgery,Delhi,chargesheet_filed,2024-11-06 08:30:45
+CASE_0240,FIR_0240,illegal betting,Chandigarh,chargesheet_filed,2024-08-28 14:11:21
+CASE_0241,FIR_0241,extortion,Mumbai,under_investigation,2025-05-03 00:50:23
+CASE_0242,FIR_0242,organized theft,Lucknow,chargesheet_filed,2025-07-30 15:16:16
+CASE_0243,FIR_0243,extortion,Jaipur,closed,2025-11-05 13:53:34
+CASE_0244,FIR_0244,extortion,Jaipur,under_investigation,2026-04-08 01:04:48
+CASE_0245,FIR_0245,vehicle theft,Bhopal,under_investigation,2024-12-02 17:57:12
+CASE_0246,FIR_0246,organized theft,Mumbai,under_investigation,2024-10-22 08:19:39
+CASE_0247,FIR_0247,robbery,Delhi,chargesheet_filed,2026-05-06 01:49:32
+CASE_0248,FIR_0248,financial fraud,Ahmedabad,closed,2025-05-20 23:17:04
+CASE_0249,FIR_0249,vehicle theft,Indore,chargesheet_filed,2024-08-22 18:13:40
+CASE_0250,FIR_0250,cyber fraud,Ahmedabad,under_investigation,2025-08-21 16:10:54
+CASE_0251,FIR_0251,illegal betting,Jaipur,chargesheet_filed,2025-10-16 21:19:00
+CASE_0252,FIR_0252,organized theft,Mumbai,under_investigation,2025-03-18 00:29:54
+CASE_0253,FIR_0253,organized theft,Pune,under_investigation,2025-06-10 22:48:22
+CASE_0254,FIR_0254,forgery,Pune,under_investigation,2025-11-05 03:48:08
+CASE_0255,FIR_0255,extortion,Indore,closed,2026-03-11 22:21:31
+CASE_0256,FIR_0256,cyber fraud,Pune,under_investigation,2026-03-05 01:55:32
+CASE_0257,FIR_0257,financial fraud,Bhopal,closed,2025-03-15 22:05:26
+CASE_0258,FIR_0258,organized theft,Pune,under_investigation,2025-07-26 13:38:15
+CASE_0259,FIR_0259,organized theft,Delhi,chargesheet_filed,2025-05-25 18:15:04
+CASE_0260,FIR_0260,forgery,Mumbai,closed,2024-12-24 18:25:19
+CASE_0261,FIR_0261,illegal betting,Mumbai,under_investigation,2024-10-23 02:53:29
+CASE_0262,FIR_0262,financial fraud,Jaipur,under_investigation,2025-08-14 06:45:27
+CASE_0263,FIR_0263,extortion,Mumbai,closed,2024-11-20 07:50:08
+CASE_0264,FIR_0264,organized theft,Delhi,under_investigation,2025-01-12 08:37:09
+CASE_0265,FIR_0265,vehicle theft,Lucknow,chargesheet_filed,2025-05-16 07:08:03
+CASE_0266,FIR_0266,financial fraud,Delhi,closed,2024-10-25 07:00:38
+CASE_0267,FIR_0267,organized theft,Hyderabad,closed,2025-10-10 21:14:20
+CASE_0268,FIR_0268,organized financial crime,Ahmedabad,chargesheet_filed,2025-05-22 14:47:35
+CASE_0269,FIR_0269,organized financial crime,Jaipur,closed,2024-07-10 07:56:55
+CASE_0270,FIR_0270,vehicle theft,Pune,closed,2024-10-12 21:10:31
+CASE_0271,FIR_0271,organized financial crime,Jaipur,under_investigation,2025-01-17 07:43:21
+CASE_0272,FIR_0272,vehicle theft,Indore,under_investigation,2026-05-13 15:00:40
+CASE_0273,FIR_0273,illegal betting,Hyderabad,closed,2025-05-09 09:01:33
+CASE_0274,FIR_0274,robbery,Ahmedabad,under_investigation,2026-04-10 18:11:32
+CASE_0275,FIR_0275,cyber fraud,Pune,chargesheet_filed,2025-05-27 21:59:23
+CASE_0276,FIR_0276,smuggling,Bhopal,chargesheet_filed,2026-03-18 14:58:45
+CASE_0277,FIR_0277,forgery,Hyderabad,under_investigation,2025-03-30 11:20:14
+CASE_0278,FIR_0278,forgery,Ahmedabad,closed,2026-04-02 12:09:55
+CASE_0279,FIR_0279,illegal betting,Delhi,under_investigation,2025-10-26 09:54:30
+CASE_0280,FIR_0280,smuggling,Hyderabad,under_investigation,2025-09-18 23:17:29
+CASE_0281,FIR_0281,financial fraud,Hyderabad,chargesheet_filed,2025-07-12 20:20:11
+CASE_0282,FIR_0282,extortion,Chandigarh,under_investigation,2025-12-24 22:21:35
+CASE_0283,FIR_0283,cyber fraud,Mumbai,closed,2025-09-19 23:24:32
+CASE_0284,FIR_0284,vehicle theft,Jaipur,chargesheet_filed,2026-01-27 07:33:54
+CASE_0285,FIR_0285,financial fraud,Indore,under_investigation,2026-01-18 13:49:05
+CASE_0286,FIR_0286,illegal betting,Indore,closed,2024-06-05 09:36:15
+CASE_0287,FIR_0287,smuggling,Lucknow,chargesheet_filed,2025-09-24 08:19:14
+CASE_0288,FIR_0288,extortion,Jaipur,under_investigation,2025-05-16 06:15:00
+CASE_0289,FIR_0289,organized financial crime,Lucknow,chargesheet_filed,2026-01-24 09:51:47
+CASE_0290,FIR_0290,vehicle theft,Hyderabad,closed,2025-12-18 19:17:14
+CASE_0291,FIR_0291,organized financial crime,Hyderabad,closed,2025-10-10 14:27:25
+CASE_0292,FIR_0292,cyber fraud,Mumbai,closed,2025-11-24 16:53:09
+CASE_0293,FIR_0293,organized financial crime,Bhopal,closed,2024-12-29 11:48:46
+CASE_0294,FIR_0294,cyber fraud,Ahmedabad,closed,2026-04-17 22:27:06
+CASE_0295,FIR_0295,smuggling,Pune,under_investigation,2024-12-25 19:30:38
+CASE_0296,FIR_0296,organized financial crime,Pune,closed,2025-11-06 00:00:55
+CASE_0297,FIR_0297,smuggling,Pune,closed,2026-02-02 23:42:22
+CASE_0298,FIR_0298,forgery,Bhopal,under_investigation,2025-05-03 22:38:54
+CASE_0299,FIR_0299,forgery,Indore,chargesheet_filed,2026-01-30 22:33:14
+CASE_0300,FIR_0300,organized theft,Ahmedabad,closed,2025-06-23 14:45:16

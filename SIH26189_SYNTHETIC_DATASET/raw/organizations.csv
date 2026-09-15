@@ -1,0 +1,301 @@
+organization_id,organization_name,organization_type,city,known_activity,source_record_id,confidence
+ORG_0001,Silver Group,informal association,Mumbai,informal lending,ORGREC_00001,0.59
+ORG_0002,Classic Transport,social group,Bhopal,retail sales,ORGREC_00002,0.69
+ORG_0003,Metro Trading Co.,social group,Mumbai,general trading,ORGREC_00003,0.81
+ORG_0004,Green Finance,business,Bhopal,general trading,ORGREC_00004,0.81
+ORG_0005,Star Distributors,front organization,Lucknow,no significant recorded activity,ORGREC_00005,0.84
+ORG_0006,United Builders,business,Ahmedabad,real estate brokerage,ORGREC_00006,0.68
+ORG_0007,Silver Traders,social group,Bhopal,vehicle rental,ORGREC_00007,0.91
+ORG_0008,Bharat Trading Co.,social group,Pune,goods transport,ORGREC_00008,0.93
+ORG_0009,Modern Enterprises,social group,Mumbai,import-export facilitation,ORGREC_00009,0.88
+ORG_0010,Green Solutions,informal association,Ahmedabad,import-export facilitation,ORGREC_00010,0.68
+ORG_0011,Star Finance,front organization,Indore,informal lending,ORGREC_00011,0.57
+ORG_0012,Modern Builders,business,Bhopal,no significant recorded activity,ORGREC_00012,0.57
+ORG_0013,Metro Traders,business,Hyderabad,goods transport,ORGREC_00013,0.54
+ORG_0014,Silver Trading Co.,business,Mumbai,retail sales,ORGREC_00014,0.71
+ORG_0015,Shree Motors,business,Jaipur,vehicle rental,ORGREC_00015,0.84
+ORG_0016,Om Ventures,business,Pune,vehicle rental,ORGREC_00016,0.79
+ORG_0017,Royal Solutions,financial entity,Jaipur,informal lending,ORGREC_00017,0.61
+ORG_0018,Sun Motors,social group,Hyderabad,event management,ORGREC_00018,0.81
+ORG_0019,Green Trading Co.,transport company,Lucknow,general trading,ORGREC_00019,0.74
+ORG_0020,Modern Distributors,business,Lucknow,general trading,ORGREC_00020,0.54
+ORG_0021,Royal Trading Co.,business,Delhi,no significant recorded activity,ORGREC_00021,0.82
+ORG_0022,Modern Ventures,business,Chandigarh,event management,ORGREC_00022,0.78
+ORG_0023,Green Transport,financial entity,Mumbai,informal lending,ORGREC_00023,0.86
+ORG_0024,Silver Solutions,financial entity,Mumbai,event management,ORGREC_00024,0.56
+ORG_0025,Classic Retail,business,Hyderabad,goods transport,ORGREC_00025,0.63
+ORG_0026,Classic Retail,business,Ahmedabad,retail sales,ORGREC_00026,0.79
+ORG_0027,National Motors,transport company,Pune,vehicle rental,ORGREC_00027,0.77
+ORG_0028,Green Retail,financial entity,Lucknow,no significant recorded activity,ORGREC_00028,0.75
+ORG_0029,Om Solutions,social group,Mumbai,no significant recorded activity,ORGREC_00029,0.68
+ORG_0030,Modern Solutions,business,Chandigarh,goods transport,ORGREC_00030,0.86
+ORG_0031,Metro Motors,front organization,Bhopal,vehicle rental,ORGREC_00031,0.65
+ORG_0032,Shree Builders,transport company,Bhopal,event management,ORGREC_00032,0.86
+ORG_0033,Modern Motors,business,Ahmedabad,real estate brokerage,ORGREC_00033,0.8
+ORG_0034,Silver Textiles,front organization,Mumbai,no significant recorded activity,ORGREC_00034,0.79
+ORG_0035,Prime Transport,front organization,Pune,informal lending,ORGREC_00035,0.52
+ORG_0036,United Trading Co.,front organization,Ahmedabad,informal lending,ORGREC_00036,0.71
+ORG_0037,Royal Builders,business,Mumbai,retail sales,ORGREC_00037,0.65
+ORG_0038,Sun Solutions,front organization,Ahmedabad,vehicle rental,ORGREC_00038,0.68
+ORG_0039,Prime Builders,social group,Chandigarh,real estate brokerage,ORGREC_00039,0.85
+ORG_0040,Classic Solutions,transport company,Indore,import-export facilitation,ORGREC_00040,0.65
+ORG_0041,United Motors,social group,Indore,retail sales,ORGREC_00041,0.54
+ORG_0042,Modern Ventures,informal association,Mumbai,informal lending,ORGREC_00042,0.77
+ORG_0043,Silver Traders,business,Chandigarh,import-export facilitation,ORGREC_00043,0.6
+ORG_0044,Royal Logistics,transport company,Indore,import-export facilitation,ORGREC_00044,0.94
+ORG_0045,Shree Textiles,social group,Chandigarh,vehicle rental,ORGREC_00045,0.51
+ORG_0046,Modern Traders,informal association,Ahmedabad,goods transport,ORGREC_00046,0.91
+ORG_0047,Sun Motors,social group,Lucknow,event management,ORGREC_00047,0.71
+ORG_0048,Green Transport,front organization,Chandigarh,goods transport,ORGREC_00048,0.62
+ORG_0049,Sun Transport,transport company,Chandigarh,goods transport,ORGREC_00049,0.77
+ORG_0050,Bharat Retail,transport company,Delhi,vehicle rental,ORGREC_00050,0.65
+ORG_0051,Star Traders,social group,Pune,goods transport,ORGREC_00051,0.55
+ORG_0052,Sun Finance,business,Hyderabad,no significant recorded activity,ORGREC_00052,0.59
+ORG_0053,Classic Associates,social group,Delhi,general trading,ORGREC_00053,0.58
+ORG_0054,Sun Associates,social group,Jaipur,import-export facilitation,ORGREC_00054,0.9
+ORG_0055,Shree Builders,informal association,Jaipur,goods transport,ORGREC_00055,0.94
+ORG_0056,Shree Builders,transport company,Jaipur,real estate brokerage,ORGREC_00056,0.88
+ORG_0057,Star Transport,financial entity,Delhi,vehicle rental,ORGREC_00057,0.74
+ORG_0058,Prime Traders,financial entity,Lucknow,real estate brokerage,ORGREC_00058,0.73
+ORG_0059,Classic Transport,financial entity,Pune,event management,ORGREC_00059,0.74
+ORG_0060,Bharat Ventures,informal association,Lucknow,vehicle rental,ORGREC_00060,0.75
+ORG_0061,Star Builders,social group,Hyderabad,general trading,ORGREC_00061,0.82
+ORG_0062,Blue Transport,financial entity,Indore,informal lending,ORGREC_00062,0.63
+ORG_0063,Classic Enterprises,front organization,Indore,retail sales,ORGREC_00063,0.75
+ORG_0064,Sun Transport,business,Lucknow,event management,ORGREC_00064,0.58
+ORG_0065,National Ventures,informal association,Indore,goods transport,ORGREC_00065,0.72
+ORG_0066,Star Enterprises,social group,Chandigarh,informal lending,ORGREC_00066,0.79
+ORG_0067,Silver Motors,financial entity,Mumbai,event management,ORGREC_00067,0.56
+ORG_0068,Prime Traders,financial entity,Lucknow,retail sales,ORGREC_00068,0.78
+ORG_0069,Shree Motors,front organization,Delhi,goods transport,ORGREC_00069,0.58
+ORG_0070,Green Enterprises,informal association,Ahmedabad,general trading,ORGREC_00070,0.83
+ORG_0071,Star Builders,social group,Bhopal,goods transport,ORGREC_00071,0.81
+ORG_0072,Om Finance,informal association,Mumbai,event management,ORGREC_00072,0.65
+ORG_0073,Bharat Retail,front organization,Chandigarh,goods transport,ORGREC_00073,0.77
+ORG_0074,Classic Associates,front organization,Lucknow,vehicle rental,ORGREC_00074,0.81
+ORG_0075,Silver Ventures,business,Hyderabad,real estate brokerage,ORGREC_00075,0.83
+ORG_0076,Silver Enterprises,front organization,Indore,retail sales,ORGREC_00076,0.75
+ORG_0077,National Ventures,transport company,Bhopal,import-export facilitation,ORGREC_00077,0.81
+ORG_0078,Sun Distributors,financial entity,Lucknow,retail sales,ORGREC_00078,0.59
+ORG_0079,Royal Builders,financial entity,Mumbai,goods transport,ORGREC_00079,0.7
+ORG_0080,Royal Trading Co.,informal association,Jaipur,vehicle rental,ORGREC_00080,0.8
+ORG_0081,National Trading Co.,front organization,Ahmedabad,event management,ORGREC_00081,0.51
+ORG_0082,Om Group,social group,Lucknow,event management,ORGREC_00082,0.68
+ORG_0083,Modern Retail,financial entity,Hyderabad,general trading,ORGREC_00083,0.56
+ORG_0084,National Distributors,business,Chandigarh,general trading,ORGREC_00084,0.54
+ORG_0085,National Ventures,front organization,Ahmedabad,vehicle rental,ORGREC_00085,0.82
+ORG_0086,Star Motors,transport company,Hyderabad,real estate brokerage,ORGREC_00086,0.5
+ORG_0087,Star Transport,financial entity,Bhopal,event management,ORGREC_00087,0.83
+ORG_0088,National Builders,front organization,Jaipur,vehicle rental,ORGREC_00088,0.71
+ORG_0089,Blue Distributors,front organization,Lucknow,no significant recorded activity,ORGREC_00089,0.89
+ORG_0090,Prime Textiles,social group,Jaipur,event management,ORGREC_00090,0.84
+ORG_0091,National Enterprises,business,Ahmedabad,import-export facilitation,ORGREC_00091,0.6
+ORG_0092,Blue Finance,financial entity,Lucknow,informal lending,ORGREC_00092,0.62
+ORG_0093,Modern Builders,front organization,Delhi,informal lending,ORGREC_00093,0.67
+ORG_0094,Prime Finance,social group,Pune,import-export facilitation,ORGREC_00094,0.53
+ORG_0095,Star Textiles,social group,Bhopal,general trading,ORGREC_00095,0.87
+ORG_0096,Metro Retail,financial entity,Bhopal,real estate brokerage,ORGREC_00096,0.66
+ORG_0097,Silver Group,transport company,Bhopal,import-export facilitation,ORGREC_00097,0.94
+ORG_0098,Star Transport,informal association,Pune,general trading,ORGREC_00098,0.88
+ORG_0099,Metro Distributors,informal association,Mumbai,general trading,ORGREC_00099,0.95
+ORG_0100,United Logistics,informal association,Mumbai,general trading,ORGREC_00100,0.71
+ORG_0101,Green Retail,business,Indore,vehicle rental,ORGREC_00101,0.75
+ORG_0102,Silver Motors,financial entity,Lucknow,retail sales,ORGREC_00102,0.83
+ORG_0103,Shree Logistics,front organization,Ahmedabad,informal lending,ORGREC_00103,0.72
+ORG_0104,Royal Associates,transport company,Lucknow,informal lending,ORGREC_00104,0.54
+ORG_0105,Blue Motors,informal association,Hyderabad,retail sales,ORGREC_00105,0.54
+ORG_0106,Blue Motors,front organization,Chandigarh,import-export facilitation,ORGREC_00106,0.53
+ORG_0107,Om Finance,transport company,Hyderabad,goods transport,ORGREC_00107,0.74
+ORG_0108,Classic Textiles,front organization,Hyderabad,no significant recorded activity,ORGREC_00108,0.79
+ORG_0109,Bharat Retail,social group,Jaipur,event management,ORGREC_00109,0.79
+ORG_0110,Modern Group,social group,Indore,import-export facilitation,ORGREC_00110,0.6
+ORG_0111,Green Textiles,social group,Bhopal,informal lending,ORGREC_00111,0.74
+ORG_0112,Metro Enterprises,financial entity,Indore,informal lending,ORGREC_00112,0.87
+ORG_0113,Silver Retail,social group,Ahmedabad,informal lending,ORGREC_00113,0.65
+ORG_0114,Green Motors,social group,Mumbai,informal lending,ORGREC_00114,0.85
+ORG_0115,Royal Traders,informal association,Chandigarh,vehicle rental,ORGREC_00115,0.82
+ORG_0116,Metro Ventures,business,Bhopal,informal lending,ORGREC_00116,0.93
+ORG_0117,Green Trading Co.,transport company,Delhi,event management,ORGREC_00117,0.94
+ORG_0118,National Logistics,front organization,Hyderabad,event management,ORGREC_00118,0.62
+ORG_0119,National Builders,front organization,Mumbai,import-export facilitation,ORGREC_00119,0.56
+ORG_0120,United Finance,front organization,Hyderabad,general trading,ORGREC_00120,0.89
+ORG_0121,Bharat Retail,business,Delhi,retail sales,ORGREC_00121,0.8
+ORG_0122,Classic Solutions,social group,Lucknow,import-export facilitation,ORGREC_00122,0.8
+ORG_0123,Classic Enterprises,social group,Chandigarh,goods transport,ORGREC_00123,0.58
+ORG_0124,Modern Enterprises,front organization,Lucknow,import-export facilitation,ORGREC_00124,0.65
+ORG_0125,Blue Ventures,business,Mumbai,informal lending,ORGREC_00125,0.87
+ORG_0126,Sun Finance,social group,Chandigarh,goods transport,ORGREC_00126,0.66
+ORG_0127,Modern Builders,business,Ahmedabad,goods transport,ORGREC_00127,0.75
+ORG_0128,Royal Solutions,business,Hyderabad,vehicle rental,ORGREC_00128,0.51
+ORG_0129,Blue Solutions,business,Ahmedabad,real estate brokerage,ORGREC_00129,0.54
+ORG_0130,Modern Trading Co.,informal association,Pune,retail sales,ORGREC_00130,0.65
+ORG_0131,Metro Retail,front organization,Lucknow,no significant recorded activity,ORGREC_00131,0.51
+ORG_0132,Green Distributors,social group,Mumbai,goods transport,ORGREC_00132,0.71
+ORG_0133,Modern Traders,financial entity,Ahmedabad,general trading,ORGREC_00133,0.62
+ORG_0134,Green Traders,transport company,Mumbai,general trading,ORGREC_00134,0.52
+ORG_0135,Classic Associates,financial entity,Hyderabad,goods transport,ORGREC_00135,0.71
+ORG_0136,Silver Enterprises,business,Indore,event management,ORGREC_00136,0.75
+ORG_0137,Sun Transport,financial entity,Ahmedabad,informal lending,ORGREC_00137,0.7
+ORG_0138,Classic Ventures,transport company,Hyderabad,no significant recorded activity,ORGREC_00138,0.59
+ORG_0139,Prime Associates,financial entity,Bhopal,informal lending,ORGREC_00139,0.56
+ORG_0140,Bharat Finance,social group,Mumbai,real estate brokerage,ORGREC_00140,0.85
+ORG_0141,Classic Retail,business,Jaipur,goods transport,ORGREC_00141,0.59
+ORG_0142,Star Trading Co.,social group,Ahmedabad,vehicle rental,ORGREC_00142,0.63
+ORG_0143,United Retail,front organization,Delhi,import-export facilitation,ORGREC_00143,0.55
+ORG_0144,Modern Associates,front organization,Delhi,vehicle rental,ORGREC_00144,0.73
+ORG_0145,Om Logistics,transport company,Bhopal,event management,ORGREC_00145,0.61
+ORG_0146,Sun Associates,transport company,Jaipur,import-export facilitation,ORGREC_00146,0.72
+ORG_0147,Sun Traders,social group,Pune,informal lending,ORGREC_00147,0.74
+ORG_0148,Prime Builders,financial entity,Ahmedabad,goods transport,ORGREC_00148,0.73
+ORG_0149,Classic Logistics,social group,Indore,retail sales,ORGREC_00149,0.91
+ORG_0150,Modern Associates,informal association,Bhopal,retail sales,ORGREC_00150,0.83
+ORG_0151,Classic Trading Co.,informal association,Ahmedabad,event management,ORGREC_00151,0.66
+ORG_0152,Prime Enterprises,financial entity,Mumbai,vehicle rental,ORGREC_00152,0.71
+ORG_0153,United Trading Co.,social group,Ahmedabad,import-export facilitation,ORGREC_00153,0.94
+ORG_0154,Royal Trading Co.,front organization,Ahmedabad,retail sales,ORGREC_00154,0.63
+ORG_0155,Om Motors,business,Ahmedabad,import-export facilitation,ORGREC_00155,0.73
+ORG_0156,Sun Solutions,business,Chandigarh,event management,ORGREC_00156,0.64
+ORG_0157,Classic Enterprises,financial entity,Delhi,retail sales,ORGREC_00157,0.53
+ORG_0158,Om Traders,social group,Delhi,informal lending,ORGREC_00158,0.53
+ORG_0159,Modern Motors,front organization,Indore,general trading,ORGREC_00159,0.94
+ORG_0160,Bharat Enterprises,financial entity,Jaipur,vehicle rental,ORGREC_00160,0.88
+ORG_0161,Prime Solutions,business,Pune,vehicle rental,ORGREC_00161,0.94
+ORG_0162,Metro Enterprises,business,Chandigarh,goods transport,ORGREC_00162,0.67
+ORG_0163,United Traders,informal association,Delhi,goods transport,ORGREC_00163,0.68
+ORG_0164,Modern Group,transport company,Hyderabad,informal lending,ORGREC_00164,0.84
+ORG_0165,Star Motors,financial entity,Lucknow,vehicle rental,ORGREC_00165,0.73
+ORG_0166,Silver Logistics,front organization,Ahmedabad,import-export facilitation,ORGREC_00166,0.51
+ORG_0167,United Motors,financial entity,Hyderabad,retail sales,ORGREC_00167,0.94
+ORG_0168,Royal Associates,social group,Pune,event management,ORGREC_00168,0.74
+ORG_0169,Green Solutions,transport company,Lucknow,goods transport,ORGREC_00169,0.59
+ORG_0170,Modern Associates,social group,Hyderabad,general trading,ORGREC_00170,0.87
+ORG_0171,Om Logistics,financial entity,Pune,vehicle rental,ORGREC_00171,0.63
+ORG_0172,Green Builders,front organization,Mumbai,informal lending,ORGREC_00172,0.76
+ORG_0173,Sun Transport,financial entity,Mumbai,goods transport,ORGREC_00173,0.87
+ORG_0174,Sun Logistics,social group,Bhopal,vehicle rental,ORGREC_00174,0.89
+ORG_0175,National Motors,transport company,Indore,import-export facilitation,ORGREC_00175,0.93
+ORG_0176,Green Finance,informal association,Pune,event management,ORGREC_00176,0.57
+ORG_0177,United Distributors,transport company,Pune,goods transport,ORGREC_00177,0.68
+ORG_0178,Metro Motors,business,Bhopal,informal lending,ORGREC_00178,0.5
+ORG_0179,Modern Ventures,financial entity,Chandigarh,real estate brokerage,ORGREC_00179,0.64
+ORG_0180,Star Traders,social group,Ahmedabad,real estate brokerage,ORGREC_00180,0.88
+ORG_0181,National Solutions,financial entity,Mumbai,vehicle rental,ORGREC_00181,0.55
+ORG_0182,Green Logistics,business,Mumbai,import-export facilitation,ORGREC_00182,0.79
+ORG_0183,United Finance,front organization,Jaipur,no significant recorded activity,ORGREC_00183,0.92
+ORG_0184,Sun Distributors,transport company,Ahmedabad,general trading,ORGREC_00184,0.8
+ORG_0185,Bharat Logistics,transport company,Bhopal,informal lending,ORGREC_00185,0.6
+ORG_0186,National Distributors,financial entity,Bhopal,informal lending,ORGREC_00186,0.73
+ORG_0187,Modern Retail,business,Pune,no significant recorded activity,ORGREC_00187,0.72
+ORG_0188,Bharat Builders,front organization,Jaipur,informal lending,ORGREC_00188,0.62
+ORG_0189,United Solutions,transport company,Bhopal,vehicle rental,ORGREC_00189,0.82
+ORG_0190,Blue Enterprises,financial entity,Jaipur,vehicle rental,ORGREC_00190,0.78
+ORG_0191,Bharat Transport,transport company,Hyderabad,informal lending,ORGREC_00191,0.75
+ORG_0192,Blue Enterprises,financial entity,Bhopal,retail sales,ORGREC_00192,0.92
+ORG_0193,Bharat Traders,social group,Jaipur,general trading,ORGREC_00193,0.69
+ORG_0194,United Trading Co.,social group,Mumbai,import-export facilitation,ORGREC_00194,0.67
+ORG_0195,Silver Enterprises,social group,Pune,real estate brokerage,ORGREC_00195,0.5
+ORG_0196,Shree Ventures,social group,Indore,event management,ORGREC_00196,0.72
+ORG_0197,Metro Enterprises,front organization,Hyderabad,general trading,ORGREC_00197,0.52
+ORG_0198,Sun Enterprises,business,Jaipur,goods transport,ORGREC_00198,0.85
+ORG_0199,National Transport,business,Lucknow,general trading,ORGREC_00199,0.67
+ORG_0200,Blue Motors,transport company,Indore,vehicle rental,ORGREC_00200,0.75
+ORG_0201,Metro Associates,front organization,Lucknow,vehicle rental,ORGREC_00201,0.65
+ORG_0202,Sun Trading Co.,front organization,Lucknow,no significant recorded activity,ORGREC_00202,0.81
+ORG_0203,Royal Associates,financial entity,Pune,import-export facilitation,ORGREC_00203,0.88
+ORG_0204,United Trading Co.,informal association,Delhi,vehicle rental,ORGREC_00204,0.87
+ORG_0205,National Finance,financial entity,Lucknow,general trading,ORGREC_00205,0.76
+ORG_0206,Metro Solutions,informal association,Lucknow,import-export facilitation,ORGREC_00206,0.95
+ORG_0207,Star Textiles,transport company,Indore,retail sales,ORGREC_00207,0.95
+ORG_0208,Prime Builders,business,Chandigarh,goods transport,ORGREC_00208,0.54
+ORG_0209,Green Solutions,transport company,Indore,event management,ORGREC_00209,0.82
+ORG_0210,National Transport,financial entity,Delhi,no significant recorded activity,ORGREC_00210,0.8
+ORG_0211,Metro Enterprises,financial entity,Jaipur,real estate brokerage,ORGREC_00211,0.88
+ORG_0212,Blue Logistics,financial entity,Delhi,retail sales,ORGREC_00212,0.65
+ORG_0213,Blue Ventures,social group,Mumbai,vehicle rental,ORGREC_00213,0.91
+ORG_0214,Classic Enterprises,business,Mumbai,vehicle rental,ORGREC_00214,0.54
+ORG_0215,Blue Associates,transport company,Ahmedabad,vehicle rental,ORGREC_00215,0.7
+ORG_0216,United Finance,social group,Mumbai,import-export facilitation,ORGREC_00216,0.65
+ORG_0217,Classic Transport,transport company,Mumbai,general trading,ORGREC_00217,0.52
+ORG_0218,Metro Traders,informal association,Delhi,no significant recorded activity,ORGREC_00218,0.52
+ORG_0219,Modern Logistics,business,Delhi,informal lending,ORGREC_00219,0.69
+ORG_0220,Star Enterprises,social group,Lucknow,real estate brokerage,ORGREC_00220,0.65
+ORG_0221,Royal Enterprises,informal association,Delhi,event management,ORGREC_00221,0.83
+ORG_0222,Metro Logistics,business,Delhi,no significant recorded activity,ORGREC_00222,0.82
+ORG_0223,Blue Associates,social group,Ahmedabad,informal lending,ORGREC_00223,0.7
+ORG_0224,Silver Traders,social group,Jaipur,goods transport,ORGREC_00224,0.77
+ORG_0225,Bharat Group,front organization,Hyderabad,goods transport,ORGREC_00225,0.6
+ORG_0226,Classic Ventures,informal association,Pune,real estate brokerage,ORGREC_00226,0.77
+ORG_0227,Silver Logistics,business,Lucknow,import-export facilitation,ORGREC_00227,0.73
+ORG_0228,Star Group,business,Ahmedabad,vehicle rental,ORGREC_00228,0.87
+ORG_0229,United Traders,social group,Lucknow,no significant recorded activity,ORGREC_00229,0.52
+ORG_0230,Modern Builders,financial entity,Ahmedabad,retail sales,ORGREC_00230,0.79
+ORG_0231,Prime Traders,business,Pune,import-export facilitation,ORGREC_00231,0.82
+ORG_0232,Prime Builders,front organization,Indore,retail sales,ORGREC_00232,0.82
+ORG_0233,Star Motors,informal association,Pune,import-export facilitation,ORGREC_00233,0.8
+ORG_0234,Modern Transport,informal association,Pune,retail sales,ORGREC_00234,0.52
+ORG_0235,Prime Enterprises,front organization,Indore,vehicle rental,ORGREC_00235,0.51
+ORG_0236,Bharat Enterprises,informal association,Jaipur,goods transport,ORGREC_00236,0.58
+ORG_0237,Modern Builders,front organization,Indore,import-export facilitation,ORGREC_00237,0.59
+ORG_0238,Green Textiles,front organization,Indore,import-export facilitation,ORGREC_00238,0.58
+ORG_0239,National Textiles,business,Jaipur,informal lending,ORGREC_00239,0.58
+ORG_0240,Shree Associates,transport company,Jaipur,goods transport,ORGREC_00240,0.75
+ORG_0241,Star Transport,social group,Chandigarh,no significant recorded activity,ORGREC_00241,0.54
+ORG_0242,Silver Textiles,transport company,Delhi,no significant recorded activity,ORGREC_00242,0.76
+ORG_0243,Royal Solutions,financial entity,Ahmedabad,import-export facilitation,ORGREC_00243,0.53
+ORG_0244,Modern Enterprises,business,Pune,event management,ORGREC_00244,0.64
+ORG_0245,Om Traders,social group,Bhopal,no significant recorded activity,ORGREC_00245,0.63
+ORG_0246,Shree Traders,informal association,Lucknow,import-export facilitation,ORGREC_00246,0.52
+ORG_0247,Shree Traders,financial entity,Mumbai,goods transport,ORGREC_00247,0.51
+ORG_0248,Bharat Builders,business,Pune,real estate brokerage,ORGREC_00248,0.71
+ORG_0249,Green Builders,transport company,Delhi,retail sales,ORGREC_00249,0.94
+ORG_0250,Blue Enterprises,financial entity,Jaipur,import-export facilitation,ORGREC_00250,0.74
+ORG_0251,Prime Finance,transport company,Jaipur,event management,ORGREC_00251,0.78
+ORG_0252,Om Logistics,front organization,Chandigarh,real estate brokerage,ORGREC_00252,0.93
+ORG_0253,Green Group,transport company,Indore,retail sales,ORGREC_00253,0.63
+ORG_0254,Classic Logistics,financial entity,Hyderabad,retail sales,ORGREC_00254,0.79
+ORG_0255,Prime Textiles,transport company,Ahmedabad,vehicle rental,ORGREC_00255,0.6
+ORG_0256,Shree Group,informal association,Lucknow,real estate brokerage,ORGREC_00256,0.56
+ORG_0257,Classic Builders,transport company,Mumbai,event management,ORGREC_00257,0.64
+ORG_0258,Modern Retail,financial entity,Mumbai,vehicle rental,ORGREC_00258,0.69
+ORG_0259,Metro Ventures,informal association,Jaipur,retail sales,ORGREC_00259,0.9
+ORG_0260,Om Enterprises,financial entity,Chandigarh,retail sales,ORGREC_00260,0.63
+ORG_0261,Green Logistics,business,Chandigarh,event management,ORGREC_00261,0.57
+ORG_0262,Blue Ventures,transport company,Delhi,import-export facilitation,ORGREC_00262,0.72
+ORG_0263,Green Trading Co.,business,Indore,general trading,ORGREC_00263,0.55
+ORG_0264,Shree Transport,transport company,Delhi,retail sales,ORGREC_00264,0.6
+ORG_0265,Prime Finance,social group,Ahmedabad,no significant recorded activity,ORGREC_00265,0.79
+ORG_0266,Prime Traders,front organization,Indore,informal lending,ORGREC_00266,0.75
+ORG_0267,Metro Textiles,business,Delhi,event management,ORGREC_00267,0.56
+ORG_0268,Classic Solutions,front organization,Delhi,real estate brokerage,ORGREC_00268,0.66
+ORG_0269,Metro Solutions,financial entity,Bhopal,general trading,ORGREC_00269,0.9
+ORG_0270,National Enterprises,informal association,Jaipur,real estate brokerage,ORGREC_00270,0.83
+ORG_0271,Star Traders,social group,Delhi,vehicle rental,ORGREC_00271,0.72
+ORG_0272,Classic Enterprises,business,Bhopal,informal lending,ORGREC_00272,0.95
+ORG_0273,Royal Group,informal association,Jaipur,event management,ORGREC_00273,0.8
+ORG_0274,Sun Distributors,informal association,Indore,general trading,ORGREC_00274,0.52
+ORG_0275,Blue Trading Co.,social group,Delhi,retail sales,ORGREC_00275,0.79
+ORG_0276,Blue Distributors,informal association,Ahmedabad,general trading,ORGREC_00276,0.86
+ORG_0277,Silver Builders,front organization,Ahmedabad,retail sales,ORGREC_00277,0.61
+ORG_0278,Royal Retail,transport company,Hyderabad,vehicle rental,ORGREC_00278,0.92
+ORG_0279,Prime Enterprises,front organization,Chandigarh,informal lending,ORGREC_00279,0.82
+ORG_0280,Classic Transport,transport company,Lucknow,informal lending,ORGREC_00280,0.57
+ORG_0281,Green Motors,transport company,Ahmedabad,real estate brokerage,ORGREC_00281,0.74
+ORG_0282,Silver Textiles,informal association,Lucknow,general trading,ORGREC_00282,0.65
+ORG_0283,Shree Associates,informal association,Indore,event management,ORGREC_00283,0.66
+ORG_0284,Green Retail,transport company,Indore,event management,ORGREC_00284,0.64
+ORG_0285,National Associates,financial entity,Mumbai,general trading,ORGREC_00285,0.5
+ORG_0286,Bharat Textiles,front organization,Bhopal,no significant recorded activity,ORGREC_00286,0.68
+ORG_0287,Royal Builders,informal association,Bhopal,vehicle rental,ORGREC_00287,0.52
+ORG_0288,Star Builders,transport company,Delhi,informal lending,ORGREC_00288,0.82
+ORG_0289,Bharat Retail,informal association,Indore,no significant recorded activity,ORGREC_00289,0.8
+ORG_0290,National Enterprises,informal association,Mumbai,goods transport,ORGREC_00290,0.84
+ORG_0291,Metro Textiles,transport company,Jaipur,real estate brokerage,ORGREC_00291,0.61
+ORG_0292,Om Textiles,informal association,Pune,real estate brokerage,ORGREC_00292,0.51
+ORG_0293,United Traders,social group,Hyderabad,vehicle rental,ORGREC_00293,0.93
+ORG_0294,Prime Logistics,social group,Hyderabad,informal lending,ORGREC_00294,0.51
+ORG_0295,Prime Logistics,transport company,Chandigarh,real estate brokerage,ORGREC_00295,0.83
+ORG_0296,Sun Finance,informal association,Ahmedabad,real estate brokerage,ORGREC_00296,0.92
+ORG_0297,Modern Finance,front organization,Hyderabad,retail sales,ORGREC_00297,0.91
+ORG_0298,Classic Finance,financial entity,Chandigarh,goods transport,ORGREC_00298,0.81
+ORG_0299,Classic Group,transport company,Jaipur,retail sales,ORGREC_00299,0.65
+ORG_0300,Classic Solutions,front organization,Delhi,goods transport,ORGREC_00300,0.9

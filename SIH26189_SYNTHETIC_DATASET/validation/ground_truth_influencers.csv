@@ -1,0 +1,5 @@
+network_id,person_id,influence_type,is_criminally_significant
+NET_003,PERSON_0486,upstream_coordinator,True
+NET_003,PERSON_0833,broker_connecting_communities,True
+NET_005,PERSON_1008,upstream_coordinator,True
+NET_005,PERSON_1002,broker_connecting_communities,True

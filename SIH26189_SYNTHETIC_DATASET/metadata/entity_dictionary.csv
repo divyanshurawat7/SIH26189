@@ -1,0 +1,12 @@
+entity_type,id_prefix,primary_table
+PERSON,PERSON_,persons.csv
+ORGANIZATION,ORG_,organizations.csv
+PHONE,PHONE_,phones.csv
+DEVICE,DEVICE_,devices.csv
+BANK_ACCOUNT,ACCOUNT_,bank_accounts.csv
+VEHICLE,VEHICLE_,vehicles.csv
+LOCATION,LOCATION_,locations.csv
+CELL_TOWER,TOWER_,cell_towers.csv
+CASE,CASE_,cases.csv
+FIR,FIR_,fir_records.csv
+EVIDENCE,EVID_,evidence.csv

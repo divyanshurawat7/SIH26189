@@ -1,0 +1,211 @@
+fir_id,case_id,date,crime_type,complainant_id,accused_id,witness_id,location_id,narrative,source,confidence
+FIR_0001,CASE_0001,2025-08-30 04:24:50,financial fraud,PERSON_0282,PERSON_1459,PERSON_1237,LOCATION_0041,Investigating officer noted unusual movement in the area prior to the reported incident. Primary suspect identified on scene.,POLICE_STATION_RECORD,0.89
+FIR_0002,CASE_0002,2025-07-31 02:37:23,smuggling,PERSON_0898,PERSON_1104,PERSON_0837,LOCATION_0182,Complainant could not clearly identify all persons involved; further verification is required.,POLICE_STATION_RECORD,0.63
+FIR_0007,CASE_0007,2025-01-20 15:26:00,organized theft,PERSON_1288,PERSON_1303,PERSON_0568,LOCATION_0027,Investigating officer noted unusual movement in the area prior to the reported incident.,POLICE_STATION_RECORD,0.74
+FIR_0008,CASE_0008,2025-05-12 15:08:40,smuggling,PERSON_1426,PERSON_0398,PERSON_0234,LOCATION_0188,Complainant stated that an associate of the accused was present at LOCATION_0188 shortly before the incident.,POLICE_STATION_RECORD,0.79
+FIR_0009,CASE_0009,2025-12-02 19:55:34,cyber fraud,PERSON_0391,PERSON_0945,PERSON_1227,LOCATION_0009,Witness reported that an individual known as Ravi G. was seen near the location before the incident.,POLICE_STATION_RECORD,0.94
+FIR_0010,CASE_0010,2025-10-20 19:19:44,organized theft,PERSON_0462,PERSON_0030,PERSON_0028,LOCATION_0190,Complainant could not clearly identify all persons involved; further verification is required.,POLICE_STATION_RECORD,0.73
+FIR_0011,CASE_0011,2025-06-18 06:34:20,robbery,PERSON_0433,PERSON_1007,PERSON_0041,LOCATION_0251,Complainant stated that an associate of the accused was present at LOCATION_0251 shortly before the incident.,POLICE_STATION_RECORD,0.84
+FIR_0012,CASE_0012,2025-04-05 18:34:43,financial fraud,PERSON_0775,PERSON_0580,PERSON_0678,LOCATION_0242,Complainant could not clearly identify all persons involved; further verification is required.,POLICE_STATION_RECORD,0.59
+FIR_0013,CASE_0013,2025-09-17 17:27:59,smuggling,PERSON_0460,PERSON_0804,,LOCATION_0102,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.62
+FIR_0015,CASE_0015,2025-04-28 23:38:55,forgery,PERSON_0549,PERSON_1140,,LOCATION_0091,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.57
+FIR_0016,CASE_0016,2025-05-15 11:26:48,smuggling,PERSON_0823,PERSON_0976,,LOCATION_0102,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.77
+FIR_0018,CASE_0018,2024-08-13 16:52:35,illegal betting,PERSON_1022,PERSON_1023,,LOCATION_0118,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.89
+FIR_0019,CASE_0019,2025-02-13 16:32:16,financial fraud,PERSON_0838,PERSON_1033,,LOCATION_0111,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.67
+FIR_0020,CASE_0020,2024-09-05 19:54:30,financial fraud,PERSON_0432,PERSON_0006,,LOCATION_0244,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.63
+FIR_0022,CASE_0022,2024-09-06 14:41:02,vehicle theft,PERSON_1290,PERSON_0633,,LOCATION_0140,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.82
+FIR_0024,CASE_0024,2024-06-29 21:15:55,illegal betting,PERSON_0822,PERSON_0310,,LOCATION_0192,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.8
+FIR_0027,CASE_0027,2024-08-25 22:38:57,cyber fraud,PERSON_0846,PERSON_1172,,LOCATION_0118,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.69
+FIR_0028,CASE_0028,2024-11-27 17:58:33,extortion,PERSON_0593,PERSON_1321,,LOCATION_0118,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.68
+FIR_0030,CASE_0030,2024-06-21 17:57:03,robbery,PERSON_0363,PERSON_1302,,LOCATION_0047,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.74
+FIR_0033,CASE_0033,2024-08-28 13:57:46,vehicle theft,PERSON_0246,PERSON_1498,,LOCATION_0232,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.61
+FIR_0034,CASE_0034,2025-09-19 06:18:49,extortion,PERSON_1495,PERSON_0948,,LOCATION_0233,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.69
+FIR_0035,CASE_0035,2024-09-05 13:09:41,organized theft,PERSON_0264,PERSON_0958,,LOCATION_0135,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.6
+FIR_0037,CASE_0037,2025-12-20 03:57:25,forgery,PERSON_0490,PERSON_0395,,LOCATION_0075,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.67
+FIR_0040,CASE_0040,2025-10-27 19:40:40,robbery,PERSON_1005,PERSON_0947,,LOCATION_0091,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.71
+FIR_0042,CASE_0042,2024-09-24 20:49:17,organized financial crime,PERSON_0495,PERSON_1150,,LOCATION_0196,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.64
+FIR_0046,CASE_0046,2026-01-12 05:53:20,cyber fraud,PERSON_0316,PERSON_0814,,LOCATION_0040,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.73
+FIR_0047,CASE_0047,2024-09-12 13:08:26,organized financial crime,PERSON_1419,PERSON_0075,,LOCATION_0061,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.61
+FIR_0048,CASE_0048,2026-01-31 03:50:01,smuggling,PERSON_0741,PERSON_0015,,LOCATION_0120,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.72
+FIR_0049,CASE_0049,2025-10-02 05:09:40,forgery,PERSON_0237,PERSON_0366,,LOCATION_0099,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.86
+FIR_0051,CASE_0051,2025-05-28 00:46:10,organized financial crime,PERSON_0883,PERSON_0399,,LOCATION_0085,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.73
+FIR_0052,CASE_0052,2026-05-28 15:51:44,illegal betting,PERSON_0197,PERSON_0975,,LOCATION_0261,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.81
+FIR_0053,CASE_0053,2025-10-11 13:55:54,smuggling,PERSON_1374,PERSON_0441,,LOCATION_0029,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.83
+FIR_0054,CASE_0054,2026-03-30 20:02:20,cyber fraud,PERSON_1268,PERSON_0801,,LOCATION_0232,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.69
+FIR_0059,CASE_0059,2024-06-20 12:36:43,organized theft,PERSON_0729,PERSON_0175,,LOCATION_0245,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.7
+FIR_0060,CASE_0060,2025-03-11 11:54:33,forgery,PERSON_0532,PERSON_0862,,LOCATION_0187,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.87
+FIR_0062,CASE_0062,2025-09-20 21:15:06,organized theft,PERSON_0876,PERSON_0699,,LOCATION_0204,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.59
+FIR_0064,CASE_0064,2025-01-22 17:06:35,cyber fraud,PERSON_0436,PERSON_0767,,LOCATION_0248,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.79
+FIR_0067,CASE_0067,2025-05-08 01:34:16,cyber fraud,PERSON_0082,PERSON_0902,,LOCATION_0051,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.56
+FIR_0069,CASE_0069,2025-10-12 17:26:24,organized theft,PERSON_0151,PERSON_0274,,LOCATION_0247,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.73
+FIR_0070,CASE_0070,2026-02-28 15:38:32,organized financial crime,PERSON_1328,PERSON_0581,,LOCATION_0188,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.75
+FIR_0071,CASE_0071,2025-01-20 05:29:46,financial fraud,PERSON_0244,PERSON_1239,,LOCATION_0156,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.7
+FIR_0072,CASE_0072,2025-04-02 04:16:24,forgery,PERSON_0468,PERSON_0988,,LOCATION_0068,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.59
+FIR_0074,CASE_0074,2024-10-08 16:16:33,forgery,PERSON_0279,PERSON_1064,,LOCATION_0178,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.6
+FIR_0075,CASE_0075,2024-07-20 16:29:44,extortion,PERSON_0805,PERSON_0128,,LOCATION_0165,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.8
+FIR_0076,CASE_0076,2024-12-18 01:23:59,financial fraud,PERSON_0422,PERSON_1017,,LOCATION_0085,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.75
+FIR_0077,CASE_0077,2025-09-05 22:30:16,organized financial crime,PERSON_0865,PERSON_0260,,LOCATION_0068,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.51
+FIR_0078,CASE_0078,2025-03-03 02:23:39,robbery,PERSON_1173,PERSON_0982,,LOCATION_0169,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.69
+FIR_0079,CASE_0079,2025-05-23 03:59:43,smuggling,PERSON_1440,PERSON_1382,,LOCATION_0088,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.59
+FIR_0080,CASE_0080,2025-02-14 16:20:31,smuggling,PERSON_0320,PERSON_1474,,LOCATION_0277,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.76
+FIR_0081,CASE_0081,2024-09-18 14:03:00,vehicle theft,PERSON_0684,PERSON_0777,,LOCATION_0244,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.64
+FIR_0083,CASE_0083,2024-10-25 17:25:35,organized theft,PERSON_1198,PERSON_0232,,LOCATION_0286,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.85
+FIR_0084,CASE_0084,2024-11-02 20:20:54,robbery,PERSON_1453,PERSON_0285,,LOCATION_0066,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.8
+FIR_0086,CASE_0086,2025-01-16 08:48:18,financial fraud,PERSON_0484,PERSON_1417,,LOCATION_0150,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.54
+FIR_0087,CASE_0087,2024-11-19 10:55:19,forgery,PERSON_0579,PERSON_1009,,LOCATION_0133,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.68
+FIR_0089,CASE_0089,2024-10-12 12:26:04,forgery,PERSON_0472,PERSON_0507,,LOCATION_0063,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.85
+FIR_0090,CASE_0090,2026-03-13 07:17:12,cyber fraud,PERSON_0708,PERSON_0362,,LOCATION_0173,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.72
+FIR_0091,CASE_0091,2024-07-31 16:02:18,robbery,PERSON_1287,PERSON_0739,,LOCATION_0185,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.66
+FIR_0092,CASE_0092,2026-02-20 04:29:09,extortion,PERSON_0665,PERSON_0821,,LOCATION_0156,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.6
+FIR_0094,CASE_0094,2026-05-24 10:59:00,vehicle theft,PERSON_0511,PERSON_0383,,LOCATION_0072,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.5
+FIR_0095,CASE_0095,2024-08-23 01:12:19,organized theft,PERSON_1118,PERSON_1176,,LOCATION_0080,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.62
+FIR_0096,CASE_0096,2025-10-31 04:47:31,financial fraud,PERSON_0209,PERSON_1013,,LOCATION_0099,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.82
+FIR_0097,CASE_0097,2026-03-20 01:39:03,forgery,PERSON_0483,PERSON_0111,,LOCATION_0108,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.66
+FIR_0101,CASE_0101,2026-03-05 21:04:36,robbery,PERSON_1375,PERSON_0523,,LOCATION_0062,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.63
+FIR_0102,CASE_0102,2025-08-18 20:48:29,illegal betting,PERSON_1101,PERSON_1042,,LOCATION_0236,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.65
+FIR_0103,CASE_0103,2025-03-19 13:40:51,financial fraud,PERSON_0946,PERSON_0097,,LOCATION_0204,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.75
+FIR_0104,CASE_0104,2025-12-03 08:35:00,organized financial crime,PERSON_0368,PERSON_0816,,LOCATION_0283,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.77
+FIR_0105,CASE_0105,2025-07-14 18:59:04,smuggling,PERSON_0716,PERSON_1372,,LOCATION_0252,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.57
+FIR_0106,CASE_0106,2024-12-30 13:16:01,illegal betting,PERSON_0563,PERSON_0573,,LOCATION_0090,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.74
+FIR_0109,CASE_0109,2025-07-04 08:53:45,financial fraud,PERSON_0102,PERSON_0086,,LOCATION_0231,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.58
+FIR_0111,CASE_0111,2024-08-06 11:20:56,extortion,PERSON_1333,PERSON_1463,,LOCATION_0231,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.72
+FIR_0112,CASE_0112,2025-03-02 23:20:54,smuggling,PERSON_0212,PERSON_1110,,LOCATION_0051,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.69
+FIR_0114,CASE_0114,2025-06-18 20:07:54,cyber fraud,PERSON_0281,PERSON_1048,,LOCATION_0177,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.55
+FIR_0115,CASE_0115,2025-02-23 19:27:12,illegal betting,PERSON_0632,PERSON_1189,,LOCATION_0169,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.52
+FIR_0117,CASE_0117,2025-02-18 05:31:43,smuggling,PERSON_0541,PERSON_1394,,LOCATION_0013,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.82
+FIR_0118,CASE_0118,2026-03-23 07:22:56,extortion,PERSON_0071,PERSON_0181,,LOCATION_0181,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.61
+FIR_0119,CASE_0119,2025-06-21 19:25:37,smuggling,PERSON_0640,PERSON_0446,,LOCATION_0195,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.53
+FIR_0120,CASE_0120,2025-11-02 07:31:41,vehicle theft,PERSON_0587,PERSON_1425,,LOCATION_0176,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.55
+FIR_0121,CASE_0121,2025-05-07 05:48:31,smuggling,PERSON_1384,PERSON_0564,,LOCATION_0147,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.77
+FIR_0122,CASE_0122,2026-02-25 13:17:44,cyber fraud,PERSON_0799,PERSON_1367,,LOCATION_0206,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.73
+FIR_0127,CASE_0127,2025-08-31 04:49:41,organized financial crime,PERSON_0058,PERSON_0528,,LOCATION_0036,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.65
+FIR_0128,CASE_0128,2025-05-20 13:24:37,financial fraud,PERSON_0106,PERSON_0439,,LOCATION_0270,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.58
+FIR_0129,CASE_0129,2024-09-06 07:00:23,cyber fraud,PERSON_0825,PERSON_0005,,LOCATION_0174,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.65
+FIR_0130,CASE_0130,2025-06-08 16:20:06,financial fraud,PERSON_0385,PERSON_0737,,LOCATION_0297,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.69
+FIR_0136,CASE_0136,2025-09-08 04:06:25,smuggling,PERSON_0494,PERSON_1141,,LOCATION_0193,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.68
+FIR_0137,CASE_0137,2024-06-11 15:28:09,vehicle theft,PERSON_0121,PERSON_0271,,LOCATION_0133,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.84
+FIR_0139,CASE_0139,2024-07-17 17:48:31,financial fraud,PERSON_0479,PERSON_0305,,LOCATION_0066,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.69
+FIR_0140,CASE_0140,2024-12-08 10:24:19,vehicle theft,PERSON_0068,PERSON_0045,,LOCATION_0115,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.81
+FIR_0141,CASE_0141,2026-04-25 20:12:21,cyber fraud,PERSON_0221,PERSON_1180,,LOCATION_0121,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.78
+FIR_0142,CASE_0142,2026-02-22 23:08:31,extortion,PERSON_1466,PERSON_0255,,LOCATION_0295,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.78
+FIR_0143,CASE_0143,2025-01-24 19:56:41,robbery,PERSON_0189,PERSON_0795,,LOCATION_0144,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.83
+FIR_0144,CASE_0144,2026-01-09 11:17:42,financial fraud,PERSON_1471,PERSON_1085,,LOCATION_0023,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.61
+FIR_0145,CASE_0145,2025-02-17 20:56:41,organized theft,PERSON_1420,PERSON_1254,,LOCATION_0060,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.52
+FIR_0146,CASE_0146,2026-03-21 12:38:24,financial fraud,PERSON_0502,PERSON_1052,,LOCATION_0080,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.87
+FIR_0148,CASE_0148,2025-11-20 23:00:51,cyber fraud,PERSON_0387,PERSON_1404,,LOCATION_0061,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.52
+FIR_0150,CASE_0150,2024-07-20 02:33:38,extortion,PERSON_0134,PERSON_0989,,LOCATION_0252,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.52
+FIR_0153,CASE_0153,2024-11-04 02:32:04,extortion,PERSON_0182,PERSON_0487,,LOCATION_0261,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.7
+FIR_0155,CASE_0155,2025-03-16 04:33:57,organized theft,PERSON_1253,PERSON_0578,,LOCATION_0064,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.78
+FIR_0156,CASE_0156,2025-03-27 23:49:16,vehicle theft,PERSON_1401,PERSON_0791,,LOCATION_0134,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.68
+FIR_0157,CASE_0157,2024-12-31 06:47:10,robbery,PERSON_1243,PERSON_1228,,LOCATION_0123,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.65
+FIR_0160,CASE_0160,2025-09-09 15:05:15,smuggling,PERSON_1109,PERSON_0131,,LOCATION_0006,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.79
+FIR_0162,CASE_0162,2025-04-18 23:54:42,vehicle theft,PERSON_0117,PERSON_1129,,LOCATION_0285,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.63
+FIR_0163,CASE_0163,2024-07-09 20:24:57,extortion,PERSON_0922,PERSON_0499,,LOCATION_0209,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.77
+FIR_0164,CASE_0164,2025-06-01 09:34:38,financial fraud,PERSON_1200,PERSON_0215,,LOCATION_0231,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.84
+FIR_0165,CASE_0165,2024-07-19 17:22:54,illegal betting,PERSON_1030,PERSON_0418,,LOCATION_0285,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.7
+FIR_0167,CASE_0167,2024-10-10 19:07:40,robbery,PERSON_1450,PERSON_0584,,LOCATION_0069,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.55
+FIR_0168,CASE_0168,2025-11-21 00:33:13,forgery,PERSON_0331,PERSON_1399,,LOCATION_0215,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.71
+FIR_0169,CASE_0169,2025-05-30 11:53:03,robbery,PERSON_1344,PERSON_1400,,LOCATION_0093,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.65
+FIR_0170,CASE_0170,2025-10-16 14:59:26,illegal betting,PERSON_0108,PERSON_0776,,LOCATION_0077,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.57
+FIR_0171,CASE_0171,2024-08-17 02:44:17,organized theft,PERSON_0592,PERSON_0421,,LOCATION_0102,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.82
+FIR_0172,CASE_0172,2024-11-28 19:44:43,vehicle theft,PERSON_1355,PERSON_0084,,LOCATION_0068,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.73
+FIR_0173,CASE_0173,2025-08-29 19:23:13,illegal betting,PERSON_0860,PERSON_1032,,LOCATION_0179,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.59
+FIR_0174,CASE_0174,2024-07-01 10:50:58,organized theft,PERSON_0201,PERSON_0496,,LOCATION_0101,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.58
+FIR_0175,CASE_0175,2025-05-29 16:52:11,forgery,PERSON_0081,PERSON_1392,,LOCATION_0287,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.52
+FIR_0176,CASE_0176,2025-09-15 23:03:36,robbery,PERSON_0195,PERSON_1364,,LOCATION_0076,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.79
+FIR_0177,CASE_0177,2026-03-27 19:28:14,cyber fraud,PERSON_0009,PERSON_0575,,LOCATION_0103,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.56
+FIR_0179,CASE_0179,2025-02-15 21:57:41,illegal betting,PERSON_0295,PERSON_0661,,LOCATION_0012,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.51
+FIR_0180,CASE_0180,2025-01-31 06:39:51,illegal betting,PERSON_1012,PERSON_0858,,LOCATION_0020,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.8
+FIR_0181,CASE_0181,2026-05-17 10:35:01,organized financial crime,PERSON_0444,PERSON_0508,,LOCATION_0115,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.68
+FIR_0182,CASE_0182,2025-06-13 14:28:28,organized theft,PERSON_0538,PERSON_1187,,LOCATION_0241,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.84
+FIR_0183,CASE_0183,2024-11-11 06:03:08,illegal betting,PERSON_0060,PERSON_1178,,LOCATION_0115,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.86
+FIR_0184,CASE_0184,2025-03-15 21:41:07,illegal betting,PERSON_0292,PERSON_0566,,LOCATION_0198,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.65
+FIR_0186,CASE_0186,2025-10-28 09:34:23,financial fraud,PERSON_1127,PERSON_1313,,LOCATION_0185,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.62
+FIR_0187,CASE_0187,2025-11-28 00:06:50,cyber fraud,PERSON_0753,PERSON_0153,,LOCATION_0098,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.57
+FIR_0189,CASE_0189,2025-01-18 10:50:33,organized financial crime,PERSON_0174,PERSON_0662,,LOCATION_0003,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.74
+FIR_0190,CASE_0190,2024-10-27 11:43:43,extortion,PERSON_0342,PERSON_0049,,LOCATION_0067,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.77
+FIR_0191,CASE_0191,2024-06-11 20:44:29,financial fraud,PERSON_0464,PERSON_0033,,LOCATION_0214,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.53
+FIR_0193,CASE_0193,2026-01-12 09:16:49,forgery,PERSON_0569,PERSON_1152,,LOCATION_0046,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.66
+FIR_0194,CASE_0194,2025-06-28 22:24:12,illegal betting,PERSON_0642,PERSON_1398,,LOCATION_0020,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.54
+FIR_0195,CASE_0195,2025-04-09 06:21:07,organized theft,PERSON_0040,PERSON_0786,,LOCATION_0258,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.74
+FIR_0196,CASE_0196,2025-11-02 10:05:17,extortion,PERSON_1192,PERSON_0359,,LOCATION_0037,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.89
+FIR_0197,CASE_0197,2025-07-31 13:56:18,forgery,PERSON_0590,PERSON_1071,,LOCATION_0133,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.89
+FIR_0198,CASE_0198,2024-09-03 08:20:21,extortion,PERSON_1134,PERSON_0306,,LOCATION_0051,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.76
+FIR_0200,CASE_0200,2024-11-01 11:40:07,cyber fraud,PERSON_0389,PERSON_0667,,LOCATION_0083,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.79
+FIR_0201,CASE_0201,2024-11-14 07:43:29,extortion,PERSON_0835,PERSON_0420,,LOCATION_0027,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.82
+FIR_0202,CASE_0202,2026-03-05 22:18:47,robbery,PERSON_1301,PERSON_1090,,LOCATION_0116,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.85
+FIR_0204,CASE_0204,2025-05-22 05:19:00,forgery,PERSON_0793,PERSON_0961,,LOCATION_0085,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.55
+FIR_0205,CASE_0205,2025-02-02 03:50:44,cyber fraud,PERSON_0112,PERSON_0973,,LOCATION_0027,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.82
+FIR_0206,CASE_0206,2026-05-02 16:17:53,extortion,PERSON_0268,PERSON_0273,,LOCATION_0201,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.64
+FIR_0207,CASE_0207,2025-04-26 14:19:55,illegal betting,PERSON_1497,PERSON_0465,,LOCATION_0295,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.55
+FIR_0208,CASE_0208,2025-06-01 01:39:23,organized financial crime,PERSON_1105,PERSON_1157,,LOCATION_0232,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.79
+FIR_0209,CASE_0209,2025-08-12 11:58:51,extortion,PERSON_0764,PERSON_0664,,LOCATION_0150,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.7
+FIR_0210,CASE_0210,2024-08-14 04:08:57,forgery,PERSON_0620,PERSON_0571,,LOCATION_0041,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.64
+FIR_0211,CASE_0211,2024-06-15 02:23:07,extortion,PERSON_1218,PERSON_1244,,LOCATION_0219,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.86
+FIR_0213,CASE_0213,2025-09-08 11:05:58,illegal betting,PERSON_0184,PERSON_1494,,LOCATION_0219,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.59
+FIR_0214,CASE_0214,2026-04-13 17:53:47,organized theft,PERSON_1080,PERSON_0529,,LOCATION_0143,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.61
+FIR_0215,CASE_0215,2024-07-29 16:51:51,cyber fraud,PERSON_0557,PERSON_0435,,LOCATION_0158,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.89
+FIR_0216,CASE_0216,2025-07-19 19:18:18,smuggling,PERSON_1049,PERSON_0510,,LOCATION_0152,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.59
+FIR_0218,CASE_0218,2026-02-11 21:31:23,vehicle theft,PERSON_1335,PERSON_0604,,LOCATION_0008,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.58
+FIR_0219,CASE_0219,2024-11-09 21:11:08,robbery,PERSON_1299,PERSON_0114,,LOCATION_0181,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.65
+FIR_0220,CASE_0220,2025-08-23 22:47:49,smuggling,PERSON_0488,PERSON_0344,,LOCATION_0121,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.68
+FIR_0221,CASE_0221,2025-03-21 15:38:57,organized financial crime,PERSON_0879,PERSON_0841,,LOCATION_0152,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.86
+FIR_0222,CASE_0222,2024-10-13 06:44:56,cyber fraud,PERSON_1427,PERSON_0984,,LOCATION_0104,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.57
+FIR_0224,CASE_0224,2026-04-05 22:28:26,extortion,PERSON_0687,PERSON_0165,,LOCATION_0008,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.74
+FIR_0226,CASE_0226,2025-07-27 01:32:13,extortion,PERSON_0899,PERSON_0589,,LOCATION_0067,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.8
+FIR_0227,CASE_0227,2026-04-29 22:57:46,vehicle theft,PERSON_1098,PERSON_1083,,LOCATION_0172,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.66
+FIR_0229,CASE_0229,2024-10-13 23:02:49,extortion,PERSON_0116,PERSON_0054,,LOCATION_0122,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.55
+FIR_0230,CASE_0230,2024-11-06 16:04:41,forgery,PERSON_0934,PERSON_1315,,LOCATION_0043,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.86
+FIR_0231,CASE_0231,2025-03-11 20:43:44,forgery,PERSON_0912,PERSON_0318,,LOCATION_0164,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.86
+FIR_0232,CASE_0232,2025-03-25 00:57:55,financial fraud,PERSON_1225,PERSON_0709,,LOCATION_0008,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.85
+FIR_0233,CASE_0233,2024-07-16 13:46:34,cyber fraud,PERSON_0347,PERSON_0312,,LOCATION_0081,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.56
+FIR_0235,CASE_0235,2025-05-13 05:15:03,vehicle theft,PERSON_0782,PERSON_0218,,LOCATION_0240,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.61
+FIR_0236,CASE_0236,2025-10-15 23:09:03,organized theft,PERSON_1073,PERSON_0094,,LOCATION_0183,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.58
+FIR_0237,CASE_0237,2025-12-06 22:22:54,cyber fraud,PERSON_0259,PERSON_0020,,LOCATION_0296,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.54
+FIR_0239,CASE_0239,2024-11-06 18:30:45,forgery,PERSON_1175,PERSON_0186,,LOCATION_0021,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.75
+FIR_0240,CASE_0240,2024-08-29 03:11:21,illegal betting,PERSON_1307,PERSON_1100,,LOCATION_0034,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.85
+FIR_0241,CASE_0241,2025-05-03 14:50:23,extortion,PERSON_0309,PERSON_0272,,LOCATION_0056,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.51
+FIR_0242,CASE_0242,2025-07-31 06:16:16,organized theft,PERSON_1319,PERSON_0293,,LOCATION_0173,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.77
+FIR_0243,CASE_0243,2025-11-05 20:53:34,extortion,PERSON_0689,PERSON_1004,,LOCATION_0202,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.85
+FIR_0244,CASE_0244,2026-04-08 08:04:48,extortion,PERSON_0249,PERSON_0333,,LOCATION_0152,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.82
+FIR_0246,CASE_0246,2024-10-22 18:19:39,organized theft,PERSON_1275,PERSON_0536,,LOCATION_0006,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.75
+FIR_0248,CASE_0248,2025-05-21 05:17:04,financial fraud,PERSON_0864,PERSON_0497,,LOCATION_0205,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.55
+FIR_0249,CASE_0249,2024-08-22 20:13:40,vehicle theft,PERSON_0419,PERSON_0337,,LOCATION_0098,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.89
+FIR_0250,CASE_0250,2025-08-21 21:10:54,cyber fraud,PERSON_0690,PERSON_1059,,LOCATION_0025,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.7
+FIR_0251,CASE_0251,2025-10-17 13:19:00,illegal betting,PERSON_0056,PERSON_0141,,LOCATION_0072,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.6
+FIR_0252,CASE_0252,2025-03-18 07:29:54,organized theft,PERSON_0610,PERSON_1430,,LOCATION_0076,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.9
+FIR_0253,CASE_0253,2025-06-11 10:48:22,organized theft,PERSON_0144,PERSON_0176,,LOCATION_0137,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.81
+FIR_0254,CASE_0254,2025-11-05 16:48:08,forgery,PERSON_1058,PERSON_0303,,LOCATION_0247,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.66
+FIR_0255,CASE_0255,2026-03-12 14:21:31,extortion,PERSON_0135,PERSON_1409,,LOCATION_0098,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.75
+FIR_0256,CASE_0256,2026-03-05 02:55:32,cyber fraud,PERSON_1057,PERSON_0638,,LOCATION_0077,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.88
+FIR_0257,CASE_0257,2025-03-16 04:05:26,financial fraud,PERSON_1277,PERSON_0350,,LOCATION_0089,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.63
+FIR_0258,CASE_0258,2025-07-27 09:38:15,organized theft,PERSON_1263,PERSON_0813,,LOCATION_0297,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.89
+FIR_0259,CASE_0259,2025-05-25 20:15:04,organized theft,PERSON_1130,PERSON_1147,,LOCATION_0141,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.82
+FIR_0262,CASE_0262,2025-08-14 22:45:27,financial fraud,PERSON_0781,PERSON_0390,,LOCATION_0282,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.7
+FIR_0264,CASE_0264,2025-01-12 21:37:09,organized theft,PERSON_0409,PERSON_0377,,LOCATION_0221,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.58
+FIR_0265,CASE_0265,2025-05-16 08:08:03,vehicle theft,PERSON_1331,PERSON_0936,,LOCATION_0133,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.78
+FIR_0266,CASE_0266,2024-10-25 19:00:38,financial fraud,PERSON_0915,PERSON_0434,,LOCATION_0101,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.81
+FIR_0267,CASE_0267,2025-10-11 08:14:20,organized theft,PERSON_1020,PERSON_0693,,LOCATION_0120,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.56
+FIR_0268,CASE_0268,2025-05-23 09:47:35,organized financial crime,PERSON_1451,PERSON_0053,,LOCATION_0115,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.74
+FIR_0269,CASE_0269,2024-07-11 00:56:55,organized financial crime,PERSON_0480,PERSON_0755,,LOCATION_0082,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.89
+FIR_0271,CASE_0271,2025-01-17 13:43:21,organized financial crime,PERSON_0203,PERSON_0625,,LOCATION_0112,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.82
+FIR_0272,CASE_0272,2026-05-14 04:00:40,vehicle theft,PERSON_0078,PERSON_1220,,LOCATION_0198,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.83
+FIR_0275,CASE_0275,2025-05-28 13:59:23,cyber fraud,PERSON_0240,PERSON_0635,,LOCATION_0037,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.81
+FIR_0276,CASE_0276,2026-03-19 01:58:45,smuggling,PERSON_0343,PERSON_1297,,LOCATION_0219,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.6
+FIR_0278,CASE_0278,2026-04-02 14:09:55,forgery,PERSON_1368,PERSON_1123,,LOCATION_0265,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.74
+FIR_0279,CASE_0279,2025-10-26 13:54:30,illegal betting,PERSON_0839,PERSON_0691,,LOCATION_0261,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.82
+FIR_0281,CASE_0281,2025-07-13 16:20:11,financial fraud,PERSON_0183,PERSON_0450,,LOCATION_0130,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.86
+FIR_0282,CASE_0282,2025-12-25 09:21:35,extortion,PERSON_0021,PERSON_0233,,LOCATION_0254,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.84
+FIR_0284,CASE_0284,2026-01-27 08:33:54,vehicle theft,PERSON_0122,PERSON_0438,,LOCATION_0162,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.85
+FIR_0285,CASE_0285,2026-01-18 18:49:05,financial fraud,PERSON_1181,PERSON_1245,,LOCATION_0078,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.63
+FIR_0286,CASE_0286,2024-06-05 15:36:15,illegal betting,PERSON_0448,PERSON_1121,,LOCATION_0128,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.85
+FIR_0287,CASE_0287,2025-09-24 17:19:14,smuggling,PERSON_1011,PERSON_0346,,LOCATION_0223,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.66
+FIR_0288,CASE_0288,2025-05-17 01:15:00,extortion,PERSON_0501,PERSON_0680,,LOCATION_0202,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.87
+FIR_0289,CASE_0289,2026-01-24 16:51:47,organized financial crime,PERSON_0913,PERSON_1395,,LOCATION_0183,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.74
+FIR_0290,CASE_0290,2025-12-19 06:17:14,vehicle theft,PERSON_1139,PERSON_0917,,LOCATION_0200,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.65
+FIR_0291,CASE_0291,2025-10-11 04:27:25,organized financial crime,PERSON_0100,PERSON_1040,,LOCATION_0110,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.54
+FIR_0293,CASE_0293,2024-12-29 20:48:46,organized financial crime,PERSON_1316,PERSON_1246,,LOCATION_0259,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.52
+FIR_0295,CASE_0295,2024-12-26 00:30:38,smuggling,PERSON_1097,PERSON_1274,,LOCATION_0047,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.76
+FIR_0296,CASE_0296,2025-11-06 08:00:55,organized financial crime,PERSON_1300,PERSON_0330,,LOCATION_0127,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.69
+FIR_0298,CASE_0298,2025-05-04 10:38:54,forgery,PERSON_1492,PERSON_1493,,LOCATION_0269,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.78
+FIR_0300,CASE_0300,2025-06-24 04:45:16,organized theft,PERSON_0859,PERSON_1365,,LOCATION_0275,Standalone synthetic case; limited relational clues in narrative.,POLICE_STATION_RECORD,0.81

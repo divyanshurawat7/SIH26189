@@ -1,0 +1,72 @@
+{
+  "SYNTHETIC_DATA": true,
+  "random_seed": 26189,
+  "generated_at_utc": "2026-09-12T12:52:34.045551+00:00",
+  "row_counts": {
+    "persons.csv": 1500,
+    "organizations.csv": 300,
+    "phones.csv": 2025,
+    "devices.csv": 2000,
+    "bank_accounts.csv": 913,
+    "financial_transactions.csv": 20000,
+    "vehicles.csv": 762,
+    "vehicle_events.csv": 10000,
+    "locations.csv": 300,
+    "cell_towers.csv": 150,
+    "location_events.csv": 15001,
+    "cdr_records.csv": 30000,
+    "fir_records.csv": 300,
+    "surveillance_reports.csv": 5000,
+    "social_media_records.csv": 5000,
+    "criminal_history.csv": 331,
+    "intelligence_reports.csv": 2000,
+    "relationships.csv": 8672,
+    "evidence.csv": 2600,
+    "cases.csv": 300,
+    "graph_edges.csv": 8672,
+    "ground_truth_entity_resolution.csv": 65,
+    "ground_truth_relationships.csv": 8672,
+    "ground_truth_networks.csv": 180,
+    "ground_truth_roles.csv": 180,
+    "ground_truth_influencers.csv": 32,
+    "ground_truth_orchestrators.csv": 12,
+    "ground_truth_case_links.csv": 44,
+    "ground_truth_suspicious_patterns.csv": 57,
+    "ground_truth_co_travel.csv": 165
+  },
+  "n_networks": 12,
+  "flagship_network": "NET_001",
+  "flagship_case_id": "CASE_0001",
+  "flagship_chain": [
+    "PERSON_1476",
+    "PERSON_0026",
+    "PERSON_0397",
+    "PERSON_0405",
+    "PERSON_1459"
+  ],
+  "n_same_name_traps": 65,
+  "n_strong_co_travel": 55,
+  "n_weak_co_travel": 110,
+  "n_innocent_co_location": 50,
+  "n_false_positive_pairs": 45,
+  "n_contradictions": 26,
+  "n_cross_case_links": 32,
+  "train_networks": [
+    "NET_001",
+    "NET_002",
+    "NET_007",
+    "NET_008",
+    "NET_009",
+    "NET_010",
+    "NET_011",
+    "NET_012"
+  ],
+  "validation_networks": [
+    "NET_003",
+    "NET_005"
+  ],
+  "test_networks": [
+    "NET_004",
+    "NET_006"
+  ]
+}

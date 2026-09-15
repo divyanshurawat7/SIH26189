@@ -1,0 +1,11 @@
+# SIH26189 — AI-Powered Criminal Network Analysis System
+# Core Requirements
+
+pandas>=2.2.0
+numpy>=1.26.0
+networkx>=3.2.0
+scikit-learn>=1.4.0
+pydantic>=2.6.0
+pytest>=8.0.0
+rich>=13.7.0
+python-dateutil>=2.8.2

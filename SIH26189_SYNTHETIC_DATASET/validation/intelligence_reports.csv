@@ -1,0 +1,5 @@
+report_id,case_id,timestamp,subject_person_id,subject_organization_id,observation,source,reliability,confidence
+INTEL_00005,CASE_0003,2025-05-09 03:13:32,PERSON_0486,ORG_0028,Source indicates the subject may be coordinating activities with an associate network.,FIELD_INTELLIGENCE_UNIT,low,0.35
+INTEL_00006,CASE_0003,2025-05-15 06:07:39,PERSON_1232,ORG_0028,Low-confidence tip regarding possible involvement in ongoing case activity.,FIELD_INTELLIGENCE_UNIT,medium,0.51
+INTEL_00009,CASE_0005,2026-02-26 04:13:35,PERSON_1008,ORG_0017,Field source reports subject was seen meeting with unidentified associates.,FIELD_INTELLIGENCE_UNIT,low,0.49
+INTEL_00010,CASE_0005,2025-01-22 04:05:42,PERSON_1269,ORG_0017,Field source reports subject was seen meeting with unidentified associates.,FIELD_INTELLIGENCE_UNIT,low,0.4

@@ -1,0 +1,7 @@
+report_id,case_id,timestamp,location_id,person_reference,vehicle_reference,observation,source,confidence
+SURV_00007,CASE_0003,2026-04-30 14:29:22,LOCATION_0293,Manju Joshi,VEHICLE_00015,Manju Joshi was clearly identified near LOCATION_0293 meeting with an associate.,FIELD_SURVEILLANCE_UNIT,0.66
+SURV_00008,CASE_0003,2025-02-02 07:08:20,LOCATION_0203,Deepak Verma,,A male individual resembling Deepak Verma was observed near LOCATION_0203.,FIELD_SURVEILLANCE_UNIT,0.68
+SURV_00009,CASE_0003,2026-02-12 07:42:52,LOCATION_0233,Ritu Singh,VEHICLE_00016,Ritu Singh was clearly identified near LOCATION_0233 meeting with an associate.,FIELD_SURVEILLANCE_UNIT,0.74
+SURV_00013,CASE_0005,2026-01-15 05:33:51,LOCATION_0105,Preeti Reddy,VEHICLE_00032,Preeti Reddy was clearly identified near LOCATION_0105 meeting with an associate.,FIELD_SURVEILLANCE_UNIT,0.84
+SURV_00014,CASE_0005,2025-11-21 00:35:04,LOCATION_0095,Karan Nair,VEHICLE_00454,Karan Nair was clearly identified near LOCATION_0095 meeting with an associate.,FIELD_SURVEILLANCE_UNIT,0.67
+SURV_00015,CASE_0005,2026-04-05 19:11:59,LOCATION_0245,Rohit Singh,VEHICLE_00033,Rohit Singh was clearly identified near LOCATION_0245 meeting with an associate.,FIELD_SURVEILLANCE_UNIT,0.66

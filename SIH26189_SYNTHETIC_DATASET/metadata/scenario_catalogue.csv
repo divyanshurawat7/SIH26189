@@ -1,0 +1,95 @@
+scenario_id,case_id,scenario_type,description,important_entities,expected_discovery,difficulty
+SCEN_001,CASE_0001,MULTI_HOP_COORDINATION,Hidden 5-hop chain in NET_001 (FLAGSHIP_ABCDE); PERSON_1476 is upstream coordinator.,PERSON_1476;PERSON_0026;PERSON_0397;PERSON_0405;PERSON_1459,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_002,CASE_0001,INFLUENTIAL_PERSON,Role differentiation test in NET_001: coordinator vs broker vs innocent high-degree contact.,PERSON_1476;PERSON_0026;PERSON_0397;PERSON_0405;PERSON_1459,Distinguish influence roles beyond raw degree,medium
+SCEN_003,CASE_0002,MULTI_HOP_COORDINATION,Hidden 4-hop chain in NET_002 (PATTERN3_CONVERGENT); PERSON_1104 is upstream coordinator.,PERSON_1104;PERSON_1226;PERSON_0969;PERSON_0809,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_004,CASE_0002,INFLUENTIAL_PERSON,Role differentiation test in NET_002: coordinator vs broker vs innocent high-degree contact.,PERSON_1104;PERSON_1226;PERSON_0969;PERSON_0809,Distinguish influence roles beyond raw degree,medium
+SCEN_005,CASE_0003,MULTI_HOP_COORDINATION,Hidden 4-hop chain in NET_003 (PATTERN4_BRANCH); PERSON_0486 is upstream coordinator.,PERSON_0486;PERSON_1343;PERSON_0833;PERSON_1232,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_006,CASE_0003,INFLUENTIAL_PERSON,Role differentiation test in NET_003: coordinator vs broker vs innocent high-degree contact.,PERSON_0486;PERSON_1343;PERSON_0833;PERSON_1232,Distinguish influence roles beyond raw degree,medium
+SCEN_007,CASE_0004,MULTI_HOP_COORDINATION,Hidden 4-hop chain in NET_004 (PATTERN3_CONVERGENT); PERSON_1060 is upstream coordinator.,PERSON_1060;PERSON_0720;PERSON_0950;PERSON_0096,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_008,CASE_0004,INFLUENTIAL_PERSON,Role differentiation test in NET_004: coordinator vs broker vs innocent high-degree contact.,PERSON_1060;PERSON_0720;PERSON_0950;PERSON_0096,Distinguish influence roles beyond raw degree,medium
+SCEN_009,CASE_0005,MULTI_HOP_COORDINATION,Hidden 4-hop chain in NET_005 (PATTERN4_BRANCH); PERSON_1008 is upstream coordinator.,PERSON_1008;PERSON_0105;PERSON_1002;PERSON_1269,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_010,CASE_0005,INFLUENTIAL_PERSON,Role differentiation test in NET_005: coordinator vs broker vs innocent high-degree contact.,PERSON_1008;PERSON_0105;PERSON_1002;PERSON_1269,Distinguish influence roles beyond raw degree,medium
+SCEN_011,CASE_0006,MULTI_HOP_COORDINATION,Hidden 3-hop chain in NET_006 (PATTERN1_ABC_EVENT); PERSON_1190 is upstream coordinator.,PERSON_1190;PERSON_1170;PERSON_0266,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_012,CASE_0006,INFLUENTIAL_PERSON,Role differentiation test in NET_006: coordinator vs broker vs innocent high-degree contact.,PERSON_1190;PERSON_1170;PERSON_0266,Distinguish influence roles beyond raw degree,medium
+SCEN_013,CASE_0007,MULTI_HOP_COORDINATION,Hidden 4-hop chain in NET_007 (PATTERN3_CONVERGENT); PERSON_1499 is upstream coordinator.,PERSON_1499;PERSON_0037;PERSON_1449;PERSON_1303,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_014,CASE_0007,INFLUENTIAL_PERSON,Role differentiation test in NET_007: coordinator vs broker vs innocent high-degree contact.,PERSON_1499;PERSON_0037;PERSON_1449;PERSON_1303,Distinguish influence roles beyond raw degree,medium
+SCEN_015,CASE_0008,MULTI_HOP_COORDINATION,Hidden 3-hop chain in NET_008 (PATTERN1_ABC_EVENT); PERSON_0398 is upstream coordinator.,PERSON_0398;PERSON_0736;PERSON_0785,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_016,CASE_0008,INFLUENTIAL_PERSON,Role differentiation test in NET_008: coordinator vs broker vs innocent high-degree contact.,PERSON_0398;PERSON_0736;PERSON_0785,Distinguish influence roles beyond raw degree,medium
+SCEN_017,CASE_0009,MULTI_HOP_COORDINATION,Hidden 4-hop chain in NET_009 (PATTERN3_CONVERGENT); PERSON_0671 is upstream coordinator.,PERSON_0671;PERSON_0639;PERSON_1203;PERSON_0945,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_018,CASE_0009,INFLUENTIAL_PERSON,Role differentiation test in NET_009: coordinator vs broker vs innocent high-degree contact.,PERSON_0671;PERSON_0639;PERSON_1203;PERSON_0945,Distinguish influence roles beyond raw degree,medium
+SCEN_019,CASE_0010,MULTI_HOP_COORDINATION,Hidden 5-hop chain in NET_010 (PATTERN5_BROKER_FANOUT); PERSON_0104 is upstream coordinator.,PERSON_0104;PERSON_1433;PERSON_0551;PERSON_0180;PERSON_0030,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_020,CASE_0010,INFLUENTIAL_PERSON,Role differentiation test in NET_010: coordinator vs broker vs innocent high-degree contact.,PERSON_0104;PERSON_1433;PERSON_0551;PERSON_0180;PERSON_0030,Distinguish influence roles beyond raw degree,medium
+SCEN_021,CASE_0011,MULTI_HOP_COORDINATION,Hidden 4-hop chain in NET_011 (PATTERN4_BRANCH); PERSON_1242 is upstream coordinator.,PERSON_1242;PERSON_1046;PERSON_0256;PERSON_1376,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_022,CASE_0011,INFLUENTIAL_PERSON,Role differentiation test in NET_011: coordinator vs broker vs innocent high-degree contact.,PERSON_1242;PERSON_1046;PERSON_0256;PERSON_1376,Distinguish influence roles beyond raw degree,medium
+SCEN_023,CASE_0012,MULTI_HOP_COORDINATION,Hidden 5-hop chain in NET_012 (PATTERN5_BROKER_FANOUT); PERSON_0423 is upstream coordinator.,PERSON_0423;PERSON_0784;PERSON_0580;PERSON_0903;PERSON_0725,Identify upstream coordinator via multi-hop temporal chain,high
+SCEN_024,CASE_0012,INFLUENTIAL_PERSON,Role differentiation test in NET_012: coordinator vs broker vs innocent high-degree contact.,PERSON_0423;PERSON_0784;PERSON_0580;PERSON_0903;PERSON_0725,Distinguish influence roles beyond raw degree,medium
+SCEN_025,,ENTITY_RESOLUTION,Same-name different-person trap: Shalini Sharma.,PERSON_0096;PERSON_0404,Correctly avoid merging these two distinct persons,medium
+SCEN_026,,ENTITY_RESOLUTION,Same-name different-person trap: Deepak Singh.,PERSON_1057;PERSON_1142,Correctly avoid merging these two distinct persons,medium
+SCEN_027,,ENTITY_RESOLUTION,Same-name different-person trap: Kavita Bhatt.,PERSON_1290;PERSON_1247,Correctly avoid merging these two distinct persons,medium
+SCEN_028,,ENTITY_RESOLUTION,Same-name different-person trap: Suresh Mishra.,PERSON_0817;PERSON_0042,Correctly avoid merging these two distinct persons,medium
+SCEN_029,,ENTITY_RESOLUTION,Same-name different-person trap: Isha Meena.,PERSON_1071;PERSON_0464,Correctly avoid merging these two distinct persons,medium
+SCEN_030,,ENTITY_RESOLUTION,Same-name different-person trap: Rajesh Chauhan.,PERSON_0273;PERSON_0080,Correctly avoid merging these two distinct persons,medium
+SCEN_031,,ENTITY_RESOLUTION,Same-name different-person trap: Deepika Chauhan.,PERSON_1396;PERSON_1098,Correctly avoid merging these two distinct persons,medium
+SCEN_032,,ENTITY_RESOLUTION,Same-name different-person trap: Deepika Agarwal.,PERSON_1200;PERSON_0598,Correctly avoid merging these two distinct persons,medium
+SCEN_033,,ENTITY_RESOLUTION,Same-name different-person trap: Anil Singh.,PERSON_0956;PERSON_1243,Correctly avoid merging these two distinct persons,medium
+SCEN_034,,ENTITY_RESOLUTION,Same-name different-person trap: Preeti Kulkarni.,PERSON_0605;PERSON_1277,Correctly avoid merging these two distinct persons,medium
+SCEN_035,,ENTITY_RESOLUTION,Same-name different-person trap: Sanjay Singh.,PERSON_0071;PERSON_0135,Correctly avoid merging these two distinct persons,medium
+SCEN_036,,ENTITY_RESOLUTION,Same-name different-person trap: Kirti Gupta.,PERSON_1203;PERSON_0668,Correctly avoid merging these two distinct persons,medium
+SCEN_037,,ENTITY_RESOLUTION,Same-name different-person trap: Kirti Choudhary.,PERSON_0137;PERSON_0396,Correctly avoid merging these two distinct persons,medium
+SCEN_038,,ENTITY_RESOLUTION,Same-name different-person trap: Ravi Yadav.,PERSON_1190;PERSON_0793,Correctly avoid merging these two distinct persons,medium
+SCEN_039,,ENTITY_RESOLUTION,Same-name different-person trap: Gaurav Verma.,PERSON_1168;PERSON_1146,Correctly avoid merging these two distinct persons,medium
+SCEN_040,,ENTITY_RESOLUTION,Same-name different-person trap: Anjali Bansal.,PERSON_1423;PERSON_0714,Correctly avoid merging these two distinct persons,medium
+SCEN_041,,ENTITY_RESOLUTION,Same-name different-person trap: Pankaj Chauhan.,PERSON_0388;PERSON_0276,Correctly avoid merging these two distinct persons,medium
+SCEN_042,,ENTITY_RESOLUTION,Same-name different-person trap: Harish Gupta.,PERSON_1119;PERSON_0657,Correctly avoid merging these two distinct persons,medium
+SCEN_043,,ENTITY_RESOLUTION,Same-name different-person trap: Yash Saxena.,PERSON_0162;PERSON_0842,Correctly avoid merging these two distinct persons,medium
+SCEN_044,,ENTITY_RESOLUTION,Same-name different-person trap: Meena Chauhan.,PERSON_0975;PERSON_0816,Correctly avoid merging these two distinct persons,medium
+SCEN_045,,FALSE_POSITIVE,Innocent dense-contact pair (business_partner).,PERSON_1184;PERSON_0509,Classify as innocent despite high contact frequency,medium
+SCEN_046,,FALSE_POSITIVE,Innocent dense-contact pair (delivery_worker_customer).,PERSON_0413;PERSON_0367,Classify as innocent despite high contact frequency,medium
+SCEN_047,,FALSE_POSITIVE,Innocent dense-contact pair (delivery_worker_customer).,PERSON_0440;PERSON_0294,Classify as innocent despite high contact frequency,medium
+SCEN_048,,FALSE_POSITIVE,Innocent dense-contact pair (legitimate_business_relationship).,PERSON_0445;PERSON_0673,Classify as innocent despite high contact frequency,medium
+SCEN_049,,FALSE_POSITIVE,Innocent dense-contact pair (family_member).,PERSON_0371;PERSON_0611,Classify as innocent despite high contact frequency,medium
+SCEN_050,,FALSE_POSITIVE,Innocent dense-contact pair (delivery_worker_customer).,PERSON_1432;PERSON_0339,Classify as innocent despite high contact frequency,medium
+SCEN_051,,FALSE_POSITIVE,Innocent dense-contact pair (business_partner).,PERSON_0603;PERSON_1385,Classify as innocent despite high contact frequency,medium
+SCEN_052,,FALSE_POSITIVE,Innocent dense-contact pair (business_partner).,PERSON_1114;PERSON_1421,Classify as innocent despite high contact frequency,medium
+SCEN_053,,FALSE_POSITIVE,Innocent dense-contact pair (taxi_driver_customer).,PERSON_1191;PERSON_0004,Classify as innocent despite high contact frequency,medium
+SCEN_054,,FALSE_POSITIVE,Innocent dense-contact pair (neighbor).,PERSON_1272;PERSON_0565,Classify as innocent despite high contact frequency,medium
+SCEN_055,,FALSE_POSITIVE,Innocent dense-contact pair (neighbor).,PERSON_0730;PERSON_0265,Classify as innocent despite high contact frequency,medium
+SCEN_056,,FALSE_POSITIVE,Innocent dense-contact pair (family_member).,PERSON_0559;PERSON_0243,Classify as innocent despite high contact frequency,medium
+SCEN_057,,FALSE_POSITIVE,Innocent dense-contact pair (business_partner).,PERSON_0055;PERSON_0867,Classify as innocent despite high contact frequency,medium
+SCEN_058,,FALSE_POSITIVE,Innocent dense-contact pair (business_partner).,PERSON_0894;PERSON_1383,Classify as innocent despite high contact frequency,medium
+SCEN_059,,FALSE_POSITIVE,Innocent dense-contact pair (coworker).,PERSON_0527;PERSON_1163,Classify as innocent despite high contact frequency,medium
+SCEN_060,,FALSE_POSITIVE,Innocent dense-contact pair (coworker).,PERSON_1329;PERSON_0216,Classify as innocent despite high contact frequency,medium
+SCEN_061,,FALSE_POSITIVE,Innocent dense-contact pair (taxi_driver_customer).,PERSON_0892;PERSON_1159,Classify as innocent despite high contact frequency,medium
+SCEN_062,,FALSE_POSITIVE,Innocent dense-contact pair (business_partner).,PERSON_1350;PERSON_1380,Classify as innocent despite high contact frequency,medium
+SCEN_063,,FALSE_POSITIVE,Innocent dense-contact pair (taxi_driver_customer).,PERSON_0217;PERSON_1217,Classify as innocent despite high contact frequency,medium
+SCEN_064,,FALSE_POSITIVE,Innocent dense-contact pair (business_partner).,PERSON_1318;PERSON_0077,Classify as innocent despite high contact frequency,medium
+SCEN_065,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_1073;PERSON_1196,Detect potential operational association from movement alone,high
+SCEN_066,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_0106;PERSON_0677,Detect potential operational association from movement alone,high
+SCEN_067,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_0915;PERSON_0236,Detect potential operational association from movement alone,high
+SCEN_068,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_0772;PERSON_0058,Detect potential operational association from movement alone,high
+SCEN_069,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_0144;PERSON_1465,Detect potential operational association from movement alone,high
+SCEN_070,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_0084;PERSON_0937,Detect potential operational association from movement alone,high
+SCEN_071,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_0248;PERSON_1434,Detect potential operational association from movement alone,high
+SCEN_072,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_1119;PERSON_0289,Detect potential operational association from movement alone,high
+SCEN_073,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_0671;PERSON_1302,Detect potential operational association from movement alone,high
+SCEN_074,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_0080;PERSON_1107,Detect potential operational association from movement alone,high
+SCEN_075,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_1276;PERSON_1450,Detect potential operational association from movement alone,high
+SCEN_076,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_0607;PERSON_1244,Detect potential operational association from movement alone,high
+SCEN_077,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_0942;PERSON_1111,Detect potential operational association from movement alone,high
+SCEN_078,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_1433;PERSON_0621,Detect potential operational association from movement alone,high
+SCEN_079,,CO_TRAVEL,Strong co-travel with zero direct calls.,PERSON_1004;PERSON_0836,Detect potential operational association from movement alone,high
+SCEN_080,CASE_0274,CROSS_CASE_LINK,Shared PERSON across cases CASE_0274;CASE_0245;CASE_0165.,PERSON_0618,Discover the shared entity link across unrelated cases,high
+SCEN_081,CASE_0082,CROSS_CASE_LINK,Shared ORGANIZATION across cases CASE_0082;CASE_0039.,ORG_0022,Discover the shared entity link across unrelated cases,high
+SCEN_082,CASE_0271,CROSS_CASE_LINK,Shared PERSON across cases CASE_0271;CASE_0178;CASE_0217.,PERSON_0661,Discover the shared entity link across unrelated cases,high
+SCEN_083,CASE_0069,CROSS_CASE_LINK,Shared PERSON across cases CASE_0069;CASE_0254;CASE_0215.,PERSON_0112,Discover the shared entity link across unrelated cases,high
+SCEN_084,CASE_0251,CROSS_CASE_LINK,Shared PERSON across cases CASE_0251;CASE_0066;CASE_0122.,PERSON_1355,Discover the shared entity link across unrelated cases,high
+SCEN_085,CASE_0142,CROSS_CASE_LINK,Shared LOCATION across cases CASE_0142;CASE_0093.,LOCATION_0243,Discover the shared entity link across unrelated cases,high
+SCEN_086,CASE_0056,CROSS_CASE_LINK,Shared PERSON across cases CASE_0056;CASE_0120;CASE_0181.,PERSON_0804,Discover the shared entity link across unrelated cases,high
+SCEN_087,CASE_0126,CROSS_CASE_LINK,Shared PERSON across cases CASE_0126;CASE_0250;CASE_0299.,PERSON_0749,Discover the shared entity link across unrelated cases,high
+SCEN_088,CASE_0030,CROSS_CASE_LINK,Shared LOCATION across cases CASE_0030;CASE_0145;CASE_0043.,LOCATION_0011,Discover the shared entity link across unrelated cases,high
+SCEN_089,CASE_0261,CROSS_CASE_LINK,Shared ORGANIZATION across cases CASE_0261;CASE_0149.,ORG_0062,Discover the shared entity link across unrelated cases,high
+SCEN_090,CASE_0102,CROSS_CASE_LINK,Shared PERSON across cases CASE_0102;CASE_0300;CASE_0174.,PERSON_0550,Discover the shared entity link across unrelated cases,high
+SCEN_091,CASE_0117,CROSS_CASE_LINK,Shared PERSON across cases CASE_0117;CASE_0190.,PERSON_1384,Discover the shared entity link across unrelated cases,high
+SCEN_092,CASE_0235,CROSS_CASE_LINK,Shared PERSON across cases CASE_0235;CASE_0156.,PERSON_0044,Discover the shared entity link across unrelated cases,high
+SCEN_093,CASE_0246,CROSS_CASE_LINK,Shared PERSON across cases CASE_0246;CASE_0172.,PERSON_0920,Discover the shared entity link across unrelated cases,high
+SCEN_094,CASE_0076,CROSS_CASE_LINK,Shared LOCATION across cases CASE_0076;CASE_0205.,LOCATION_0046,Discover the shared entity link across unrelated cases,high

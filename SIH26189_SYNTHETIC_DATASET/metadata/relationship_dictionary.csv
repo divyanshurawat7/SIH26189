@@ -1,0 +1,16 @@
+relationship_type,description
+CALLED,Low-frequency direct phone-to-phone contact.
+TRANSFERRED_MONEY,Aggregated financial relationship derived from transactions.
+OWNED,Ownership of an asset (vehicle/account) by a person.
+USED,A person used/held a given phone.
+TRAVELLED_WITH,"Repeated synchronized vehicle movement (strong co-travel), no direct calls required."
+CO_LOCATED,Weak or innocent co-location overlap; may be coincidental.
+MENTIONED,Entity mentioned in a narrative/report referencing another entity.
+ASSOCIATED_WITH,"General association, often innocent (family/coworker/shared address)."
+WORKED_WITH,Co-affiliation through a shared organization.
+COMMUNICATED_WITH,Aggregated communication relationship derived from CDR volume.
+MEMBER_OF,Person affiliated with an organization.
+CONNECTED_TO,"Weak/ambiguous connection, e.g. shared device history."
+APPEARED_IN_CASE,Person recorded as accused/witness/complainant in a case/FIR.
+OBSERVED_WITH,Surveillance-derived co-presence observation.
+POTENTIAL_OPERATIONAL_LINK,Low-frequency but temporally significant contact suggesting coordination.

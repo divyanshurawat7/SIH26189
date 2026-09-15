@@ -1,0 +1,16 @@
+report_id,case_id,timestamp,subject_person_id,subject_organization_id,observation,source,reliability,confidence
+INTEL_00002,CASE_0001,2025-08-12 15:49:23,PERSON_1459,ORG_0054,Unverified report suggests financial support is being routed through an intermediary.,FIELD_INTELLIGENCE_UNIT,low,0.49
+INTEL_00003,CASE_0002,2025-01-02 04:45:26,PERSON_1104,ORG_0204,Source with prior reliable reporting indicates increased contact frequency before an incident.,FIELD_INTELLIGENCE_UNIT,high,0.83
+INTEL_00004,CASE_0002,2025-07-28 20:45:46,PERSON_0809,ORG_0204,Source with prior reliable reporting indicates increased contact frequency before an incident.,FIELD_INTELLIGENCE_UNIT,high,0.95
+INTEL_00013,CASE_0007,2026-03-19 17:11:17,PERSON_1499,ORG_0183,Source with prior reliable reporting indicates increased contact frequency before an incident.,FIELD_INTELLIGENCE_UNIT,medium,0.68
+INTEL_00014,CASE_0007,2025-03-09 22:39:23,PERSON_1303,ORG_0183,Source indicates the subject may be coordinating activities with an associate network.,FIELD_INTELLIGENCE_UNIT,high,0.78
+INTEL_00015,CASE_0008,2025-05-02 23:35:59,PERSON_0398,ORG_0182,Field source reports subject was seen meeting with unidentified associates.,FIELD_INTELLIGENCE_UNIT,medium,0.51
+INTEL_00016,CASE_0008,2025-08-17 13:27:17,PERSON_0785,ORG_0182,Field source reports subject was seen meeting with unidentified associates.,FIELD_INTELLIGENCE_UNIT,high,0.89
+INTEL_00017,CASE_0009,2025-08-22 21:54:28,PERSON_0671,ORG_0255,Field source reports subject was seen meeting with unidentified associates.,FIELD_INTELLIGENCE_UNIT,high,0.78
+INTEL_00018,CASE_0009,2025-11-20 22:14:21,PERSON_0945,ORG_0255,Source indicates the subject may be coordinating activities with an associate network.,FIELD_INTELLIGENCE_UNIT,high,0.89
+INTEL_00019,CASE_0010,2025-08-04 22:42:30,PERSON_0104,ORG_0119,Low-confidence tip regarding possible involvement in ongoing case activity.,FIELD_INTELLIGENCE_UNIT,high,0.75
+INTEL_00020,CASE_0010,2025-10-14 21:02:55,PERSON_0030,ORG_0119,Low-confidence tip regarding possible involvement in ongoing case activity.,FIELD_INTELLIGENCE_UNIT,high,0.93
+INTEL_00021,CASE_0011,2025-06-08 22:02:43,PERSON_1242,ORG_0015,Field source reports subject was seen meeting with unidentified associates.,FIELD_INTELLIGENCE_UNIT,high,0.8
+INTEL_00022,CASE_0011,2025-01-22 17:35:15,PERSON_1376,ORG_0015,Low-confidence tip regarding possible involvement in ongoing case activity.,FIELD_INTELLIGENCE_UNIT,high,0.88
+INTEL_00023,CASE_0012,2026-01-14 07:09:40,PERSON_0423,ORG_0116,Source indicates the subject may be coordinating activities with an associate network.,FIELD_INTELLIGENCE_UNIT,low,0.45
+INTEL_00024,CASE_0012,2025-11-18 00:49:47,PERSON_0725,ORG_0116,Field source reports subject was seen meeting with unidentified associates.,FIELD_INTELLIGENCE_UNIT,low,0.32

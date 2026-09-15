@@ -1,0 +1,7 @@
+report_id,case_id,timestamp,location_id,person_reference,vehicle_reference,observation,source,confidence
+SURV_00010,CASE_0004,2025-10-17 10:34:16,LOCATION_0284,A. Kulkarni,VEHICLE_00023,A male individual resembling A. Kulkarni was observed near LOCATION_0284.,FIELD_SURVEILLANCE_UNIT,0.65
+SURV_00011,CASE_0004,2025-05-23 13:41:40,LOCATION_0204,Aman Sharma,VEHICLE_00024,Aman Sharma was clearly identified near LOCATION_0204 meeting with an associate.,FIELD_SURVEILLANCE_UNIT,0.87
+SURV_00012,CASE_0004,2025-07-03 15:32:15,LOCATION_0274,Ashok Chauhan,VEHICLE_00025,Ashok Chauhan was clearly identified near LOCATION_0274 meeting with an associate.,FIELD_SURVEILLANCE_UNIT,0.76
+SURV_00016,CASE_0006,2026-02-24 09:37:34,LOCATION_0266,Ravi Y.,VEHICLE_00040,A male individual resembling Ravi Y. was observed near LOCATION_0266.,FIELD_SURVEILLANCE_UNIT,0.88
+SURV_00017,CASE_0006,2026-02-26 17:29:26,LOCATION_0156,Vikram Chauhan,VEHICLE_00041,Vikram Chauhan was clearly identified near LOCATION_0156 meeting with an associate.,FIELD_SURVEILLANCE_UNIT,0.83
+SURV_00018,CASE_0006,2026-04-06 18:39:56,LOCATION_0006,rajesh gupta,VEHICLE_00042,A male individual resembling rajesh gupta was observed near LOCATION_0006.,FIELD_SURVEILLANCE_UNIT,0.76
