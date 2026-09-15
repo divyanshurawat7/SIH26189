@@ -242,3 +242,19 @@ export interface InvestigationDossierResponse {
   confidence: number;
   investigator_narrative: string;
 }
+
+export interface SearchResultItem {
+  entity_id: string;
+  entity_type: 'person' | 'case' | 'network' | 'vehicle' | 'phone' | 'location' | string;
+  display_name: string;
+  role_or_status?: string | null;
+  confidence?: number | null;
+  details?: string | null;
+}
+
+export interface SearchResponse {
+  query: string;
+  total_results: number;
+  results: SearchResultItem[];
+}
+

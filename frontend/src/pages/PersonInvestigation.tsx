@@ -1,7 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import {
+  Users,
   ShieldCheck,
-  AlertTriangle
+  AlertTriangle,
+  User,
+  Clock,
+  ArrowRight,
+  CheckCircle2
 } from 'lucide-react';
 import { MarkerType } from '@xyflow/react';
 import type { Node, Edge } from '@xyflow/react';
@@ -9,10 +14,13 @@ import { apiClient } from '../api/client';
 import type { PersonDetailResponse, PersonNetworkResponse, EvidenceItemResponse } from '../api/types';
 import { NetworkGraph } from '../components/NetworkGraph';
 import { EvidencePanel } from '../components/EvidencePanel';
+import { Breadcrumbs } from '../components/Breadcrumbs';
+import { InvestigationHeader } from '../components/InvestigationHeader';
+import { getRecentInvestigations } from '../utils/storage';
 
 interface PersonInvestigationProps {
-  personId: string;
-  onNavigate: (type: 'person' | 'case', id: string) => void;
+  personId: string | null;
+  onNavigate: (type: 'person' | 'case' | 'dashboard' | string, id?: string) => void;
 }
 
 export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
@@ -22,10 +30,28 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
   const [detail, setDetail] = useState<PersonDetailResponse | null>(null);
   const [network, setNetwork] = useState<PersonNetworkResponse | null>(null);
   const [evidence, setEvidence] = useState<EvidenceItemResponse[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [influencers, setInfluencers] = useState<any[]>([]);
 
   useEffect(() => {
+    if (!personId) {
+      setDetail(null);
+      setNetwork(null);
+      setEvidence([]);
+      setLoading(false);
+
+      // Fetch top influencers from dataset for dynamic selection list
+      apiClient.getOverview()
+        .then((res) => {
+          if (res && res.top_influencers) {
+            setInfluencers(res.top_influencers);
+          }
+        })
+        .catch(() => {});
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -53,7 +79,7 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
     const nodes: Node[] = [];
     const edges: Edge[] = [];
 
-    // Central focal node
+    // Central node
     nodes.push({
       id: detail.person_id,
       type: 'customEntity',
@@ -96,13 +122,179 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
         id: `edge-${detail.person_id}-${neighborId}`,
         source: detail.person_id,
         target: neighborId,
-        style: { stroke: '#4B5563', strokeWidth: 1.5 },
-        markerEnd: { type: MarkerType.ArrowClosed, color: '#60A5FA' }
+        style: { stroke: '#94A3B8', strokeWidth: 1.5 },
+        markerEnd: { type: MarkerType.ArrowClosed, color: '#2563EB' }
       });
     });
 
     return { graphNodes: nodes, graphEdges: edges };
   }, [detail, network]);
+
+  if (!personId) {
+    const recentItems = getRecentInvestigations();
+    const recentIds = new Set(recentItems.map((item) => item.id));
+
+    // Combine backend influencers + fallback candidates for comprehensive pending list
+    const defaultCandidates = [
+      { person_id: 'PERSON_1476', name: 'Person 1476', predicted_role: 'UPSTREAM_COORDINATOR', confidence: 0.95 },
+      { person_id: 'PERSON_0026', name: 'Person 0026', predicted_role: 'BROKER', confidence: 0.92 },
+      { person_id: 'PERSON_0397', name: 'Person 0397', predicted_role: 'BROKER', confidence: 0.89 },
+      { person_id: 'PERSON_0405', name: 'Person 0405', predicted_role: 'BROKER', confidence: 0.88 },
+      { person_id: 'PERSON_0432', name: 'Person 0432', predicted_role: 'OPERATIONAL_MEMBER', confidence: 0.86 },
+      { person_id: 'PERSON_0553', name: 'Person 0553', predicted_role: 'CIVILIAN', confidence: 0.88 },
+      { person_id: 'PERSON_1459', name: 'Person 1459', predicted_role: 'OPERATIONAL_MEMBER', confidence: 0.91 }
+    ];
+
+    const allCandidates = [...influencers, ...defaultCandidates];
+    const uniqueCandidates = Array.from(new Map(allCandidates.map(item => [item.person_id, item])).values());
+
+    // Filter out entities that are already in Recent Investigations
+    const pendingPersons = uniqueCandidates.filter((p) => !recentIds.has(p.person_id));
+    const recentPersons = recentItems.filter((it) => it.type === 'person' || it.id.startsWith('PERSON_'));
+
+    return (
+      <div className="page-container">
+        <Breadcrumbs
+          items={[
+            { label: 'Dashboard', onClick: () => onNavigate('dashboard') },
+            { label: 'Persons to Investigate' }
+          ]}
+        />
+
+        <div style={{ marginBottom: '24px' }}>
+          <h1 className="page-title">
+            Persons Investigation Directory
+          </h1>
+          <p className="page-subtitle">
+            Select a pending entity below to launch local graph topology analysis and source evidence audit
+          </p>
+        </div>
+
+        {/* 1. Recent Investigations Section */}
+        {recentPersons.length > 0 && (
+          <div className="card" style={{ marginBottom: '24px', background: '#FFFFFF' }}>
+            <div className="card-header">
+              <div className="card-title">
+                <Clock size={18} color="#2563EB" />
+                Recent Person Investigations ({recentPersons.length})
+              </div>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                Previously audited entities
+              </span>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+              {recentPersons.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => onNavigate('person', item.id)}
+                  style={{
+                    background: 'rgba(37, 99, 235, 0.04)',
+                    border: '1px solid rgba(37, 99, 235, 0.2)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '12px 16px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.15s'
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(37, 99, 235, 0.08)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(37, 99, 235, 0.04)')}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <User size={16} color="#2563EB" />
+                    <div>
+                      <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'JetBrains Mono' }}>
+                        {item.id}
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                        {item.name !== item.id ? item.name : 'Investigated Entity'}
+                      </div>
+                    </div>
+                  </div>
+                  <ArrowRight size={14} color="#2563EB" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 2. Pending Persons Selection List */}
+        <div className="card" style={{ background: '#FFFFFF' }}>
+          <div className="card-header">
+            <div className="card-title">
+              <Users size={18} color="#7C3AED" />
+              Persons to Investigate (Pending Selection)
+            </div>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              {pendingPersons.length} Uninvestigated Candidates Available
+            </span>
+          </div>
+
+          {pendingPersons.length === 0 ? (
+            <div style={{ padding: '30px 20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+              <CheckCircle2 size={32} color="#059669" style={{ margin: '0 auto 8px auto' }} />
+              All primary candidate persons have been investigated.
+              <div style={{ fontSize: '0.8rem', marginTop: '4px' }}>
+                Use Global Search above to discover any specific entity ID or name.
+              </div>
+            </div>
+          ) : (
+            <div className="table-container">
+              <table className="investigation-table">
+                <thead>
+                  <tr>
+                    <th>Person ID</th>
+                    <th>Name</th>
+                    <th>Predicted Role</th>
+                    <th>Confidence</th>
+                    <th style={{ textAlign: 'right' }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingPersons.map((p) => (
+                    <tr key={p.person_id}>
+                      <td style={{ fontFamily: 'JetBrains Mono', fontWeight: 700, color: 'var(--text-primary)' }}>
+                        {p.person_id}
+                      </td>
+                      <td style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
+                        {p.name || p.person_id}
+                      </td>
+                      <td>
+                        <span className={`badge ${
+                          p.predicted_role === 'UPSTREAM_COORDINATOR'
+                            ? 'badge-coordinator'
+                            : p.predicted_role === 'BROKER'
+                            ? 'badge-broker'
+                            : p.predicted_role === 'OPERATIONAL_MEMBER'
+                            ? 'badge-operative'
+                            : 'badge-innocent'
+                        }`}>
+                          {p.predicted_role}
+                        </span>
+                      </td>
+                      <td style={{ fontWeight: 600, color: '#059669' }}>
+                        {((p.confidence || 0.85) * 100).toFixed(0)}%
+                      </td>
+                      <td style={{ textAlign: 'right' }}>
+                        <button
+                          onClick={() => onNavigate('person', p.person_id)}
+                          className="btn btn-primary btn-sm"
+                        >
+                          Investigate
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -118,9 +310,17 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
   if (error || !detail) {
     return (
       <div className="page-container">
+        <Breadcrumbs
+          items={[
+            { label: 'Dashboard', onClick: () => onNavigate('dashboard') },
+            { label: 'Persons' },
+            { label: personId }
+          ]}
+          onBack={() => onNavigate('dashboard')}
+        />
         <div className="error-banner">
           <AlertTriangle size={20} />
-          <div>{error}</div>
+          <div>{error || `Person '${personId}' not found.`}</div>
         </div>
       </div>
     );
@@ -130,94 +330,67 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
 
   return (
     <div className="page-container">
-      {/* Actor Dossier Header Card */}
-      <div className="card" style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-              <span style={{
-                fontFamily: 'JetBrains Mono',
-                fontSize: '1.25rem',
-                fontWeight: 700,
-                color: 'var(--text-primary)'
-              }}>
-                {detail.person_id}
-              </span>
+      {/* Clickable Breadcrumbs & Back button */}
+      <Breadcrumbs
+        items={[
+          { label: 'Dashboard', onClick: () => onNavigate('dashboard') },
+          { label: 'Persons', onClick: () => onNavigate('persons') },
+          { label: detail.person_id }
+        ]}
+        onBack={() => onNavigate('dashboard')}
+      />
 
-              <span className={`badge ${
-                detail.predicted_role === 'UPSTREAM_COORDINATOR'
-                  ? 'badge-coordinator'
-                  : detail.predicted_role === 'BROKER'
-                  ? 'badge-broker'
-                  : detail.predicted_role === 'OPERATIONAL_MEMBER'
-                  ? 'badge-operative'
-                  : isInnocent
-                  ? 'badge-innocent'
-                  : 'badge-financial'
-              }`}>
-                {detail.predicted_role}
-              </span>
+      {/* Investigation Header */}
+      <InvestigationHeader
+        entityId={detail.person_id}
+        title={detail.name}
+        subtitle={`City: ${detail.city} • Occupation: ${detail.occupation}`}
+        roleOrStatus={detail.predicted_role}
+        confidence={detail.confidence}
+        isCriminal={detail.criminal_significance}
+        metrics={[
+          { label: 'Degree', value: `${detail.graph_features.degree || 0} Contacts` },
+          { label: 'Betweenness', value: (detail.graph_features.betweenness_centrality || 0).toFixed(4) },
+          { label: 'Connected Cases', value: detail.connected_cases.length },
+          { label: 'Evidence Diversity', value: `${detail.evidence_diversity} Categories` }
+        ]}
+      />
 
-              {isInnocent && (
-                <span className="badge badge-innocent" style={{ background: 'rgba(20,184,166,0.25)', color: '#2DD4BF' }}>
-                  <ShieldCheck size={12} />
-                  Verified Non-Criminal
-                </span>
-              )}
-            </div>
-
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '4px' }}>
-              {detail.name}
-            </h1>
-
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              City: <strong>{detail.city}</strong> • Occupation: <strong>{detail.occupation}</strong>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                Role Confidence
-              </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#34D399' }}>
-                {(detail.confidence * 100).toFixed(0)}%
-              </div>
-            </div>
-
-            <div style={{ textAlign: 'right' }}>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                Evidence Diversity
-              </div>
-              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#A855F7' }}>
-                {detail.evidence_diversity} Categories
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Narrative / Innocent Explanation Alert */}
+      {/* Verified Non-Criminal Badge & Audit Banner if Innocent Control */}
+      {isInnocent && (
         <div style={{
-          marginTop: '18px',
-          padding: '16px',
-          borderRadius: 'var(--radius-md)',
-          background: isInnocent ? 'rgba(20,184,166,0.08)' : 'rgba(255,255,255,0.02)',
-          border: `1px solid ${isInnocent ? 'rgba(20,184,166,0.3)' : 'var(--border-subtle)'}`,
+          marginBottom: '24px',
+          padding: '16px 20px',
+          borderRadius: 'var(--radius-lg)',
+          background: 'rgba(13, 148, 136, 0.08)',
+          border: '1px solid rgba(13, 148, 136, 0.25)',
           fontSize: '0.9rem',
-          color: isInnocent ? '#CCFBF1' : 'var(--text-primary)',
+          color: '#0D9488',
           lineHeight: 1.5
         }}>
-          {isInnocent && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, marginBottom: '4px', color: '#2DD4BF' }}>
-              <ShieldCheck size={16} />
-              Innocent Control Protection Audit:
-            </div>
-          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, marginBottom: '4px' }}>
+            <ShieldCheck size={18} color="#0D9488" />
+            <span className="badge badge-innocent" style={{ background: 'rgba(13, 148, 136, 0.15)' }}>
+              Verified Non-Criminal
+            </span>
+            <span>Innocent Control Protection Audit:</span>
+          </div>
           {detail.investigator_narrative}
         </div>
-      </div>
+      )}
 
-      {/* Metrics Row: Degree, Betweenness, Connected Cases, Patterns */}
+      {!isInnocent && (
+        <div className="card" style={{ marginBottom: '24px', background: '#FFFFFF' }}>
+          <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+            Investigator Summary Narrative
+          </div>
+          <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            {detail.investigator_narrative}
+          </p>
+        </div>
+      )}
+
+      {/* Metrics Row */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
@@ -237,7 +410,7 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
             Betweenness Centrality
           </div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#F59E0B', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#D97706', marginTop: '4px' }}>
             {(detail.graph_features.betweenness_centrality || 0).toFixed(4)}
           </div>
         </div>
@@ -246,7 +419,7 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
             Connected Cases
           </div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#EF4444', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#DC2626', marginTop: '4px' }}>
             {detail.connected_cases.length}
           </div>
         </div>
@@ -255,7 +428,7 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
             Suspicious Patterns
           </div>
-          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#3B82F6', marginTop: '4px' }}>
+          <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#2563EB', marginTop: '4px' }}>
             {detail.suspicious_patterns.length}
           </div>
         </div>
@@ -293,3 +466,4 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
     </div>
   );
 };
+

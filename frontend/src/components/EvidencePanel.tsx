@@ -20,7 +20,7 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
       <div style={{
         padding: '30px',
         textAlign: 'center',
-        background: 'var(--bg-card)',
+        background: '#FFFFFF',
         border: '1px solid var(--border-subtle)',
         borderRadius: 'var(--radius-lg)',
         color: 'var(--text-muted)',
@@ -42,7 +42,7 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
 
   return (
     <div style={{
-      background: 'var(--bg-card)',
+      background: '#FFFFFF',
       border: '1px solid var(--border-subtle)',
       borderRadius: 'var(--radius-lg)',
       padding: '24px'
@@ -60,7 +60,7 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
       }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Layers size={18} color="#A855F7" />
+            <Layers size={18} color="#7C3AED" />
             <h3 style={{ fontSize: '1.05rem', fontWeight: 600, color: 'var(--text-primary)' }}>
               {title}
             </h3>
@@ -91,9 +91,9 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
               padding: '4px 10px',
               borderRadius: 'var(--radius-full)',
               cursor: 'pointer',
-              border: selectedCategory === cat ? '1px solid #A855F7' : '1px solid var(--border-subtle)',
-              background: selectedCategory === cat ? 'rgba(168, 85, 247, 0.2)' : 'rgba(255,255,255,0.03)',
-              color: selectedCategory === cat ? '#E9D5FF' : 'var(--text-secondary)',
+              border: selectedCategory === cat ? '1px solid #7C3AED' : '1px solid var(--border-subtle)',
+              background: selectedCategory === cat ? 'rgba(124, 58, 237, 0.08)' : 'var(--bg-panel)',
+              color: selectedCategory === cat ? '#7C3AED' : 'var(--text-secondary)',
               fontWeight: selectedCategory === cat ? 600 : 400
             }}
           >
@@ -109,14 +109,14 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
             key={`${item.source_record_id}-${idx}`}
             onClick={() => onSelectRecord && onSelectRecord(item.source_record_id)}
             style={{
-              background: 'rgba(255, 255, 255, 0.02)',
+              background: 'var(--bg-panel)',
               border: '1px solid var(--border-subtle)',
               borderRadius: 'var(--radius-md)',
               padding: '12px 16px',
               transition: 'border-color 0.15s, background 0.15s',
               cursor: onSelectRecord ? 'pointer' : 'default'
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.18)')}
+            onMouseEnter={(e) => (e.currentTarget.style.borderColor = 'rgba(37, 99, 235, 0.3)')}
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-subtle)')}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
@@ -125,7 +125,7 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
                   fontFamily: 'JetBrains Mono',
                   fontSize: '0.8rem',
                   fontWeight: 600,
-                  color: '#60A5FA'
+                  color: '#2563EB'
                 }}>
                   {item.source_record_id}
                 </span>
@@ -134,7 +134,8 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
                   fontSize: '0.65rem',
                   padding: '2px 6px',
                   borderRadius: '4px',
-                  background: 'rgba(255,255,255,0.06)',
+                  background: 'var(--bg-sidebar)',
+                  border: '1px solid var(--border-subtle)',
                   color: 'var(--text-secondary)'
                 }}>
                   {item.source_type}
@@ -145,8 +146,8 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
                     fontSize: '0.65rem',
                     padding: '2px 6px',
                     borderRadius: '4px',
-                    background: 'rgba(225,29,72,0.15)',
-                    color: '#FB7185'
+                    background: 'rgba(220, 38, 38, 0.08)',
+                    color: '#DC2626'
                   }}>
                     {item.case_id}
                   </span>
@@ -160,7 +161,7 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
                 <span style={{
                   fontSize: '0.75rem',
                   fontWeight: 600,
-                  color: item.confidence >= 0.9 ? '#34D399' : '#FBBF24'
+                  color: item.confidence >= 0.9 ? '#059669' : '#D97706'
                 }}>
                   {(item.confidence * 100).toFixed(0)}% Conf
                 </span>
@@ -182,3 +183,4 @@ export const EvidencePanel: React.FC<EvidencePanelProps> = ({
     </div>
   );
 };
+

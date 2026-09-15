@@ -18,7 +18,8 @@ vi.mock('../api/client', () => ({
     getFindings: vi.fn(),
     getFindingDetail: vi.fn(),
     getCrossCase: vi.fn(),
-    getInvestigationDossier: vi.fn()
+    getInvestigationDossier: vi.fn(),
+    search: vi.fn()
   }
 }));
 
@@ -276,13 +277,27 @@ describe('SIH26189 Frontend Application Test Suite', () => {
         supporting_evidence: ['TXN_001', 'CALL_001']
       });
     });
+
+    (apiClient.search as any).mockResolvedValue({
+      query: 'PERSON_1476',
+      total_matches: 1,
+      results: [
+        {
+          entity_id: 'PERSON_1476',
+          entity_type: 'person',
+          display_name: 'Person 1476',
+          role_or_status: 'UPSTREAM_COORDINATOR',
+          details: 'Businessman • Mumbai'
+        }
+      ]
+    });
   });
 
   it('renders landing dashboard with accurate graph metrics and top influencers', async () => {
     render(<App />);
 
     // Verify Title & Subtitle
-    expect(await screen.findByText(/Criminal Intelligence Command Center/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Investigation Command Center/i)).toBeInTheDocument();
 
     // Verify Metric Tiles
     expect(await screen.findByText('1,500')).toBeInTheDocument();
@@ -290,20 +305,20 @@ describe('SIH26189 Frontend Application Test Suite', () => {
     expect(screen.getByText('12')).toBeInTheDocument();
     expect(screen.getByText('329')).toBeInTheDocument();
 
-    // Verify Flagship Banner
-    expect(screen.getByText(/FLAGSHIP MASTERMIND AUDIT/i)).toBeInTheDocument();
-    expect(screen.getByText(/Upstream Coordinator PERSON_1476 Isolated & Corroborated/i)).toBeInTheDocument();
+    // Verify Flagship Demo Card
+    expect(screen.getByText(/Featured Demo Case/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/PERSON_1476/i).length).toBeGreaterThan(0);
 
     // Verify Top Influencers Table
-    expect(screen.getByText('PERSON_1476')).toBeInTheDocument();
-    expect(screen.getByText('UPSTREAM_COORDINATOR')).toBeInTheDocument();
+    expect(screen.getAllByText('PERSON_1476').length).toBeGreaterThan(0);
+    expect(screen.getByText('COORDINATOR')).toBeInTheDocument();
   });
 
   it('navigates to Flagship Demo view and displays the 5-hop operational chain', async () => {
     render(<App />);
 
     // Click Flagship Demo button in banner or navbar
-    const flagshipBtn = await screen.findByText(/View Flagship CASE_0001/i);
+    const flagshipBtn = await screen.findByText(/Featured Demo \(CASE_0001\)/i);
     fireEvent.click(flagshipBtn);
 
     // Verify Flagship Header
@@ -349,10 +364,14 @@ describe('SIH26189 Frontend Application Test Suite', () => {
     const casesNavBtn = await screen.findByText('Case Investigations');
     fireEvent.click(casesNavBtn);
 
+    // Select CASE_0001
+    const caseSelectBtn = await screen.findByText('CASE_0001');
+    fireEvent.click(caseSelectBtn);
+
     // Verify Case file header
     expect(await screen.findByText(/Criminal Case File: CASE_0001/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Extortion/i).length).toBeGreaterThan(0);
-    expect(screen.getByText('FIR_0001')).toBeInTheDocument();
+    expect(screen.getByText(/FIR_0001/i)).toBeInTheDocument();
   });
 
   it('navigates to Behavioral Findings page and applies filters', async () => {
@@ -420,7 +439,8 @@ describe('SIH26189 Frontend Application Test Suite', () => {
     render(<App />);
 
     // Search input in navbar
-    const searchInput = await screen.findByPlaceholderText(/Search Person ID/i);
+    const searchInputs = await screen.findAllByPlaceholderText(/Search person name/i);
+    const searchInput = searchInputs[0];
     fireEvent.change(searchInput, { target: { value: 'PERSON_1476' } });
     fireEvent.submit(searchInput.closest('form')!);
 
@@ -436,5 +456,53 @@ describe('SIH26189 Frontend Application Test Suite', () => {
     // Verify Error Banner
     expect(await screen.findByText(/Backend API Connection Error:/i)).toBeInTheDocument();
     expect(screen.getByText(/Ensure Uvicorn is running/i)).toBeInTheDocument();
+  });
+
+  it('moves investigated PERSON_0432 from Pending list to Recent Investigations without deleting backend entity', async () => {
+    render(<App />);
+
+    // 1. Navigate to Persons tab
+    const personsBtn = await screen.findByText('Persons & Influencers');
+    fireEvent.click(personsBtn);
+
+    // Verify PERSON_0432 is in pending list initially
+    expect(await screen.findByText('PERSON_0432')).toBeInTheDocument();
+
+    // 2. Click Investigate on PERSON_0432 row
+    const personCell = screen.getByText('PERSON_0432');
+    const personRow = personCell.closest('tr')!;
+    const investigateBtn = personRow.querySelector('button')!;
+    fireEvent.click(investigateBtn);
+
+    // 3. Return to Persons Directory by clicking breadcrumb
+    const navBtn = await screen.findByText('Persons');
+    fireEvent.click(navBtn);
+
+    // Verify PERSON_0432 appears under Recent Person Investigations
+    expect(await screen.findByText(/Recent Person Investigations/i)).toBeInTheDocument();
+  });
+
+  it('moves investigated CASE_0025 from Pending list to Recent Case Investigations', async () => {
+    render(<App />);
+
+    // 1. Navigate to Cases tab
+    const casesBtn = await screen.findByText('Case Investigations');
+    fireEvent.click(casesBtn);
+
+    // Verify CASE_0025 is in pending list
+    expect(await screen.findByText('CASE_0025')).toBeInTheDocument();
+
+    // 2. Click Investigate on CASE_0025 row
+    const caseCell = screen.getByText('CASE_0025');
+    const caseRow = caseCell.closest('tr')!;
+    const investigateBtn = caseRow.querySelector('button')!;
+    fireEvent.click(investigateBtn);
+
+    // 3. Return to Cases Directory by clicking breadcrumb
+    const navBtn = await screen.findByText('Cases');
+    fireEvent.click(navBtn);
+
+    // Verify CASE_0025 appears under Recent Case Investigations
+    expect(await screen.findByText(/Recent Case Investigations/i)).toBeInTheDocument();
   });
 });

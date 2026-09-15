@@ -3,10 +3,11 @@ import {
   Crown,
   GitBranch,
   Target,
-  FileText,
-  MapPin,
-  Calendar,
-  AlertTriangle
+  AlertTriangle,
+  Briefcase,
+  Clock,
+  ArrowRight,
+  CheckCircle2
 } from 'lucide-react';
 import { apiClient } from '../api/client';
 import type {
@@ -18,10 +19,13 @@ import type {
 import { OperationalChain } from '../components/OperationalChain';
 import { Timeline } from '../components/Timeline';
 import { EvidencePanel } from '../components/EvidencePanel';
+import { Breadcrumbs } from '../components/Breadcrumbs';
+import { InvestigationHeader } from '../components/InvestigationHeader';
+import { getRecentInvestigations } from '../utils/storage';
 
 interface CaseInvestigationProps {
-  caseId: string;
-  onNavigate: (type: 'person' | 'case', id: string) => void;
+  caseId: string | null;
+  onNavigate: (type: 'person' | 'case' | 'dashboard' | string, id?: string) => void;
 }
 
 export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
@@ -32,10 +36,19 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
   const [dossier, setDossier] = useState<InvestigationDossierResponse | null>(null);
   const [timeline, setTimeline] = useState<CaseTimelineResponse | null>(null);
   const [evidenceData, setEvidenceData] = useState<CaseEvidenceResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!caseId) {
+      setCaseDetail(null);
+      setDossier(null);
+      setTimeline(null);
+      setEvidenceData(null);
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -58,6 +71,159 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
       });
   }, [caseId]);
 
+  if (!caseId) {
+    const recentItems = getRecentInvestigations();
+    const recentIds = new Set(recentItems.map((item) => item.id));
+
+    const defaultCandidates = [
+      { case_id: 'CASE_0001', crime_type: 'Extortion Racket', fir_id: 'FIR_0001', location: 'LOCATION_0041' },
+      { case_id: 'CASE_0002', crime_type: 'Cyber Financial Scam', fir_id: 'FIR_0002', location: 'LOCATION_0012' },
+      { case_id: 'CASE_0003', crime_type: 'Money Laundering', fir_id: 'FIR_0003', location: 'LOCATION_0088' },
+      { case_id: 'CASE_0004', crime_type: 'Extortion Call Cascade', fir_id: 'FIR_0004', location: 'LOCATION_0015' },
+      { case_id: 'CASE_0005', crime_type: 'Cross-Jurisdictional Fraud', fir_id: 'FIR_0005', location: 'LOCATION_0023' },
+      { case_id: 'CASE_0012', crime_type: 'Financial Transfer Chain', fir_id: 'FIR_0012', location: 'LOCATION_0045' },
+      { case_id: 'CASE_0025', crime_type: 'Cross-Border Syndicate Operation', fir_id: 'FIR_0025', location: 'LOCATION_0099' }
+    ];
+
+    // Filter out cases that have already been investigated
+    const pendingCases = defaultCandidates.filter((c) => !recentIds.has(c.case_id));
+    const recentCases = recentItems.filter((it) => it.type === 'case' || it.id.startsWith('CASE_'));
+
+    return (
+      <div className="page-container">
+        <Breadcrumbs
+          items={[
+            { label: 'Dashboard', onClick: () => onNavigate('dashboard') },
+            { label: 'Cases to Investigate' }
+          ]}
+        />
+
+        <div style={{ marginBottom: '24px' }}>
+          <h1 className="page-title">
+            Case Investigation Directory
+          </h1>
+          <p className="page-subtitle">
+            Select an uninvestigated criminal case to inspect FIR parameters, forensic timeline events, and operational chain
+          </p>
+        </div>
+
+        {/* 1. Recent Case Investigations */}
+        {recentCases.length > 0 && (
+          <div className="card" style={{ marginBottom: '24px', background: '#FFFFFF' }}>
+            <div className="card-header">
+              <div className="card-title">
+                <Clock size={18} color="#DC2626" />
+                Recent Case Investigations ({recentCases.length})
+              </div>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                Previously audited case files
+              </span>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+              {recentCases.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => onNavigate('case', item.id)}
+                  style={{
+                    background: 'rgba(220, 38, 38, 0.04)',
+                    border: '1px solid rgba(220, 38, 38, 0.2)',
+                    borderRadius: 'var(--radius-md)',
+                    padding: '12px 16px',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    transition: 'all 0.15s'
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(220, 38, 38, 0.08)')}
+                  onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(220, 38, 38, 0.04)')}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <Briefcase size={16} color="#DC2626" />
+                    <div>
+                      <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'JetBrains Mono' }}>
+                        {item.id}
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                        {item.name !== item.id ? item.name : 'Investigated Case'}
+                      </div>
+                    </div>
+                  </div>
+                  <ArrowRight size={14} color="#DC2626" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* 2. Pending Cases Selection List */}
+        <div className="card" style={{ background: '#FFFFFF' }}>
+          <div className="card-header">
+            <div className="card-title">
+              <Briefcase size={18} color="#DC2626" />
+              Cases to Investigate (Pending Selection)
+            </div>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+              {pendingCases.length} Uninvestigated Cases Available
+            </span>
+          </div>
+
+          {pendingCases.length === 0 ? (
+            <div style={{ padding: '30px 20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+              <CheckCircle2 size={32} color="#059669" style={{ margin: '0 auto 8px auto' }} />
+              All candidate cases have been investigated.
+              <div style={{ fontSize: '0.8rem', marginTop: '4px' }}>
+                Use Global Search above to search for any case ID or FIR number.
+              </div>
+            </div>
+          ) : (
+            <div className="table-container">
+              <table className="investigation-table">
+                <thead>
+                  <tr>
+                    <th>Case ID</th>
+                    <th>Crime Type</th>
+                    <th>FIR Reference</th>
+                    <th>Location</th>
+                    <th style={{ textAlign: 'right' }}>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingCases.map((c) => (
+                    <tr key={c.case_id}>
+                      <td style={{ fontFamily: 'JetBrains Mono', fontWeight: 700, color: 'var(--text-primary)' }}>
+                        {c.case_id}
+                      </td>
+                      <td style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
+                        {c.crime_type}
+                      </td>
+                      <td style={{ fontFamily: 'JetBrains Mono', fontSize: '0.8rem', color: '#2563EB' }}>
+                        {c.fir_id}
+                      </td>
+                      <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                        {c.location}
+                      </td>
+                      <td style={{ textAlign: 'right' }}>
+                        <button
+                          onClick={() => onNavigate('case', c.case_id)}
+                          className="btn btn-primary btn-sm"
+                          style={{ background: '#DC2626', borderColor: '#DC2626' }}
+                        >
+                          Investigate
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="state-container" style={{ height: '70vh' }}>
@@ -72,9 +238,17 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
   if (error || !caseDetail || !dossier) {
     return (
       <div className="page-container">
+        <Breadcrumbs
+          items={[
+            { label: 'Dashboard', onClick: () => onNavigate('dashboard') },
+            { label: 'Cases' },
+            { label: caseId }
+          ]}
+          onBack={() => onNavigate('dashboard')}
+        />
         <div className="error-banner">
           <AlertTriangle size={20} />
-          <div>{error}</div>
+          <div>{error || `Case '${caseId}' not found.`}</div>
         </div>
       </div>
     );
@@ -87,81 +261,39 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
 
   return (
     <div className="page-container">
-      {/* Case Header Card */}
-      <div className="card" style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-              <span style={{
-                fontFamily: 'JetBrains Mono',
-                fontSize: '1.25rem',
-                fontWeight: 700,
-                color: 'var(--text-primary)'
-              }}>
-                {caseDetail.case_id}
-              </span>
+      {/* Clickable Breadcrumbs & Back button */}
+      <Breadcrumbs
+        items={[
+          { label: 'Dashboard', onClick: () => onNavigate('dashboard') },
+          { label: 'Cases', onClick: () => onNavigate('cases') },
+          { label: caseDetail.case_id }
+        ]}
+        onBack={() => onNavigate('dashboard')}
+      />
 
-              <span className="badge badge-case">
-                {caseDetail.crime_type}
-              </span>
+      {/* Investigation Header */}
+      <InvestigationHeader
+        entityId={caseDetail.case_id}
+        title={`Criminal Case File: ${caseDetail.case_id}`}
+        subtitle={`Offense Category: ${caseDetail.crime_type} • FIR: ${caseDetail.fir_information.fir_id || 'N/A'}`}
+        roleOrStatus={caseDetail.status}
+        confidence={dossier.confidence}
+        metrics={[
+          { label: 'FIR Section', value: caseDetail.fir_information.section || 'N/A' },
+          { label: 'FIR Date', value: caseDetail.fir_information.date || 'N/A' },
+          { label: 'Location', value: caseDetail.fir_information.location_id || 'N/A' },
+          { label: 'Timeline Events', value: timeline?.events.length || 0 }
+        ]}
+      />
 
-              <span className="badge badge-info">
-                Status: {caseDetail.status}
-              </span>
-            </div>
-
-            <h1 style={{ fontSize: '1.4rem', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '8px' }}>
-              Criminal Case File: {caseDetail.case_id}
-            </h1>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '16px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-              {caseDetail.fir_information.fir_id && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <FileText size={14} color="#F87171" />
-                  FIR: <strong>{caseDetail.fir_information.fir_id}</strong>
-                  {caseDetail.fir_information.section && <span>(Section {caseDetail.fir_information.section})</span>}
-                </div>
-              )}
-
-              {caseDetail.fir_information.date && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <Calendar size={14} color="#60A5FA" />
-                  Date: <strong>{caseDetail.fir_information.date}</strong>
-                </div>
-              )}
-
-              {caseDetail.fir_information.location_id && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <MapPin size={14} color="#10B981" />
-                  Location: <strong>{caseDetail.fir_information.location_id}</strong>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-              Dossier Confidence
-            </div>
-            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#34D399' }}>
-              {(dossier.confidence * 100).toFixed(0)}%
-            </div>
-          </div>
+      {/* Case Narrative */}
+      <div className="card" style={{ marginBottom: '24px', background: '#FFFFFF' }}>
+        <div style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '6px' }}>
+          Investigator Summary Narrative
         </div>
-
-        {/* Narrative Box */}
-        <div style={{
-          marginTop: '16px',
-          padding: '14px 16px',
-          borderRadius: 'var(--radius-md)',
-          background: 'rgba(255,255,255,0.02)',
-          border: '1px solid var(--border-subtle)',
-          fontSize: '0.9rem',
-          color: 'var(--text-primary)',
-          lineHeight: 1.5
-        }}>
+        <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
           {caseDetail.investigation_narrative}
-        </div>
+        </p>
       </div>
 
       {/* Dynamic Operational Chain Diagram */}
@@ -186,9 +318,9 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
         marginBottom: '28px'
       }}>
         {/* Coordinator */}
-        <div className="card" style={{ borderLeft: '4px solid #A855F7' }}>
+        <div className="card" style={{ borderLeft: '4px solid #7C3AED' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-            <Crown size={16} color="#C084FC" />
+            <Crown size={16} color="#7C3AED" />
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
               Upstream Coordinator
             </span>
@@ -202,7 +334,7 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
                 fontFamily: 'JetBrains Mono',
                 fontSize: '1.15rem',
                 fontWeight: 700,
-                color: '#C084FC',
+                color: '#7C3AED',
                 cursor: 'pointer',
                 textAlign: 'left'
               }}
@@ -215,9 +347,9 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
         </div>
 
         {/* Brokers */}
-        <div className="card" style={{ borderLeft: '4px solid #F59E0B' }}>
+        <div className="card" style={{ borderLeft: '4px solid #D97706' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-            <GitBranch size={16} color="#FBBF24" />
+            <GitBranch size={16} color="#D97706" />
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
               Intermediary Brokers ({dossier.brokers.length})
             </span>
@@ -233,10 +365,11 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
                     fontFamily: 'JetBrains Mono',
                     padding: '2px 8px',
                     borderRadius: '4px',
-                    background: 'rgba(245,158,11,0.15)',
-                    border: '1px solid rgba(245,158,11,0.3)',
-                    color: '#FDE68A',
-                    cursor: 'pointer'
+                    background: 'var(--role-broker-bg)',
+                    border: '1px solid var(--role-broker-border)',
+                    color: '#D97706',
+                    cursor: 'pointer',
+                    fontWeight: 600
                   }}
                 >
                   {b}
@@ -249,9 +382,9 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
         </div>
 
         {/* Operational Members */}
-        <div className="card" style={{ borderLeft: '4px solid #EF4444' }}>
+        <div className="card" style={{ borderLeft: '4px solid #DC2626' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-            <Target size={16} color="#F87171" />
+            <Target size={16} color="#DC2626" />
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
               Operational Members ({dossier.operational_members.length})
             </span>
@@ -267,10 +400,11 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
                     fontFamily: 'JetBrains Mono',
                     padding: '2px 8px',
                     borderRadius: '4px',
-                    background: 'rgba(239,68,68,0.15)',
-                    border: '1px solid rgba(239,68,68,0.3)',
-                    color: '#FECACA',
-                    cursor: 'pointer'
+                    background: 'var(--role-operative-bg)',
+                    border: '1px solid var(--role-operative-border)',
+                    color: '#DC2626',
+                    cursor: 'pointer',
+                    fontWeight: 600
                   }}
                 >
                   {m}
@@ -291,3 +425,4 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
     </div>
   );
 };
+

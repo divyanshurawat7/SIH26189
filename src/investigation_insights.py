@@ -1,3 +1,24 @@
+"""
+SIH26189 — AI-Powered Criminal Network Analysis System
+Module: src/investigation_insights.py
+
+Phase 6: Investigation Insights Layer
+Converts graph topology, influencer roles, and detected intelligence findings into
+explainable, investigator-oriented dossiers and forensic narratives.
+
+Answers the investigator's core questions:
+- "Why did the system identify this person/network/case?"
+- "Exactly which source records support that conclusion?"
+- "What is the hop-by-hop operational chain linking the mastermind to the crime?"
+- "Why was an innocent high-contact individual (e.g. PERSON_0553) not falsely accused?"
+
+Components:
+1. PersonInsight: Comprehensive actor dossier with role, centralities, patterns, and provenance.
+2. CaseInsight: Complete case investigation dossier with coordinator, intermediaries, chain, and records.
+3. NetworkInsight: Syndicate structural summary across key actors, paths, and evidence diversity.
+4. CrossCaseInsight: Dual/multi-case linkage explanation with shared evidence provenance.
+5. FalsePositiveExplanation: Explains non-criminal classification for control entities.
+"""
 
 from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Optional, Tuple, Any, Set, Union

@@ -12,15 +12,31 @@ import {
 
 interface SidebarProps {
   currentTab: string;
+  selectedPersonId?: string | null;
+  selectedCaseId?: string | null;
   onSelectTab: (tab: string, id?: string) => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => {
-  const navItems = [
+export const Sidebar: React.FC<SidebarProps> = ({
+  currentTab,
+  selectedPersonId,
+  selectedCaseId,
+  onSelectTab
+}) => {
+  const mainNavItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'flagship', label: 'Flagship CASE_0001', icon: Sparkles, highlight: true },
-    { id: 'persons', label: 'Persons & Influencers', icon: Users },
-    { id: 'cases', label: 'Case Investigations', icon: Briefcase },
+    {
+      id: 'persons',
+      label: selectedPersonId ? `Person (${selectedPersonId})` : 'Persons & Influencers',
+      icon: Users,
+      badge: selectedPersonId ? 'ACTIVE' : undefined
+    },
+    {
+      id: 'cases',
+      label: selectedCaseId ? `Case (${selectedCaseId})` : 'Case Investigations',
+      icon: Briefcase,
+      badge: selectedCaseId ? 'ACTIVE' : undefined
+    },
     { id: 'findings', label: 'Behavioral Findings', icon: AlertTriangle },
     { id: 'cross-case', label: 'Cross-Case Linkages', icon: Network },
   ];
@@ -33,10 +49,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'space-between',
-      flexShrink: 0
+      flexShrink: 0,
+      height: '100vh',
+      position: 'sticky',
+      top: 0
     }}>
       {/* Navigation Links */}
-      <div style={{ padding: '20px 12px' }}>
+      <div style={{ padding: '20px 12px', overflowY: 'auto' }}>
         <div style={{
           fontSize: '0.7rem',
           fontWeight: 600,
@@ -45,13 +64,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
           textTransform: 'uppercase',
           padding: '0 12px 10px 12px'
         }}>
-          Investigation Modules
+          Command Center
         </div>
 
         <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          {navItems.map((item) => {
+          {mainNavItems.map((item) => {
             const Icon = item.icon;
-            const isActive = currentTab === item.id;
+            const isActive = currentTab === item.id || (currentTab === 'person' && item.id === 'persons') || (currentTab === 'case' && item.id === 'cases');
             return (
               <button
                 key={item.id}
@@ -59,40 +78,44 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '12px',
+                  justifyContent: 'space-between',
                   width: '100%',
-                  padding: '10px 14px',
+                  padding: '10px 12px',
                   borderRadius: 'var(--radius-md)',
-                  background: isActive
-                    ? 'rgba(59, 130, 246, 0.15)'
-                    : item.highlight
-                    ? 'rgba(168, 85, 247, 0.08)'
-                    : 'transparent',
-                  color: isActive
-                    ? '#60A5FA'
-                    : item.highlight
-                    ? '#E9D5FF'
-                    : 'var(--text-secondary)',
-                  border: isActive
-                    ? '1px solid rgba(59, 130, 246, 0.3)'
-                    : item.highlight
-                    ? '1px solid rgba(168, 85, 247, 0.2)'
-                    : '1px solid transparent',
+                  background: isActive ? 'rgba(37, 99, 235, 0.08)' : 'transparent',
+                  color: isActive ? '#2563EB' : 'var(--text-secondary)',
+                  border: isActive ? '1px solid rgba(37, 99, 235, 0.25)' : '1px solid transparent',
                   cursor: 'pointer',
                   fontWeight: isActive ? 600 : 500,
-                  fontSize: '0.875rem',
+                  fontSize: '0.85rem',
                   textAlign: 'left',
-                  transition: 'background 0.15s, color 0.15s'
+                  transition: 'all 0.15s'
                 }}
               >
-                <Icon size={17} color={isActive ? '#60A5FA' : item.highlight ? '#C084FC' : 'currentColor'} />
-                {item.label}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <Icon size={17} color={isActive ? '#2563EB' : 'var(--text-secondary)'} />
+                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {item.label}
+                  </span>
+                </div>
+                {item.badge && (
+                  <span style={{
+                    fontSize: '0.65rem',
+                    fontWeight: 700,
+                    padding: '1px 6px',
+                    borderRadius: '4px',
+                    background: '#2563EB',
+                    color: '#FFFFFF'
+                  }}>
+                    {item.badge}
+                  </span>
+                )}
               </button>
             );
           })}
         </nav>
 
-        {/* Quick Investigator Shortcuts */}
+        {/* Demo & Shortcuts */}
         <div style={{
           fontSize: '0.7rem',
           fontWeight: 600,
@@ -101,10 +124,35 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
           textTransform: 'uppercase',
           padding: '24px 12px 10px 12px'
         }}>
-          Key Fast-Audits
+          Demo & Fast Audits
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <button
+            onClick={() => onSelectTab('flagship')}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              padding: '9px 12px',
+              borderRadius: 'var(--radius-md)',
+              background: currentTab === 'flagship' ? 'rgba(124, 58, 237, 0.08)' : 'transparent',
+              border: currentTab === 'flagship' ? '1px solid rgba(124, 58, 237, 0.25)' : '1px solid transparent',
+              color: currentTab === 'flagship' ? '#7C3AED' : 'var(--text-secondary)',
+              cursor: 'pointer',
+              fontSize: '0.8rem',
+              fontWeight: 500
+            }}
+          >
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Sparkles size={14} color="#7C3AED" />
+              Flagship CASE_0001
+            </span>
+            <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(124, 58, 237, 0.1)', color: '#7C3AED', fontWeight: 600 }}>
+              Demo
+            </span>
+          </button>
+
           <button
             onClick={() => onSelectTab('person', 'PERSON_1476')}
             style={{
@@ -122,7 +170,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
             }}
           >
             <span>Mastermind: PERSON_1476</span>
-            <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(168,85,247,0.2)', color: '#C084FC' }}>
+            <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '4px', background: 'var(--role-coordinator-bg)', color: 'var(--role-coordinator)', fontWeight: 600 }}>
               Coord
             </span>
           </button>
@@ -146,10 +194,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
             }}
           >
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <ShieldCheck size={14} color="#10B981" />
+              <ShieldCheck size={14} color="#0D9488" />
               Innocent: PERSON_0553
             </span>
-            <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(16,185,129,0.2)', color: '#34D399' }}>
+            <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '4px', background: 'var(--role-innocent-bg)', color: 'var(--role-innocent)', fontWeight: 600 }}>
               Civilian
             </span>
           </button>
@@ -167,9 +215,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
           <Info size={13} />
           Synthetic Intelligence Dataset
         </div>
-        <div>36,151 graph nodes • 133,816 edges</div>
-        <div style={{ marginTop: '6px', color: '#10B981' }}>Phase 8 Complete • 117 Tests</div>
+        <div>36,151 nodes • 133,816 edges</div>
+        <div style={{ marginTop: '6px', color: '#059669', fontWeight: 600 }}>Phase 8 Complete • 117 Tests</div>
       </div>
     </aside>
   );
 };
+

@@ -16,7 +16,8 @@ import type {
   FindingSummaryResponse,
   FindingDetailResponse,
   CrossCaseResponse,
-  InvestigationDossierResponse
+  InvestigationDossierResponse,
+  SearchResponse
 } from './types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
@@ -116,5 +117,8 @@ export const apiClient = {
     fetchJson<CrossCaseResponse>(`/cross-case/${encodeURIComponent(entityId)}`),
 
   getInvestigationDossier: (caseId: string) =>
-    fetchJson<InvestigationDossierResponse>(`/investigation/${encodeURIComponent(caseId)}`)
+    fetchJson<InvestigationDossierResponse>(`/investigation/${encodeURIComponent(caseId)}`),
+
+  search: (query: string) =>
+    fetchJson<SearchResponse>(`/search?q=${encodeURIComponent(query)}`)
 };

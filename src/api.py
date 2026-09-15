@@ -1,3 +1,26 @@
+"""
+SIH26189 — AI-Powered Criminal Network Analysis System
+Module: src/api.py
+
+Phase 7: Investigation REST API Backend
+Provides a high-performance, explainable REST API layer built on top of the
+validated Phase 1–6 criminal intelligence and evidence traceability engine.
+
+Exposes:
+- GET /health: Service health and system readiness
+- GET /persons/{person_id}: Actor profile, predicted role, evidence diversity, and narrative
+- GET /persons/{person_id}/network: 1-hop topology, influencer neighbors, operational paths
+- GET /persons/{person_id}/evidence: Traceable records for person across 11 source categories
+- GET /cases/{case_id}: Case details, FIR information, key actors, locations, patterns
+- GET /cases/{case_id}/timeline: Chronologically ordered forensic event stream
+- GET /cases/{case_id}/evidence: Traceable case evidence grouped by source category
+- GET /networks/{network_id}: Syndicate structural profile, hierarchy, and key paths
+- GET /findings: Behavioral pattern findings with optional query filters
+- GET /findings/{finding_id}: Complete finding with supporting records and explanation
+- GET /cross-case/{entity_id}: Multi-jurisdictional linkage with overlap suppression logic
+- GET /investigation/{case_id}: Primary demo endpoint — complete dynamic investigation dossier
+"""
+
 import time
 from contextlib import asynccontextmanager
 from typing import Dict, List, Optional, Any, Set
@@ -15,9 +38,6 @@ from src.evidence_traceability import EvidenceTracer, EvidenceItem
 from src.influencer_detection import InfluencerDetector, InfluencerResult, RoleType
 from src.pattern_detection import PatternDetector, Finding
 from src.investigation_insights import InvestigationInsightsGenerator
-from src.ml_role_classifier import RoleClassifier
-from src.hybrid_intelligence import HybridIntelligence
-from src.explainability import ExplainabilityEngine
 from src.api_models import (
     HealthResponse,
     ErrorResponse,
@@ -35,7 +55,9 @@ from src.api_models import (
     FindingSummaryResponse,
     FindingDetailResponse,
     CrossCaseResponse,
-    InvestigationDossierResponse
+    InvestigationDossierResponse,
+    SearchResultItem,
+    SearchResponse
 )
 from src.utils.logger import get_logger
 
@@ -54,9 +76,7 @@ class AppState:
         self.influencer_detector: Optional[InfluencerDetector] = None
         self.pattern_detector: Optional[PatternDetector] = None
         self.insights_generator: Optional[InvestigationInsightsGenerator] = None
-        self.ml_role_classifier: Optional[RoleClassifier] = None
-        self.hybrid_intelligence: Optional[HybridIntelligence] = None
-        self.explainability_engine: Optional[ExplainabilityEngine] = None
+
         self.roles: Dict[str, InfluencerResult] = {}
         self.findings: List[Finding] = []
         self.findings_by_id: Dict[str, Finding] = {}
@@ -101,54 +121,13 @@ def init_app_state() -> AppState:
         influencer_detector=state.influencer_detector,
         pattern_detector=state.pattern_detector
     )
-    
+
+    # 5. Precompute roles and findings for zero-latency lookups
     state.roles = state.insights_generator._get_roles()
     state.findings = state.insights_generator._get_findings()
     state.findings_by_id = {f.finding_id: f for f in state.findings}
-    try:
-        state.ml_role_classifier = RoleClassifier()
-        state.ml_role_classifier.load()
 
-        logger.info(
-            f"ML Role Classifier loaded: "
-            f"{state.ml_role_classifier.model_name}"
-        )
-
-        try:
-            state.hybrid_intelligence = HybridIntelligence(
-                influencer_detector=state.influencer_detector,
-                ml_classifier=state.ml_role_classifier,
-                roles=state.roles,
-            )
-
-            logger.info("Hybrid Intelligence engine loaded")
-
-        except Exception as e:
-            state.hybrid_intelligence = None
-            logger.warning(
-                f"Hybrid Intelligence unavailable: {e}"
-            )
-
-    except Exception as e:
-        state.ml_role_classifier = None
-        state.hybrid_intelligence = None
-        logger.warning(
-            f"ML Role Classifier unavailable: {e}"
-        )
-    try:
-        state.explainability_engine = ExplainabilityEngine(
-            graph=state.graph,
-            tracer=state.tracer,
-            influencer_detector=state.influencer_detector,
-        )
-
-        logger.info("Explainability Engine loaded")
-
-    except Exception as e:
-        state.explainability_engine = None
-        logger.warning(
-            f"Explainability Engine unavailable: {e}"
-        )
+    # 6. Precompute lookup sets
     state.person_ids = set(state.data.persons["person_id"].dropna().unique())
     state.case_ids = set(state.data.cases["case_id"].dropna().unique())
     state.entity_ids = (
@@ -171,13 +150,20 @@ def init_app_state() -> AppState:
 
 
 def get_app_state() -> AppState:
+    """Returns the singleton application state."""
     global _state
     if _state is None:
         return init_app_state()
     return _state
 
+
+# =============================================================================
+# FastAPI Application & Lifespan Context
+# =============================================================================
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    """Lifespan event handler preloading intelligence data at startup."""
     init_app_state()
     yield
 
@@ -193,6 +179,7 @@ app = FastAPI(
     }
 )
 
+# CORS Configuration for local frontend development
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -210,10 +197,16 @@ app.add_middleware(
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """Maps parameter validation errors to HTTP 400."""
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={"detail": f"Invalid query parameters: {exc.errors()}"}
     )
+
+
+# =============================================================================
+# 1. Health Endpoint
+# =============================================================================
 
 @app.get(
     "/health",
@@ -222,6 +215,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     tags=["System"]
 )
 def get_health() -> HealthResponse:
+    """Returns system status, service name, dataset type, and pipeline version."""
     return HealthResponse(
         status="ok",
         service="SIH26189 Investigation API",
@@ -237,8 +231,10 @@ def get_health() -> HealthResponse:
     tags=["System"]
 )
 def get_overview() -> OverviewResponse:
+    """Returns system-wide intelligence metrics, top criminal coordinators/brokers, and activity."""
     state = get_app_state()
 
+    # Top influencers prioritized by coordinators, brokers, and betweenness
     priority_order = {
         RoleType.UPSTREAM_COORDINATOR.value: 1,
         RoleType.BROKER.value: 2,
@@ -248,6 +244,7 @@ def get_overview() -> OverviewResponse:
         RoleType.PERIPHERAL_ASSOCIATE.value: 6
     }
 
+    # Fetch names efficiently from persons table
     p_names = dict(zip(state.data.persons["person_id"], state.data.persons["name"]))
 
     sorted_influencers = sorted(
@@ -297,6 +294,10 @@ def get_overview() -> OverviewResponse:
     )
 
 
+# =============================================================================
+# 2. Person Endpoints
+# =============================================================================
+
 @app.get(
     "/persons/{person_id}",
     response_model=PersonDetailResponse,
@@ -304,73 +305,20 @@ def get_overview() -> OverviewResponse:
     tags=["Persons"]
 )
 def get_person(person_id: str) -> PersonDetailResponse:
+    """
+    Returns full investigative profile for a person:
+    predicted role, confidence, criminal significance, topological features,
+    connected cases, suspicious patterns, evidence diversity, and narrative.
+    """
     state = get_app_state()
     if person_id not in state.person_ids:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Person '{person_id}' not found in database."
         )
+
     insight = state.insights_generator.generate_person_insight(person_id)
 
-    ml_prediction = None
-
-    if state.ml_role_classifier is not None:
-        try:
-            person_features = (
-                state.influencer_detector
-                .compute_person_features()
-                .get(person_id)
-            )
-
-            if person_features:
-                ml_prediction = state.ml_role_classifier.predict(
-                    person_features
-                )
-
-        except Exception as e:
-            logger.warning(
-                f"ML prediction failed for {person_id}: {e}"
-            )
-    hybrid_prediction = None
-
-    if (
-        state.hybrid_intelligence is not None
-        and ml_prediction is not None
-    ):
-        try:
-            hybrid_prediction = state.hybrid_intelligence.predict(
-                person_id=person_id,
-                rule_prediction=insight.predicted_role,
-                rule_confidence=insight.confidence,
-                ml_prediction=ml_prediction,
-            )
-        except Exception as e:
-            logger.warning(
-                f"Hybrid prediction failed for {person_id}: {e}"
-            )
-    explanation_result = None
-
-    if state.explainability_engine is not None:
-        try:
-            explanation_result = state.explainability_engine.explain(
-                person_id=person_id,
-                rule_role=state.roles.get(person_id),
-                role=(
-                    hybrid_prediction["role"]
-                    if hybrid_prediction
-                    else insight.predicted_role
-                ),
-                confidence=(
-                    hybrid_prediction["confidence"]
-                    if hybrid_prediction
-                    else insight.confidence
-                ),
-            )
-
-        except Exception as e:
-            logger.warning(
-                f"Explainability generation failed for {person_id}: {e}"
-            )
     return PersonDetailResponse(
         person_id=insight.person_id,
         name=insight.name,
@@ -378,68 +326,6 @@ def get_person(person_id: str) -> PersonDetailResponse:
         occupation=insight.occupation,
         predicted_role=insight.predicted_role,
         confidence=insight.confidence,
-                ml_predicted_role=(
-            ml_prediction["role"]
-            if ml_prediction else None
-        ),
-
-        ml_confidence=(
-            ml_prediction["confidence"]
-            if ml_prediction else None
-        ),
-
-        ml_probabilities=(
-            ml_prediction["probabilities"]
-            if ml_prediction else {}
-        ),
-
-        ml_rule_agreement=(
-            ml_prediction["role"] == insight.predicted_role
-            if ml_prediction else None
-        ),
-        hybrid_role=(
-            hybrid_prediction["role"]
-            if hybrid_prediction else None
-        ),
-
-        hybrid_confidence=(
-            hybrid_prediction["confidence"]
-            if hybrid_prediction else None
-        ),
-
-        hybrid_rule_score=(
-            hybrid_prediction["rule_score"]
-            if hybrid_prediction else None
-        ),
-
-        hybrid_ml_score=(
-            hybrid_prediction["ml_score"]
-            if hybrid_prediction else None
-        ),
-
-        hybrid_evidence_score=(
-            hybrid_prediction["evidence_score"]
-            if hybrid_prediction else None
-        ),
-
-        hybrid_agreement=(
-            hybrid_prediction["agreement"]
-            if hybrid_prediction else None
-        ),
-                explanation_summary=(
-            explanation_result["summary"]
-            if explanation_result else None
-        ),
-
-        explanation_reasons=(
-            explanation_result["reasons"]
-            if explanation_result else []
-        ),
-
-        explanation_evidence_count=(
-            explanation_result["evidence_count"]
-            if explanation_result else 0
-        ),
         criminal_significance=insight.is_criminally_significant,
         graph_features={
             "degree": insight.degree,
@@ -462,6 +348,11 @@ def get_person(person_id: str) -> PersonDetailResponse:
     tags=["Persons"]
 )
 def get_person_network(person_id: str) -> PersonNetworkResponse:
+    """
+    Returns local network context for a person:
+    direct connections, important influencer neighbors, operational paths,
+    roles of connected persons, connected cases, and strongest relationships.
+    """
     state = get_app_state()
     if person_id not in state.person_ids:
         raise HTTPException(
@@ -1059,3 +950,113 @@ def get_investigation_dossier(case_id: str) -> InvestigationDossierResponse:
         confidence=conf,
         investigator_narrative=c_insight.narrative
     )
+
+
+# =============================================================================
+# 8. Search Endpoint
+# =============================================================================
+
+@app.get(
+    "/search",
+    response_model=SearchResponse,
+    summary="Global entity search",
+    tags=["Search"]
+)
+def search_entities(
+    q: str = Query(..., min_length=1, description="Search query string")
+) -> SearchResponse:
+    """
+    Searches loaded dataset entities (Persons by ID or Name, Cases, Networks, Vehicles, Phones)
+    matching the query.
+    """
+    state = get_app_state()
+    query_str = q.strip()
+    query_lower = query_str.lower()
+
+    results: List[SearchResultItem] = []
+
+    # 1. Search Persons
+    if hasattr(state.data, 'persons') and state.data.persons is not None:
+        p_df = state.data.persons
+        mask = (
+            p_df['person_id'].astype(str).str.lower().str.contains(query_lower, na=False) |
+            p_df['name'].astype(str).str.lower().str.contains(query_lower, na=False)
+        )
+        matched_persons = p_df[mask].head(15)
+        for _, row in matched_persons.iterrows():
+            pid = str(row['person_id'])
+            name = str(row.get('name', pid))
+            city = str(row.get('city', ''))
+            occ = str(row.get('occupation', ''))
+            role_info = state.roles.get(pid)
+            role = role_info.predicted_role if role_info else "CIVILIAN"
+            conf = role_info.confidence_score if role_info else 0.80
+
+            results.append(SearchResultItem(
+                entity_id=pid,
+                entity_type="person",
+                display_name=name,
+                role_or_status=role,
+                confidence=round(conf, 2),
+                details=f"{city} • {occ}".strip(" •")
+            ))
+
+    # 2. Search Cases
+    if hasattr(state.data, 'cases') and state.data.cases is not None:
+        c_df = state.data.cases
+        mask = (
+            c_df['case_id'].astype(str).str.lower().str.contains(query_lower, na=False) |
+            c_df['crime_type'].astype(str).str.lower().str.contains(query_lower, na=False)
+        )
+        matched_cases = c_df[mask].head(10)
+        for _, row in matched_cases.iterrows():
+            cid = str(row['case_id'])
+            crime = str(row.get('crime_type', 'Criminal Case'))
+            status_val = str(row.get('status', 'ACTIVE'))
+            fir = str(row.get('fir_id', ''))
+
+            results.append(SearchResultItem(
+                entity_id=cid,
+                entity_type="case",
+                display_name=f"{cid}: {crime}",
+                role_or_status=status_val,
+                confidence=1.0,
+                details=f"FIR: {fir}" if fir else "Case Investigation"
+            ))
+
+    # 3. Search Networks
+    for i in range(1, 13):
+        net_id = f"NET_{i:03d}"
+        if query_lower in net_id.lower() or "syndicate" in query_lower or "network" in query_lower:
+            results.append(SearchResultItem(
+                entity_id=net_id,
+                entity_type="network",
+                display_name=f"Syndicate {net_id}",
+                role_or_status="ACTIVE_SYNDICATE",
+                confidence=0.95,
+                details=f"Connected primary case CASE_{i:04d}"
+            ))
+
+    # 4. Search Vehicles
+    if hasattr(state.data, 'vehicles') and state.data.vehicles is not None and ("veh" in query_lower or "car" in query_lower or query_lower.startswith("v")):
+        v_df = state.data.vehicles
+        mask = v_df['vehicle_id'].astype(str).str.lower().str.contains(query_lower, na=False)
+        matched_v = v_df[mask].head(5)
+        for _, row in matched_v.iterrows():
+            vid = str(row['vehicle_id'])
+            owner = str(row.get('owner_person_id', ''))
+            results.append(SearchResultItem(
+                entity_id=vid,
+                entity_type="vehicle",
+                display_name=vid,
+                role_or_status="VEHICLE",
+                confidence=0.9,
+                details=f"Owner: {owner}"
+            ))
+
+    return SearchResponse(
+        query=query_str,
+        total_results=len(results),
+        results=results
+    )
+

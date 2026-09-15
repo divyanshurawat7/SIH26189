@@ -2,52 +2,51 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --bg-canvas: #090D16;
-  --bg-sidebar: #0D131F;
-  --bg-card: #111827;
-  --bg-card-hover: #162032;
-  --bg-panel: #0E1626;
-  --bg-input: #151F30;
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-focus: #3B82F6;
-  --border-active: rgba(59, 130, 246, 0.4);
+  --bg-canvas: #F5F7FA;
+  --bg-sidebar: #FFFFFF;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #F8FAFC;
+  --bg-panel: #F9FAFB;
+  --bg-input: #F3F4F6;
+  --border-subtle: rgba(15, 23, 42, 0.08);
+  --border-focus: #2563EB;
+  --border-active: rgba(37, 99, 235, 0.3);
 
-  --text-primary: #F9FAFB;
-  --text-secondary: #9CA3AF;
-  --text-muted: #6B7280;
-  --text-inverse: #0B0F17;
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  --text-inverse: #FFFFFF;
 
   /* Forensic Role Accents */
-  --role-coordinator: #A855F7;
-  --role-coordinator-bg: rgba(168, 85, 247, 0.15);
-  --role-coordinator-border: rgba(168, 85, 247, 0.4);
+  --role-coordinator: #7C3AED;
+  --role-coordinator-bg: rgba(124, 58, 237, 0.08);
+  --role-coordinator-border: rgba(124, 58, 237, 0.25);
 
-  --role-broker: #F59E0B;
-  --role-broker-bg: rgba(245, 158, 11, 0.15);
-  --role-broker-border: rgba(245, 158, 11, 0.4);
+  --role-broker: #D97706;
+  --role-broker-bg: rgba(217, 119, 6, 0.08);
+  --role-broker-border: rgba(217, 119, 6, 0.25);
 
-  --role-operative: #EF4444;
-  --role-operative-bg: rgba(239, 68, 68, 0.15);
-  --role-operative-border: rgba(239, 68, 68, 0.4);
+  --role-operative: #DC2626;
+  --role-operative-bg: rgba(220, 38, 38, 0.08);
+  --role-operative-border: rgba(220, 38, 38, 0.25);
 
-  --role-financial: #10B981;
-  --role-financial-bg: rgba(16, 185, 129, 0.15);
-  --role-financial-border: rgba(16, 185, 129, 0.4);
+  --role-financial: #059669;
+  --role-financial-bg: rgba(5, 150, 105, 0.08);
+  --role-financial-border: rgba(5, 150, 105, 0.25);
 
-  --role-innocent: #14B8A6;
-  --role-innocent-bg: rgba(20, 184, 166, 0.15);
-  --role-innocent-border: rgba(20, 184, 166, 0.4);
+  --role-innocent: #0D9488;
+  --role-innocent-bg: rgba(13, 148, 136, 0.08);
+  --role-innocent-border: rgba(13, 148, 136, 0.25);
 
-  --color-case: #E11D48;
-  --color-case-bg: rgba(225, 29, 72, 0.15);
+  --color-case: #DC2626;
+  --color-case-bg: rgba(220, 38, 38, 0.08);
 
-  --color-info: #3B82F6;
-  --color-info-bg: rgba(59, 130, 246, 0.15);
+  --color-info: #2563EB;
+  --color-info-bg: rgba(37, 99, 235, 0.08);
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  --glow-coordinator: 0 0 15px rgba(168, 85, 247, 0.3);
+  --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 10px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -1px rgba(15, 23, 42, 0.04);
+  --shadow-lg: 0 12px 24px -3px rgba(15, 23, 42, 0.12), 0 4px 6px -2px rgba(15, 23, 42, 0.05);
 
   --radius-sm: 6px;
   --radius-md: 8px;
@@ -126,7 +125,8 @@ code, pre, .font-mono {
 }
 
 .card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
+  border-color: rgba(15, 23, 42, 0.16);
+  box-shadow: var(--shadow-md);
 }
 
 .card-header {
@@ -162,44 +162,44 @@ code, pre, .font-mono {
 
 .badge-coordinator {
   background: var(--role-coordinator-bg);
-  color: #C084FC;
+  color: #7C3AED;
   border: 1px solid var(--role-coordinator-border);
 }
 
 .badge-broker {
   background: var(--role-broker-bg);
-  color: #FBBF24;
+  color: #D97706;
   border: 1px solid var(--role-broker-border);
 }
 
 .badge-operative {
   background: var(--role-operative-bg);
-  color: #F87171;
+  color: #DC2626;
   border: 1px solid var(--role-operative-border);
 }
 
 .badge-financial {
   background: var(--role-financial-bg);
-  color: #34D399;
+  color: #059669;
   border: 1px solid var(--role-financial-border);
 }
 
 .badge-innocent {
   background: var(--role-innocent-bg);
-  color: #2DD4BF;
+  color: #0D9488;
   border: 1px solid var(--role-innocent-border);
 }
 
 .badge-case {
   background: var(--color-case-bg);
-  color: #FB7185;
-  border: 1px solid rgba(225, 29, 72, 0.4);
+  color: #DC2626;
+  border: 1px solid rgba(220, 38, 38, 0.25);
 }
 
 .badge-info {
   background: var(--color-info-bg);
-  color: #60A5FA;
-  border: 1px solid rgba(59, 130, 246, 0.4);
+  color: #2563EB;
+  border: 1px solid rgba(37, 99, 235, 0.25);
 }
 
 /* Metric / Stat Tiles */
@@ -218,12 +218,14 @@ code, pre, .font-mono {
   display: flex;
   align-items: center;
   gap: 16px;
-  transition: transform 0.2s, border-color 0.2s;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
 .metric-tile:hover {
   transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.16);
+  border-color: rgba(15, 23, 42, 0.16);
+  box-shadow: var(--shadow-md);
 }
 
 .metric-icon {
@@ -233,7 +235,7 @@ code, pre, .font-mono {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--bg-panel);
 }
 
 .metric-value {
@@ -248,6 +250,7 @@ code, pre, .font-mono {
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-weight: 500;
 }
 
 /* Tables */
@@ -264,7 +267,7 @@ code, pre, .font-mono {
 }
 
 .investigation-table th {
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--bg-panel);
   padding: 12px 16px;
   font-size: 0.75rem;
   font-weight: 600;
@@ -276,13 +279,13 @@ code, pre, .font-mono {
 
 .investigation-table td {
   padding: 14px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--border-subtle);
   color: var(--text-secondary);
   vertical-align: middle;
 }
 
 .investigation-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-card-hover);
   color: var(--text-primary);
 }
 
@@ -298,7 +301,7 @@ code, pre, .font-mono {
   font-weight: 500;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: background 0.15s, border-color 0.15s;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .btn-primary {
@@ -310,13 +313,13 @@ code, pre, .font-mono {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
+  background: #FFFFFF;
   color: var(--text-primary);
   border: 1px solid var(--border-subtle);
 }
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--bg-card-hover);
+  border-color: rgba(15, 23, 42, 0.2);
 }
 
 .btn-sm {
@@ -337,8 +340,8 @@ code, pre, .font-mono {
 .spinner {
   width: 36px;
   height: 36px;
-  border: 3px solid rgba(255, 255, 255, 0.1);
-  border-top-color: #3B82F6;
+  border: 3px solid rgba(37, 99, 235, 0.15);
+  border-top-color: #2563EB;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin-bottom: 16px;
@@ -349,9 +352,9 @@ code, pre, .font-mono {
 }
 
 .error-banner {
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #FCA5A5;
+  background: #FEF2F2;
+  border: 1px solid #FCA5A5;
+  color: #991B1B;
   padding: 14px 18px;
   border-radius: var(--radius-md);
   margin-bottom: 20px;
@@ -360,23 +363,26 @@ code, pre, .font-mono {
   gap: 12px;
 }
 
-/* React Flow custom overrides */
+/* React Flow custom overrides - Graph canvas remains dark */
 .react-flow__renderer {
   background: #080B12 !important;
 }
 
 .react-flow__controls {
-  background: #111827 !important;
+  background: #FFFFFF !important;
   border: 1px solid var(--border-subtle) !important;
   border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
 .react-flow__controls-button {
   background: transparent !important;
   border-bottom: 1px solid var(--border-subtle) !important;
-  color: #9CA3AF !important;
+  color: #475569 !important;
 }
 
 .react-flow__controls-button:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
+  background: #F8FAFC !important;
+  color: #0F172A !important;
 }
+

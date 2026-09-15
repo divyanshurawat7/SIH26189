@@ -30,7 +30,7 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({ node, onClos
       right: 0,
       bottom: 0,
       width: '360px',
-      background: 'var(--bg-card)',
+      background: '#FFFFFF',
       borderLeft: '1px solid var(--border-subtle)',
       boxShadow: 'var(--shadow-lg)',
       zIndex: 20,
@@ -42,10 +42,10 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({ node, onClos
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          {isPerson && <User size={18} color="#A855F7" />}
-          {isCase && <Briefcase size={18} color="#EF4444" />}
-          {isLocation && <MapPin size={18} color="#10B981" />}
-          {isVehicle && <Car size={18} color="#60A5FA" />}
+          {isPerson && <User size={18} color="#7C3AED" />}
+          {isCase && <Briefcase size={18} color="#DC2626" />}
+          {isLocation && <MapPin size={18} color="#059669" />}
+          {isVehicle && <Car size={18} color="#2563EB" />}
           <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
             Entity Inspector
           </span>
@@ -80,29 +80,35 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({ node, onClos
             padding: '6px 12px',
             borderRadius: 'var(--radius-md)',
             background: node.role === 'UPSTREAM_COORDINATOR'
-              ? 'rgba(168,85,247,0.2)'
+              ? 'var(--role-coordinator-bg)'
               : node.role === 'BROKER'
-              ? 'rgba(245,158,11,0.2)'
+              ? 'var(--role-broker-bg)'
               : node.role === 'OPERATIONAL_MEMBER'
-              ? 'rgba(239,68,68,0.2)'
-              : 'rgba(20,184,166,0.2)',
+              ? 'var(--role-operative-bg)'
+              : 'var(--role-innocent-bg)',
             border: `1px solid ${
               node.role === 'UPSTREAM_COORDINATOR'
-                ? 'rgba(168,85,247,0.5)'
+                ? 'var(--role-coordinator-border)'
                 : node.role === 'BROKER'
-                ? 'rgba(245,158,11,0.5)'
+                ? 'var(--role-broker-border)'
                 : node.role === 'OPERATIONAL_MEMBER'
-                ? 'rgba(239,68,68,0.5)'
-                : 'rgba(20,184,166,0.5)'
+                ? 'var(--role-operative-border)'
+                : 'var(--role-innocent-border)'
             }`,
             fontSize: '0.8rem',
             fontWeight: 700,
-            color: 'var(--text-primary)'
+            color: node.role === 'UPSTREAM_COORDINATOR'
+              ? '#7C3AED'
+              : node.role === 'BROKER'
+              ? '#D97706'
+              : node.role === 'OPERATIONAL_MEMBER'
+              ? '#DC2626'
+              : '#0D9488'
           }}>
-            {node.role === 'UPSTREAM_COORDINATOR' && <Crown size={14} color="#C084FC" />}
-            {node.role === 'BROKER' && <GitBranch size={14} color="#FBBF24" />}
-            {node.role === 'OPERATIONAL_MEMBER' && <Target size={14} color="#F87171" />}
-            {node.role === 'PERIPHERAL_ASSOCIATE' && <ShieldCheck size={14} color="#2DD4BF" />}
+            {node.role === 'UPSTREAM_COORDINATOR' && <Crown size={14} color="#7C3AED" />}
+            {node.role === 'BROKER' && <GitBranch size={14} color="#D97706" />}
+            {node.role === 'OPERATIONAL_MEMBER' && <Target size={14} color="#DC2626" />}
+            {node.role === 'PERIPHERAL_ASSOCIATE' && <ShieldCheck size={14} color="#0D9488" />}
             {node.role}
           </div>
         </div>
@@ -110,7 +116,7 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({ node, onClos
 
       {/* Attribute Properties */}
       <div style={{
-        background: 'rgba(255,255,255,0.02)',
+        background: 'var(--bg-panel)',
         border: '1px solid var(--border-subtle)',
         borderRadius: 'var(--radius-md)',
         padding: '16px',
@@ -128,14 +134,14 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({ node, onClos
         {node.confidence !== undefined && (
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span style={{ color: 'var(--text-muted)' }}>Confidence:</span>
-            <span style={{ color: '#34D399', fontWeight: 600 }}>{(node.confidence * 100).toFixed(0)}%</span>
+            <span style={{ color: '#059669', fontWeight: 600 }}>{(node.confidence * 100).toFixed(0)}%</span>
           </div>
         )}
 
         {node.isCriminal !== undefined && (
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span style={{ color: 'var(--text-muted)' }}>Predicate Status:</span>
-            <span style={{ color: node.isCriminal ? '#F87171' : '#34D399', fontWeight: 600 }}>
+            <span style={{ color: node.isCriminal ? '#DC2626' : '#059669', fontWeight: 600 }}>
               {node.isCriminal ? 'Criminal Suspect' : 'Verified Civilian / Non-Criminal'}
             </span>
           </div>
@@ -169,3 +175,4 @@ export const NodeDetailDrawer: React.FC<NodeDetailDrawerProps> = ({ node, onClos
     </div>
   );
 };
+

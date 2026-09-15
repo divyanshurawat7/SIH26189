@@ -87,55 +87,6 @@ class PersonDetailResponse(BaseModel):
     occupation: str = Field(..., description="Recorded occupation")
     predicted_role: str = Field(..., description="Predicted network role")
     confidence: float = Field(..., description="Role prediction confidence score")
-        # Machine Learning role intelligence
-    ml_predicted_role: Optional[str] = Field(
-        None,
-        description="Machine-learning suggested role"
-    )
-
-    ml_confidence: Optional[float] = Field(
-        None,
-        description="Machine-learning role confidence"
-    )
-
-    ml_probabilities: Dict[str, float] = Field(
-        default_factory=dict,
-        description="ML probability distribution across roles"
-    )
-
-    ml_rule_agreement: Optional[bool] = Field(
-        None,
-        description="Whether ML and rule-based role predictions agree"
-    )
-    hybrid_role: Optional[str] = Field(
-        None,
-        description="Final role from hybrid rule + ML intelligence"
-    )
-
-    hybrid_confidence: Optional[float] = Field(
-        None,
-        description="Hybrid intelligence confidence score"
-    )
-
-    hybrid_rule_score: Optional[float] = Field(
-        None,
-        description="Rule engine contribution"
-    )
-
-    hybrid_ml_score: Optional[float] = Field(
-        None,
-        description="ML model contribution"
-    )
-
-    hybrid_evidence_score: Optional[float] = Field(
-        None,
-        description="Evidence strength contribution"
-    )
-
-    hybrid_agreement: Optional[bool] = Field(
-        None,
-        description="Whether rule and ML predictions agree"
-    )
     criminal_significance: bool = Field(..., description="Whether actor exhibits verified criminal predicate")
     graph_features: Dict[str, Any] = Field(default_factory=dict, description="Topological features (degree, betweenness, etc.)")
     connected_cases: List[str] = Field(default_factory=list, description="Directly or multi-hop connected cases")
@@ -330,3 +281,29 @@ class InvestigationDossierResponse(BaseModel):
     evidence_traceability: Dict[str, Any] = Field(default_factory=dict, description="Traceability metrics & diversity")
     confidence: float = Field(..., description="Overall aggregated dossier confidence")
     investigator_narrative: str = Field(..., description="Complete investigative summary narrative")
+
+
+# =============================================================================
+# 9. Global Search Models
+# =============================================================================
+
+class SearchResultItem(BaseModel):
+    """Dynamic global search result item."""
+    model_config = ConfigDict(extra="ignore")
+
+    entity_id: str = Field(..., description="Unique entity ID (e.g. PERSON_1476, CASE_0001, NET_001)")
+    entity_type: str = Field(..., description="Entity type ('person' | 'case' | 'network' | 'vehicle' | 'phone' | 'location')")
+    display_name: str = Field(..., description="Display label or person name")
+    role_or_status: Optional[str] = Field(None, description="Predicted role or case status")
+    confidence: Optional[float] = Field(None, description="Confidence score if applicable")
+    details: Optional[str] = Field(None, description="Additional contextual details")
+
+
+class SearchResponse(BaseModel):
+    """Global search response schema."""
+    model_config = ConfigDict(extra="ignore")
+
+    query: str = Field(..., description="Original query string")
+    total_results: int = Field(..., description="Count of matched entities")
+    results: List[SearchResultItem] = Field(default_factory=list, description="List of matching search results")
+

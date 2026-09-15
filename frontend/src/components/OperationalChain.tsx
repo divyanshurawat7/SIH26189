@@ -20,7 +20,7 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
     return (
       <div style={{
         padding: '24px',
-        background: 'rgba(255,255,255,0.02)',
+        background: 'var(--bg-panel)',
         borderRadius: 'var(--radius-md)',
         color: 'var(--text-muted)',
         fontSize: '0.875rem',
@@ -38,9 +38,9 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
         desc: 'Remote Command & Control (Zero direct crime exposure)',
         badgeClass: 'badge-coordinator',
         icon: Crown,
-        color: '#C084FC',
-        border: 'rgba(168, 85, 247, 0.5)',
-        bg: 'rgba(168, 85, 247, 0.1)'
+        color: '#7C3AED',
+        border: 'rgba(124, 58, 237, 0.3)',
+        bg: 'rgba(124, 58, 237, 0.08)'
       };
     }
     if (nodeId.startsWith('CASE_') || index === chain.length - 1) {
@@ -49,9 +49,9 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
         desc: 'Incident Location & FIR Offense',
         badgeClass: 'badge-case',
         icon: Briefcase,
-        color: '#FB7185',
-        border: 'rgba(225, 29, 72, 0.5)',
-        bg: 'rgba(225, 29, 72, 0.1)'
+        color: '#DC2626',
+        border: 'rgba(220, 38, 38, 0.3)',
+        bg: 'rgba(220, 38, 38, 0.08)'
       };
     }
     if (operationalMembers.includes(nodeId) || index === chain.length - 2) {
@@ -60,9 +60,9 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
         desc: 'On-scene FIR Accused / Physical Perpetrator',
         badgeClass: 'badge-operative',
         icon: Target,
-        color: '#F87171',
-        border: 'rgba(239, 68, 68, 0.5)',
-        bg: 'rgba(239, 68, 68, 0.1)'
+        color: '#DC2626',
+        border: 'rgba(220, 38, 38, 0.3)',
+        bg: 'rgba(220, 38, 38, 0.08)'
       };
     }
     if (brokers.includes(nodeId) || (index > 0 && index < chain.length - 2)) {
@@ -71,9 +71,9 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
         desc: 'Cluster Bridge / Financial & Telecom Conduit',
         badgeClass: 'badge-broker',
         icon: GitBranch,
-        color: '#FBBF24',
-        border: 'rgba(245, 158, 11, 0.5)',
-        bg: 'rgba(245, 158, 11, 0.1)'
+        color: '#D97706',
+        border: 'rgba(217, 119, 6, 0.3)',
+        bg: 'rgba(217, 119, 6, 0.08)'
       };
     }
     return {
@@ -81,15 +81,15 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
       desc: 'Transitional Link in Operational Hierarchy',
       badgeClass: 'badge-info',
       icon: GitBranch,
-      color: '#60A5FA',
-      border: 'rgba(96, 165, 250, 0.5)',
-      bg: 'rgba(96, 165, 250, 0.1)'
+      color: '#2563EB',
+      border: 'rgba(37, 99, 235, 0.3)',
+      bg: 'rgba(37, 99, 235, 0.08)'
     };
   };
 
   return (
     <div style={{
-      background: 'var(--bg-card)',
+      background: '#FFFFFF',
       border: '1px solid var(--border-subtle)',
       borderRadius: 'var(--radius-lg)',
       padding: '24px',
@@ -157,7 +157,7 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
                   fontSize: '0.65rem',
                   fontWeight: 700,
                   background: info.color,
-                  color: '#000000',
+                  color: '#FFFFFF',
                   padding: '1px 7px',
                   borderRadius: 'var(--radius-full)'
                 }}>
@@ -166,7 +166,7 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '4px', marginBottom: '8px' }}>
                   <Icon size={16} color={info.color} />
-                  <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)' }}>
+                  <span style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'JetBrains Mono' }}>
                     {nodeId}
                   </span>
                 </div>
@@ -175,7 +175,7 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
                   {info.role}
                 </div>
 
-                <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)', lineHeight: 1.3 }}>
+                <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', lineHeight: 1.3 }}>
                   {info.desc}
                 </div>
               </div>
@@ -188,8 +188,8 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
                   gap: '2px',
                   padding: '0 4px'
                 }}>
-                  <ArrowRight size={20} color="#60A5FA" />
-                  <span style={{ fontSize: '0.65rem', color: '#60A5FA', fontWeight: 500 }}>
+                  <ArrowRight size={20} color="#2563EB" />
+                  <span style={{ fontSize: '0.65rem', color: '#2563EB', fontWeight: 500 }}>
                     calls / funds
                   </span>
                 </div>
@@ -201,3 +201,4 @@ export const OperationalChain: React.FC<OperationalChainProps> = ({
     </div>
   );
 };
+

@@ -1,3 +1,19 @@
+"""
+SIH26189 — AI-Powered Criminal Network Analysis System
+Module: src/entity_resolution.py
+
+Phase 2: Person Entity Resolution
+Identifies records that likely refer to the same real-world PERSON while
+strictly avoiding false merges of distinct individuals with similar names.
+
+Features:
+- Robust name normalization (lowercase, punctuation, whitespace, camelCase splitting, initial handling).
+- Candidate pair blocking (inverted indexing on initial+surname, address, phone) to eliminate >99% of unneeded comparisons.
+- Multi-attribute explainable similarity scoring across:
+  name, name_variant, gender, age, city, address_id, primary_phone_id.
+- Conservative decision thresholds (HIGH, MEDIUM, LOW) with hard conflict penalties (gender, severe age gap, distinct first names).
+- Detailed, auditable investigator explanations and explicit matched/conflicting field tracking.
+"""
 
 from dataclasses import dataclass, field, asdict
 from enum import Enum

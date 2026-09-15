@@ -1,3 +1,20 @@
+"""
+SIH26189 — AI-Powered Criminal Network Analysis System
+Module: src/evidence_traceability.py
+
+Phase 6: Evidence Traceability
+Provides a unified evidence tracing layer that links high-level intelligence findings,
+roles, multi-hop operational chains, and case conclusions back to concrete,
+verifiable source records across the raw dataset.
+
+Core Principles:
+1. Strict Provenance: Every evidence item traces back to a genuine primary key in the raw CSVs.
+2. High-Performance Indexing: In-memory indexes built once upon initialization for O(1) lookups.
+3. Multi-Source Diversity: Quantifies independent categories (CDR, Transactions, Location,
+   Vehicle, Surveillance, Intelligence, FIR, Criminal History, Relationships, Evidence Records, Social Media).
+4. Explainable Confidence: Aggregates source confidence without inventing unwarranted certainty.
+5. Zero Ground-Truth Leakage: Predicts and traces using strictly raw datasets and graph topology.
+"""
 
 from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Optional, Tuple, Any, Set, Union

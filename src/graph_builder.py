@@ -1,3 +1,25 @@
+"""
+SIH26189 — AI-Powered Criminal Network Analysis System
+Module: src/graph_builder.py
+
+Phase 3: Graph Construction
+Builds a unified, multi-layer, typed directed graph (NetworkX MultiDiGraph)
+representing the entire criminal intelligence ecosystem.
+
+Entity Types (12):
+- PERSON, ORGANIZATION, PHONE, DEVICE, BANK_ACCOUNT, VEHICLE,
+  LOCATION, CELL_TOWER, CASE, FIR, EVENT, EVIDENCE
+
+Features:
+- Full multi-source relationship ingestion and edge derivation.
+- Strict source traceability for every edge:
+  (source_type, source_record_id, confidence, timestamp, weight).
+- Flagship directed path verification:
+  PERSON_1476 -> PERSON_0026 -> PERSON_0397 -> PERSON_0405 -> PERSON_1459 -> CASE_0001.
+- Complete isolation check ensuring PERSON_1476 has zero direct CASE_0001 associations.
+- Zero broken references (all edge endpoints are validated nodes in the graph).
+- Comprehensive graph statistics reporting.
+"""
 
 from dataclasses import dataclass, field, asdict
 from enum import Enum
