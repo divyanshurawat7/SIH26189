@@ -149,6 +149,27 @@ print(f"Flagship directed path: {' -> '.join(stats.flagship_shortest_path)}")
 Neo4jLoader.export_cypher_script(G, output_file="export_sih26189_graph.cypher")
 ```
 
+### Running Influencer Detection in Python
+```python
+from src.data_loader import DataLoader
+from src.graph_builder import GraphBuilder
+from src.influencer_detection import InfluencerDetector
+
+loader = DataLoader()
+dataset = loader.load_all(validate=False)
+
+builder = GraphBuilder()
+G = builder.build_graph(dataset)
+
+detector = InfluencerDetector(G)
+top_influencers = detector.get_top_influencers(20)
+
+for rank, inf in enumerate(top_influencers, 1):
+    print(f"{rank}. {inf.person_id} [{inf.predicted_role}] (Conf: {inf.confidence_score:.2f})")
+    if inf.supporting_paths:
+        print("   Path:", " -> ".join(inf.supporting_paths[0]))
+```
+
 ### Running Automated Tests
 ```bash
 python -m unittest discover tests/ -v
@@ -160,7 +181,8 @@ python -m unittest discover tests/ -v
 
 - [x] **Phase 1: Data Ingestion & Schema Integrity**: Complete (20 raw tables loaded, FK validated, 6/6 tests passing).
 - [x] **Phase 2: Person Entity Resolution**: Complete (Explainable multi-attribute matching, candidate blocking, 0 false merges on 65 traps, 25/25 tests passing).
-- [x] **Phase 3: Graph Construction & Neo4j Integration**: Complete (NetworkX MultiDiGraph with 12 entity types, full source traceability, 0 coordinator direct edges, Cypher exporter, offline fallback, 15/15 tests passing — **46/46 total passing**).
-- [ ] **Phase 4: Upstream Coordinator Discovery & Multi-Hop Traversal**: Pending.
+- [x] **Phase 3: Graph Construction & Neo4j Integration**: Complete (NetworkX MultiDiGraph with 12 entity types, full source traceability, 0 coordinator direct edges, Cypher exporter, offline fallback, 15/15 tests passing).
+- [x] **Phase 4: Upstream Coordinator Discovery & Influencer Detection**: Complete (Graph feature extraction, broker detection, multi-hop directed chain recovery, innocent high-degree trap differentiation, post-prediction GT evaluation — **56/56 total tests passing**).
 - [ ] **Phase 5: Investigator Interface & Case Dossier Generation**: Pending.
+
 
