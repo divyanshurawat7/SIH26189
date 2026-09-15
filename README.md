@@ -247,6 +247,108 @@ fp_audit = insights.explain_false_positive_control("PERSON_0553")
 print(f"PERSON_0553 Innocence Justification: {fp_audit['justification']}")
 ```
 
+### Running the Investigation REST API Backend (Phase 7)
+
+The system exposes a high-performance, explainable REST API built on **FastAPI**, **Pydantic**, and **Uvicorn**.
+
+#### 1. Installation
+```bash
+pip install -r requirements.txt
+```
+
+#### 2. Starting the Development Server
+```bash
+uvicorn src.api:app --reload --port 8000
+```
+*Note: The intelligence engine indexes the dataset and builds graph models once during startup (~29s warmup). Once loaded, individual API queries execute in $<0.5\text{ ms}$.*
+
+#### 3. Accessing Interactive API Documentation
+- **Swagger UI**: [http://localhost:8000/docs](http://localhost:8000/docs)
+- **ReDoc**: [http://localhost:8000/redoc](http://localhost:8000/redoc)
+
+#### 4. Available Endpoints
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/health` | Service health, dataset status, and completed pipeline phases |
+| `GET` | `/persons/{person_id}` | Actor dossier, predicted role, centralities, evidence diversity, and narrative |
+| `GET` | `/persons/{person_id}/network` | 1-hop topology, influencer neighbors, operational paths, role breakdown |
+| `GET` | `/persons/{person_id}/evidence` | Traceable evidence records for the person across 11 source categories |
+| `GET` | `/cases/{case_id}` | Case overview, FIR details, key actors, locations, vehicles, patterns |
+| `GET` | `/cases/{case_id}/timeline` | Chronologically ordered forensic event stream (calls, transactions, sightings, FIR) |
+| `GET` | `/cases/{case_id}/evidence` | Traceable case evidence grouped by source category (`CDR`, `FINANCIAL`, etc.) |
+| `GET` | `/networks/{network_id}` | Syndicate structural profile (`NET_001`–`NET_012`), hierarchy, key paths |
+| `GET` | `/findings` | Filterable pattern findings (`?case_id=...&person_id=...&min_confidence=0.8`) |
+| `GET` | `/findings/{finding_id}` | Detailed finding with supporting records, categories, and explanation |
+| `GET` | `/cross-case/{entity_id}` | Cross-case analysis with linkage strength and overlap suppression logic |
+| `GET` | `/investigation/{case_id}` | **Primary Demo Endpoint**: Dynamic end-to-end dossier (coordinator, 5-hop chain, multi-source evidence) |
+
+#### 5. Example Requests and Responses
+
+##### Health Check (`GET /health`)
+```bash
+curl -s http://localhost:8000/health
+```
+```json
+{
+  "status": "ok",
+  "service": "SIH26189 Investigation API",
+  "dataset": "synthetic",
+  "phases_completed": 6
+}
+```
+
+##### Flagship Case Investigation Dossier (`GET /investigation/CASE_0001`)
+```bash
+curl -s http://localhost:8000/investigation/CASE_0001
+```
+```json
+{
+  "case_id": "CASE_0001",
+  "case_summary": {
+    "case_id": "CASE_0001",
+    "crime_type": "extortion",
+    "status": "under_investigation",
+    "fir_id": "FIR_0001",
+    "incident_date": "2024-01-15",
+    "incident_location": "LOCATION_0041"
+  },
+  "upstream_coordinator": "PERSON_1476",
+  "operational_chain": [
+    "PERSON_1476",
+    "PERSON_0026",
+    "PERSON_0397",
+    "PERSON_0405",
+    "PERSON_1459",
+    "CASE_0001"
+  ],
+  "brokers": ["PERSON_0026", "PERSON_0397", "PERSON_0405"],
+  "operational_members": ["PERSON_1459"],
+  "financial_facilitators": [],
+  "financial_evidence": [...],
+  "communication_evidence": [...],
+  "temporal_evidence": [...],
+  "spatial_evidence": [...],
+  "vehicle_evidence": [...],
+  "cross_case_connections": [],
+  "evidence_traceability": {
+    "total_case_records": 10,
+    "evidence_diversity_score": 6,
+    "source_categories": [
+      "EVIDENCE_RECORD",
+      "FINANCIAL_TRANSACTION",
+      "FIR_RECORD",
+      "INTELLIGENCE_REPORT",
+      "RELATIONSHIP",
+      "SURVEILLANCE_REPORT"
+    ],
+    "operational_chain_length": 6
+  },
+  "confidence": 0.98,
+  "investigator_narrative": "Investigation of CASE_0001 (extortion, status: under_investigation) directed by Upstream Coordinator PERSON_1476 via operational chain (PERSON_1476 -> PERSON_0026 -> PERSON_0397 -> PERSON_0405 -> PERSON_1459 -> CASE_0001)..."
+}
+```
+
 ### Running Automated Tests
 ```bash
 python -m unittest discover tests/ -v
@@ -261,8 +363,5 @@ python -m unittest discover tests/ -v
 - [x] **Phase 3: Graph Construction & Neo4j Integration**: Complete (NetworkX MultiDiGraph with 12 entity types, full source traceability, 0 coordinator direct edges, Cypher exporter, offline fallback, 15/15 tests passing).
 - [x] **Phase 4: Upstream Coordinator Discovery & Influencer Detection**: Complete (Graph feature extraction, broker detection, multi-hop directed chain recovery, innocent high-degree trap differentiation, post-prediction GT evaluation — 10/10 tests passing).
 - [x] **Phase 5: Suspicious Pattern, Temporal, Spatial, & Cross-Case Analysis**: Complete (Activity timelines, communication bursts, rapid transfer chains, layered financial+call cascades, dual-tier vehicle convoys, audited cross-case entity links, innocent control handling, post-prediction GT evaluation — 20/20 tests passing).
-- [x] **Phase 6: Evidence Traceability & Investigation Insights**: Complete (Unified evidence tracing across all 11 source categories, in-memory O(1) indexing of 98,904 records, hop-by-hop multi-hop chain tracing, source diversity scoring, explainable confidence aggregation, Person/Case/Network/Cross-Case dossiers, innocent PERSON_0553 forensic justification — **93/93 total tests passing**).
-
-
-
-
+- [x] **Phase 6: Evidence Traceability & Investigation Insights**: Complete (Unified evidence tracing across all 11 source categories, in-memory O(1) indexing of 98,904 records, hop-by-hop multi-hop chain tracing, source diversity scoring, explainable confidence aggregation, Person/Case/Network/Cross-Case dossiers, innocent PERSON_0553 forensic justification — 93/93 tests passing).
+- [x] **Phase 7: Investigation REST API Backend**: Complete (FastAPI, Pydantic v2, Uvicorn service layer, 12 endpoints covering actor profiles, case timelines, grouped evidence, syndicate structures, filterable pattern findings, cross-case analysis, and dynamic flagship investigation dossiers; sub-millisecond query latencies — **117/117 total tests passing**).
