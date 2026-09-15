@@ -1,26 +1,3 @@
-"""
-SIH26189 — AI-Powered Criminal Network Analysis System
-Module: src/api.py
-
-Phase 7: Investigation REST API Backend
-Provides a high-performance, explainable REST API layer built on top of the
-validated Phase 1–6 criminal intelligence and evidence traceability engine.
-
-Exposes:
-- GET /health: Service health and system readiness
-- GET /persons/{person_id}: Actor profile, predicted role, evidence diversity, and narrative
-- GET /persons/{person_id}/network: 1-hop topology, influencer neighbors, operational paths
-- GET /persons/{person_id}/evidence: Traceable records for person across 11 source categories
-- GET /cases/{case_id}: Case details, FIR information, key actors, locations, patterns
-- GET /cases/{case_id}/timeline: Chronologically ordered forensic event stream
-- GET /cases/{case_id}/evidence: Traceable case evidence grouped by source category
-- GET /networks/{network_id}: Syndicate structural profile, hierarchy, and key paths
-- GET /findings: Behavioral pattern findings with optional query filters
-- GET /findings/{finding_id}: Complete finding with supporting records and explanation
-- GET /cross-case/{entity_id}: Multi-jurisdictional linkage with overlap suppression logic
-- GET /investigation/{case_id}: Primary demo endpoint — complete dynamic investigation dossier
-"""
-
 import time
 from contextlib import asynccontextmanager
 from typing import Dict, List, Optional, Any, Set
@@ -38,6 +15,8 @@ from src.evidence_traceability import EvidenceTracer, EvidenceItem
 from src.influencer_detection import InfluencerDetector, InfluencerResult, RoleType
 from src.pattern_detection import PatternDetector, Finding
 from src.investigation_insights import InvestigationInsightsGenerator
+from src.ml_role_classifier import RoleClassifier
+from src.hybrid_intelligence import HybridIntelligence
 from src.api_models import (
     HealthResponse,
     ErrorResponse,
@@ -74,7 +53,8 @@ class AppState:
         self.influencer_detector: Optional[InfluencerDetector] = None
         self.pattern_detector: Optional[PatternDetector] = None
         self.insights_generator: Optional[InvestigationInsightsGenerator] = None
-
+        self.ml_role_classifier: Optional[RoleClassifier] = None
+        self.hybrid_intelligence: Optional[HybridIntelligence] = None
         self.roles: Dict[str, InfluencerResult] = {}
         self.findings: List[Finding] = []
         self.findings_by_id: Dict[str, Finding] = {}
@@ -124,7 +104,35 @@ def init_app_state() -> AppState:
     state.roles = state.insights_generator._get_roles()
     state.findings = state.insights_generator._get_findings()
     state.findings_by_id = {f.finding_id: f for f in state.findings}
+        # 5.1 Load trained ML role classifier
+    try:
+        state.ml_role_classifier = RoleClassifier()
+        state.ml_role_classifier.load()
+        try:
+            state.hybrid_intelligence = HybridIntelligence(
+                influencer_detector=state.influencer_detector,
+                ml_classifier=state.ml_role_classifier,
+                roles=state.roles,
+            )
 
+            logger.info("Hybrid Intelligence engine loaded")
+
+        except Exception as e:
+            state.hybrid_intelligence = None
+            logger.warning(
+                f"Hybrid Intelligence unavailable: {e}"
+            )
+
+        logger.info(
+            f"ML Role Classifier loaded: "
+            f"{state.ml_role_classifier.model_name}"
+        )
+
+    except Exception as e:
+        state.ml_role_classifier = None
+        logger.warning(
+            f"ML Role Classifier unavailable: {e}"
+        )
     # 6. Precompute lookup sets
     state.person_ids = set(state.data.persons["person_id"].dropna().unique())
     state.case_ids = set(state.data.cases["case_id"].dropna().unique())
@@ -314,8 +322,47 @@ def get_person(person_id: str) -> PersonDetailResponse:
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Person '{person_id}' not found in database."
         )
-
     insight = state.insights_generator.generate_person_insight(person_id)
+
+    # ---------------------------------------------------------
+    # ML role prediction
+    # ---------------------------------------------------------
+    ml_prediction = None
+
+    if state.ml_role_classifier is not None:
+        try:
+            person_features = (
+                state.influencer_detector
+                .compute_person_features()
+                .get(person_id)
+            )
+
+            if person_features:
+                ml_prediction = state.ml_role_classifier.predict(
+                    person_features
+                )
+
+        except Exception as e:
+            logger.warning(
+                f"ML prediction failed for {person_id}: {e}"
+            )
+    hybrid_prediction = None
+
+    if (
+        state.hybrid_intelligence is not None
+        and ml_prediction is not None
+    ):
+        try:
+            hybrid_prediction = state.hybrid_intelligence.predict(
+                person_id=person_id,
+                rule_prediction=insight.predicted_role,
+                rule_confidence=insight.confidence,
+                ml_prediction=ml_prediction,
+            )
+        except Exception as e:
+            logger.warning(
+                f"Hybrid prediction failed for {person_id}: {e}"
+            )
 
     return PersonDetailResponse(
         person_id=insight.person_id,
@@ -324,6 +371,54 @@ def get_person(person_id: str) -> PersonDetailResponse:
         occupation=insight.occupation,
         predicted_role=insight.predicted_role,
         confidence=insight.confidence,
+                ml_predicted_role=(
+            ml_prediction["role"]
+            if ml_prediction else None
+        ),
+
+        ml_confidence=(
+            ml_prediction["confidence"]
+            if ml_prediction else None
+        ),
+
+        ml_probabilities=(
+            ml_prediction["probabilities"]
+            if ml_prediction else {}
+        ),
+
+        ml_rule_agreement=(
+            ml_prediction["role"] == insight.predicted_role
+            if ml_prediction else None
+        ),
+        hybrid_role=(
+            hybrid_prediction["role"]
+            if hybrid_prediction else None
+        ),
+
+        hybrid_confidence=(
+            hybrid_prediction["confidence"]
+            if hybrid_prediction else None
+        ),
+
+        hybrid_rule_score=(
+            hybrid_prediction["rule_score"]
+            if hybrid_prediction else None
+        ),
+
+        hybrid_ml_score=(
+            hybrid_prediction["ml_score"]
+            if hybrid_prediction else None
+        ),
+
+        hybrid_evidence_score=(
+            hybrid_prediction["evidence_score"]
+            if hybrid_prediction else None
+        ),
+
+        hybrid_agreement=(
+            hybrid_prediction["agreement"]
+            if hybrid_prediction else None
+        ),
         criminal_significance=insight.is_criminally_significant,
         graph_features={
             "degree": insight.degree,
@@ -346,11 +441,6 @@ def get_person(person_id: str) -> PersonDetailResponse:
     tags=["Persons"]
 )
 def get_person_network(person_id: str) -> PersonNetworkResponse:
-    """
-    Returns local network context for a person:
-    direct connections, important influencer neighbors, operational paths,
-    roles of connected persons, connected cases, and strongest relationships.
-    """
     state = get_app_state()
     if person_id not in state.person_ids:
         raise HTTPException(

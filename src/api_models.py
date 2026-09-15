@@ -87,6 +87,26 @@ class PersonDetailResponse(BaseModel):
     occupation: str = Field(..., description="Recorded occupation")
     predicted_role: str = Field(..., description="Predicted network role")
     confidence: float = Field(..., description="Role prediction confidence score")
+        # Machine Learning role intelligence
+    ml_predicted_role: Optional[str] = Field(
+        None,
+        description="Machine-learning suggested role"
+    )
+
+    ml_confidence: Optional[float] = Field(
+        None,
+        description="Machine-learning role confidence"
+    )
+
+    ml_probabilities: Dict[str, float] = Field(
+        default_factory=dict,
+        description="ML probability distribution across roles"
+    )
+
+    ml_rule_agreement: Optional[bool] = Field(
+        None,
+        description="Whether ML and rule-based role predictions agree"
+    )
     criminal_significance: bool = Field(..., description="Whether actor exhibits verified criminal predicate")
     graph_features: Dict[str, Any] = Field(default_factory=dict, description="Topological features (degree, betweenness, etc.)")
     connected_cases: List[str] = Field(default_factory=list, description="Directly or multi-hop connected cases")
