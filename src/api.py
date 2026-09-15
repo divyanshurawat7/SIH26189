@@ -101,12 +101,10 @@ def init_app_state() -> AppState:
         influencer_detector=state.influencer_detector,
         pattern_detector=state.pattern_detector
     )
-
-    # 5. Precompute roles and findings for zero-latency lookups
+    
     state.roles = state.insights_generator._get_roles()
     state.findings = state.insights_generator._get_findings()
     state.findings_by_id = {f.finding_id: f for f in state.findings}
-        # 5.1 Load trained ML role classifier
     try:
         state.ml_role_classifier = RoleClassifier()
         state.ml_role_classifier.load()
@@ -116,7 +114,6 @@ def init_app_state() -> AppState:
             f"{state.ml_role_classifier.model_name}"
         )
 
-        # 5.2 Initialize Hybrid Intelligence
         try:
             state.hybrid_intelligence = HybridIntelligence(
                 influencer_detector=state.influencer_detector,
@@ -152,7 +149,6 @@ def init_app_state() -> AppState:
         logger.warning(
             f"Explainability Engine unavailable: {e}"
         )
-    # 6. Precompute lookup sets
     state.person_ids = set(state.data.persons["person_id"].dropna().unique())
     state.case_ids = set(state.data.cases["case_id"].dropna().unique())
     state.entity_ids = (
@@ -175,20 +171,13 @@ def init_app_state() -> AppState:
 
 
 def get_app_state() -> AppState:
-    """Returns the singleton application state."""
     global _state
     if _state is None:
         return init_app_state()
     return _state
 
-
-# =============================================================================
-# FastAPI Application & Lifespan Context
-# =============================================================================
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Lifespan event handler preloading intelligence data at startup."""
     init_app_state()
     yield
 
@@ -204,7 +193,6 @@ app = FastAPI(
     }
 )
 
-# CORS Configuration for local frontend development
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -222,16 +210,10 @@ app.add_middleware(
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):
-    """Maps parameter validation errors to HTTP 400."""
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content={"detail": f"Invalid query parameters: {exc.errors()}"}
     )
-
-
-# =============================================================================
-# 1. Health Endpoint
-# =============================================================================
 
 @app.get(
     "/health",
@@ -240,7 +222,6 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     tags=["System"]
 )
 def get_health() -> HealthResponse:
-    """Returns system status, service name, dataset type, and pipeline version."""
     return HealthResponse(
         status="ok",
         service="SIH26189 Investigation API",
@@ -256,10 +237,8 @@ def get_health() -> HealthResponse:
     tags=["System"]
 )
 def get_overview() -> OverviewResponse:
-    """Returns system-wide intelligence metrics, top criminal coordinators/brokers, and activity."""
     state = get_app_state()
 
-    # Top influencers prioritized by coordinators, brokers, and betweenness
     priority_order = {
         RoleType.UPSTREAM_COORDINATOR.value: 1,
         RoleType.BROKER.value: 2,
@@ -269,7 +248,6 @@ def get_overview() -> OverviewResponse:
         RoleType.PERIPHERAL_ASSOCIATE.value: 6
     }
 
-    # Fetch names efficiently from persons table
     p_names = dict(zip(state.data.persons["person_id"], state.data.persons["name"]))
 
     sorted_influencers = sorted(
@@ -319,10 +297,6 @@ def get_overview() -> OverviewResponse:
     )
 
 
-# =============================================================================
-# 2. Person Endpoints
-# =============================================================================
-
 @app.get(
     "/persons/{person_id}",
     response_model=PersonDetailResponse,
@@ -330,11 +304,6 @@ def get_overview() -> OverviewResponse:
     tags=["Persons"]
 )
 def get_person(person_id: str) -> PersonDetailResponse:
-    """
-    Returns full investigative profile for a person:
-    predicted role, confidence, criminal significance, topological features,
-    connected cases, suspicious patterns, evidence diversity, and narrative.
-    """
     state = get_app_state()
     if person_id not in state.person_ids:
         raise HTTPException(
@@ -343,9 +312,6 @@ def get_person(person_id: str) -> PersonDetailResponse:
         )
     insight = state.insights_generator.generate_person_insight(person_id)
 
-    # ---------------------------------------------------------
-    # ML role prediction
-    # ---------------------------------------------------------
     ml_prediction = None
 
     if state.ml_role_classifier is not None:
@@ -382,9 +348,6 @@ def get_person(person_id: str) -> PersonDetailResponse:
             logger.warning(
                 f"Hybrid prediction failed for {person_id}: {e}"
             )
-        # ---------------------------------------------------------
-    # Explainable investigation narrative
-    # ---------------------------------------------------------
     explanation_result = None
 
     if state.explainability_engine is not None:
