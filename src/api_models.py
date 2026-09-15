@@ -107,6 +107,35 @@ class PersonDetailResponse(BaseModel):
         None,
         description="Whether ML and rule-based role predictions agree"
     )
+    hybrid_role: Optional[str] = Field(
+        None,
+        description="Final role from hybrid rule + ML intelligence"
+    )
+
+    hybrid_confidence: Optional[float] = Field(
+        None,
+        description="Hybrid intelligence confidence score"
+    )
+
+    hybrid_rule_score: Optional[float] = Field(
+        None,
+        description="Rule engine contribution"
+    )
+
+    hybrid_ml_score: Optional[float] = Field(
+        None,
+        description="ML model contribution"
+    )
+
+    hybrid_evidence_score: Optional[float] = Field(
+        None,
+        description="Evidence strength contribution"
+    )
+
+    hybrid_agreement: Optional[bool] = Field(
+        None,
+        description="Whether rule and ML predictions agree"
+    )
     criminal_significance: bool = Field(..., description="Whether actor exhibits verified criminal predicate")
     graph_features: Dict[str, Any] = Field(default_factory=dict, description="Topological features (degree, betweenness, etc.)")
     connected_cases: List[str] = Field(default_factory=list, description="Directly or multi-hop connected cases")

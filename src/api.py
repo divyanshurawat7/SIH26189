@@ -17,6 +17,7 @@ from src.pattern_detection import PatternDetector, Finding
 from src.investigation_insights import InvestigationInsightsGenerator
 from src.ml_role_classifier import RoleClassifier
 from src.hybrid_intelligence import HybridIntelligence
+from src.explainability import ExplainabilityEngine
 from src.api_models import (
     HealthResponse,
     ErrorResponse,
@@ -55,6 +56,7 @@ class AppState:
         self.insights_generator: Optional[InvestigationInsightsGenerator] = None
         self.ml_role_classifier: Optional[RoleClassifier] = None
         self.hybrid_intelligence: Optional[HybridIntelligence] = None
+        self.explainability_engine: Optional[ExplainabilityEngine] = None
         self.roles: Dict[str, InfluencerResult] = {}
         self.findings: List[Finding] = []
         self.findings_by_id: Dict[str, Finding] = {}
@@ -108,6 +110,13 @@ def init_app_state() -> AppState:
     try:
         state.ml_role_classifier = RoleClassifier()
         state.ml_role_classifier.load()
+
+        logger.info(
+            f"ML Role Classifier loaded: "
+            f"{state.ml_role_classifier.model_name}"
+        )
+
+        # 5.2 Initialize Hybrid Intelligence
         try:
             state.hybrid_intelligence = HybridIntelligence(
                 influencer_detector=state.influencer_detector,
@@ -123,15 +132,25 @@ def init_app_state() -> AppState:
                 f"Hybrid Intelligence unavailable: {e}"
             )
 
-        logger.info(
-            f"ML Role Classifier loaded: "
-            f"{state.ml_role_classifier.model_name}"
-        )
-
     except Exception as e:
         state.ml_role_classifier = None
+        state.hybrid_intelligence = None
         logger.warning(
             f"ML Role Classifier unavailable: {e}"
+        )
+    try:
+        state.explainability_engine = ExplainabilityEngine(
+            graph=state.graph,
+            tracer=state.tracer,
+            influencer_detector=state.influencer_detector,
+        )
+
+        logger.info("Explainability Engine loaded")
+
+    except Exception as e:
+        state.explainability_engine = None
+        logger.warning(
+            f"Explainability Engine unavailable: {e}"
         )
     # 6. Precompute lookup sets
     state.person_ids = set(state.data.persons["person_id"].dropna().unique())
@@ -363,7 +382,32 @@ def get_person(person_id: str) -> PersonDetailResponse:
             logger.warning(
                 f"Hybrid prediction failed for {person_id}: {e}"
             )
+        # ---------------------------------------------------------
+    # Explainable investigation narrative
+    # ---------------------------------------------------------
+    explanation_result = None
 
+    if state.explainability_engine is not None:
+        try:
+            explanation_result = state.explainability_engine.explain(
+                person_id=person_id,
+                rule_role=state.roles.get(person_id),
+                role=(
+                    hybrid_prediction["role"]
+                    if hybrid_prediction
+                    else insight.predicted_role
+                ),
+                confidence=(
+                    hybrid_prediction["confidence"]
+                    if hybrid_prediction
+                    else insight.confidence
+                ),
+            )
+
+        except Exception as e:
+            logger.warning(
+                f"Explainability generation failed for {person_id}: {e}"
+            )
     return PersonDetailResponse(
         person_id=insight.person_id,
         name=insight.name,
@@ -418,6 +462,20 @@ def get_person(person_id: str) -> PersonDetailResponse:
         hybrid_agreement=(
             hybrid_prediction["agreement"]
             if hybrid_prediction else None
+        ),
+                explanation_summary=(
+            explanation_result["summary"]
+            if explanation_result else None
+        ),
+
+        explanation_reasons=(
+            explanation_result["reasons"]
+            if explanation_result else []
+        ),
+
+        explanation_evidence_count=(
+            explanation_result["evidence_count"]
+            if explanation_result else 0
         ),
         criminal_significance=insight.is_criminally_significant,
         graph_features={
