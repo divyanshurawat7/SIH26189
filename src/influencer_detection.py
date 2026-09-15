@@ -126,15 +126,16 @@ class InfluencerDetector:
 
         person_count = len(P_sub)
 
-        # Exact betweenness on small graphs.
-        # Sampled betweenness on large graphs.
         if person_count <= 500:
             bc = nx.betweenness_centrality(
                 P_sub,
                 weight="weight"
             )
         else:
-            sample_size = min(250, person_count)
+            # Large PERSON graphs:
+            # use a smaller deterministic sample for fast,
+            # reproducible approximation.
+            sample_size = min(100, person_count)
 
             logger.info(
                 f"Using sampled betweenness centrality: "
@@ -147,7 +148,6 @@ class InfluencerDetector:
                 weight="weight",
                 seed=42
             )
-
         # Closeness is comparatively manageable for our PERSON graph.
         closeness = nx.closeness_centrality(P_sub)
 
