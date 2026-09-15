@@ -11,11 +11,12 @@ import {
 import { MarkerType } from '@xyflow/react';
 import type { Node, Edge } from '@xyflow/react';
 import { apiClient } from '../api/client';
-import type { PersonDetailResponse, PersonNetworkResponse, EvidenceItemResponse } from '../api/types';
+import type { PersonDetailResponse, PersonNetworkResponse, EvidenceItemResponse, PersonListResponse, PersonSummaryItem } from '../api/types';
 import { NetworkGraph } from '../components/NetworkGraph';
 import { EvidencePanel } from '../components/EvidencePanel';
 import { Breadcrumbs } from '../components/Breadcrumbs';
 import { InvestigationHeader } from '../components/InvestigationHeader';
+import { HybridIntelligenceCard } from '../components/HybridIntelligenceCard';
 import { getRecentInvestigations } from '../utils/storage';
 
 interface PersonInvestigationProps {
@@ -32,7 +33,12 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
   const [evidence, setEvidence] = useState<EvidenceItemResponse[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [influencers, setInfluencers] = useState<any[]>([]);
+
+  // Person Directory State
+  const [directoryPage, setDirectoryPage] = useState<number>(1);
+  const [directorySearch, setDirectorySearch] = useState<string>('');
+  const [directoryData, setDirectoryData] = useState<PersonListResponse | null>(null);
+  const [directoryLoading, setDirectoryLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (!personId) {
@@ -41,14 +47,15 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
       setEvidence([]);
       setLoading(false);
 
-      // Fetch top influencers from dataset for dynamic selection list
-      apiClient.getOverview()
-        .then((res) => {
-          if (res && res.top_influencers) {
-            setInfluencers(res.top_influencers);
-          }
+      setDirectoryLoading(true);
+      apiClient.getPersons({ page: directoryPage, limit: 20, search: directorySearch })
+        .then((pRes) => {
+          if (pRes) setDirectoryData(pRes);
+          setDirectoryLoading(false);
         })
-        .catch(() => {});
+        .catch(() => {
+          setDirectoryLoading(false);
+        });
       return;
     }
 
@@ -70,7 +77,7 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
         setError(err.message || `Failed to load dossier for ${personId}`);
         setLoading(false);
       });
-  }, [personId]);
+  }, [personId, directoryPage, directorySearch]);
 
   // Construct React Flow graph nodes and edges
   const { graphNodes, graphEdges } = useMemo(() => {
@@ -132,25 +139,23 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
 
   if (!personId) {
     const recentItems = getRecentInvestigations();
-    const recentIds = new Set(recentItems.map((item) => item.id));
+    const recentPersons = recentItems.filter((it) => it.type === 'person' || it.id.startsWith('PERSON_'));
 
-    // Combine backend influencers + fallback candidates for comprehensive pending list
-    const defaultCandidates = [
-      { person_id: 'PERSON_1476', name: 'Person 1476', predicted_role: 'UPSTREAM_COORDINATOR', confidence: 0.95 },
-      { person_id: 'PERSON_0026', name: 'Person 0026', predicted_role: 'BROKER', confidence: 0.92 },
-      { person_id: 'PERSON_0397', name: 'Person 0397', predicted_role: 'BROKER', confidence: 0.89 },
-      { person_id: 'PERSON_0405', name: 'Person 0405', predicted_role: 'BROKER', confidence: 0.88 },
-      { person_id: 'PERSON_0432', name: 'Person 0432', predicted_role: 'OPERATIONAL_MEMBER', confidence: 0.86 },
-      { person_id: 'PERSON_0553', name: 'Person 0553', predicted_role: 'CIVILIAN', confidence: 0.88 },
-      { person_id: 'PERSON_1459', name: 'Person 1459', predicted_role: 'OPERATIONAL_MEMBER', confidence: 0.91 }
+    const defaultCandidates: PersonSummaryItem[] = [
+      { person_id: 'PERSON_1476', name: 'Person 1476', city: 'Mumbai', occupation: 'Businessman', predicted_role: 'UPSTREAM_COORDINATOR', confidence: 0.95, criminal_significance: true },
+      { person_id: 'PERSON_0026', name: 'Person 0026', city: 'Delhi', occupation: 'Trader', predicted_role: 'BROKER', confidence: 0.92, criminal_significance: true },
+      { person_id: 'PERSON_0397', name: 'Person 0397', city: 'Kolkata', occupation: 'Agent', predicted_role: 'BROKER', confidence: 0.89, criminal_significance: true },
+      { person_id: 'PERSON_0405', name: 'Person 0405', city: 'Chennai', occupation: 'Manager', predicted_role: 'BROKER', confidence: 0.88, criminal_significance: true },
+      { person_id: 'PERSON_0432', name: 'Person 0432', city: 'Bangalore', occupation: 'Technician', predicted_role: 'OPERATIONAL_MEMBER', confidence: 0.86, criminal_significance: true },
+      { person_id: 'PERSON_0553', name: 'Person 0553', city: 'Delhi', occupation: 'Merchant', predicted_role: 'CIVILIAN', confidence: 0.88, criminal_significance: false },
+      { person_id: 'PERSON_1459', name: 'Person 1459', city: 'Hyderabad', occupation: 'Driver', predicted_role: 'OPERATIONAL_MEMBER', confidence: 0.91, criminal_significance: true }
     ];
 
-    const allCandidates = [...influencers, ...defaultCandidates];
-    const uniqueCandidates = Array.from(new Map(allCandidates.map(item => [item.person_id, item])).values());
-
-    // Filter out entities that are already in Recent Investigations
-    const pendingPersons = uniqueCandidates.filter((p) => !recentIds.has(p.person_id));
-    const recentPersons = recentItems.filter((it) => it.type === 'person' || it.id.startsWith('PERSON_'));
+    const activePersonsList = directoryData?.persons || defaultCandidates;
+    const totalPersonsCount = directoryData?.total_persons || activePersonsList.length;
+    const totalPages = directoryData?.total_pages || 1;
+    const startNum = directoryData ? (directoryData.page - 1) * directoryData.page_size + 1 : 1;
+    const endNum = directoryData ? Math.min(startNum + activePersonsList.length - 1, totalPersonsCount) : activePersonsList.length;
 
     return (
       <div className="page-container">
@@ -166,12 +171,49 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
             Persons Investigation Directory
           </h1>
           <p className="page-subtitle">
-            Select a pending entity below to launch local graph topology analysis and source evidence audit
+            Search and select any entity to inspect local graph topology, AI role intelligence, and traceable source evidence
           </p>
         </div>
 
+        {/* Search & Filter Bar */}
+        <div className="card" style={{ marginBottom: '20px', background: '#FFFFFF', padding: '16px 20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1 1 300px', display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--bg-panel)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', padding: '8px 12px' }}>
+              <Users size={16} color="var(--text-muted)" />
+              <input
+                type="text"
+                value={directorySearch}
+                onChange={(e) => {
+                  setDirectorySearch(e.target.value);
+                  setDirectoryPage(1);
+                }}
+                placeholder="Search persons by Person ID, Name, City, Occupation, Role..."
+                style={{
+                  width: '100%',
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '0.85rem',
+                  color: 'var(--text-primary)'
+                }}
+              />
+            </div>
+            {directorySearch && (
+              <button
+                onClick={() => {
+                  setDirectorySearch('');
+                  setDirectoryPage(1);
+                }}
+                className="btn btn-secondary btn-sm"
+              >
+                Clear Search
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* 1. Recent Investigations Section */}
-        {recentPersons.length > 0 && (
+        {recentPersons.length > 0 && !directorySearch && (
           <div className="card" style={{ marginBottom: '24px', background: '#FFFFFF' }}>
             <div className="card-header">
               <div className="card-title">
@@ -220,76 +262,141 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
           </div>
         )}
 
-        {/* 2. Pending Persons Selection List */}
+        {/* 2. Full Available Persons Table */}
         <div className="card" style={{ background: '#FFFFFF' }}>
           <div className="card-header">
             <div className="card-title">
               <Users size={18} color="#7C3AED" />
-              Persons to Investigate (Pending Selection)
+              Persons Directory
             </div>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              {pendingPersons.length} Uninvestigated Candidates Available
+              {directoryLoading ? 'Loading persons...' : `Showing ${startNum}–${endNum} of ${totalPersonsCount} persons`}
             </span>
           </div>
 
-          {pendingPersons.length === 0 ? (
+          {activePersonsList.length === 0 ? (
             <div style={{ padding: '30px 20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
               <CheckCircle2 size={32} color="#059669" style={{ margin: '0 auto 8px auto' }} />
-              All primary candidate persons have been investigated.
-              <div style={{ fontSize: '0.8rem', marginTop: '4px' }}>
-                Use Global Search above to discover any specific entity ID or name.
-              </div>
+              No persons found matching "{directorySearch}".
             </div>
           ) : (
-            <div className="table-container">
-              <table className="investigation-table">
-                <thead>
-                  <tr>
-                    <th>Person ID</th>
-                    <th>Name</th>
-                    <th>Predicted Role</th>
-                    <th>Confidence</th>
-                    <th style={{ textAlign: 'right' }}>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pendingPersons.map((p) => (
-                    <tr key={p.person_id}>
-                      <td style={{ fontFamily: 'JetBrains Mono', fontWeight: 700, color: 'var(--text-primary)' }}>
-                        {p.person_id}
-                      </td>
-                      <td style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
-                        {p.name || p.person_id}
-                      </td>
-                      <td>
-                        <span className={`badge ${
-                          p.predicted_role === 'UPSTREAM_COORDINATOR'
-                            ? 'badge-coordinator'
-                            : p.predicted_role === 'BROKER'
-                            ? 'badge-broker'
-                            : p.predicted_role === 'OPERATIONAL_MEMBER'
-                            ? 'badge-operative'
-                            : 'badge-innocent'
-                        }`}>
-                          {p.predicted_role}
-                        </span>
-                      </td>
-                      <td style={{ fontWeight: 600, color: '#059669' }}>
-                        {((p.confidence || 0.85) * 100).toFixed(0)}%
-                      </td>
-                      <td style={{ textAlign: 'right' }}>
-                        <button
-                          onClick={() => onNavigate('person', p.person_id)}
-                          className="btn btn-primary btn-sm"
-                        >
-                          Investigate
-                        </button>
-                      </td>
+            <>
+              <div className="table-container">
+                <table className="investigation-table">
+                  <thead>
+                    <tr>
+                      <th>Person ID</th>
+                      <th>Name</th>
+                      <th>City / Occupation</th>
+                      <th>Predicted Role</th>
+                      <th>Confidence</th>
+                      <th style={{ textAlign: 'right' }}>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {activePersonsList.map((p: PersonSummaryItem) => (
+                      <tr
+                        key={p.person_id}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => onNavigate('person', p.person_id)}
+                      >
+                        <td style={{ fontFamily: 'JetBrains Mono', fontWeight: 700, color: 'var(--text-primary)' }}>
+                          {p.person_id}
+                        </td>
+                        <td style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
+                          {p.name || p.person_id}
+                        </td>
+                        <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                          {p.city} • {p.occupation}
+                        </td>
+                        <td>
+                          <span className={`badge ${
+                            p.predicted_role === 'UPSTREAM_COORDINATOR'
+                              ? 'badge-coordinator'
+                              : p.predicted_role === 'BROKER'
+                              ? 'badge-broker'
+                              : p.predicted_role === 'OPERATIONAL_MEMBER'
+                              ? 'badge-operative'
+                              : 'badge-innocent'
+                          }`}>
+                            {p.predicted_role}
+                          </span>
+                        </td>
+                        <td style={{ fontWeight: 600, color: '#059669' }}>
+                          {((p.confidence || 0.85) * 100).toFixed(0)}%
+                        </td>
+                        <td style={{ textAlign: 'right' }}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onNavigate('person', p.person_id);
+                            }}
+                            className="btn btn-primary btn-sm"
+                          >
+                            Investigate
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingTop: '16px',
+                    marginTop: '16px',
+                    borderTop: '1px solid var(--border-subtle)',
+                    flexWrap: 'wrap',
+                    gap: '12px'
+                  }}
+                >
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    Page {directoryPage} of {totalPages}
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <button
+                      disabled={directoryPage <= 1}
+                      onClick={() => setDirectoryPage((p) => Math.max(1, p - 1))}
+                      className="btn btn-secondary btn-sm"
+                      style={{ opacity: directoryPage <= 1 ? 0.5 : 1, cursor: directoryPage <= 1 ? 'not-allowed' : 'pointer' }}
+                    >
+                      Previous
+                    </button>
+
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, idx) => {
+                      let pNum = directoryPage - 2 + idx;
+                      if (pNum < 1) pNum = idx + 1;
+                      if (pNum > totalPages) return null;
+                      return (
+                        <button
+                          key={pNum}
+                          onClick={() => setDirectoryPage(pNum)}
+                          className={`btn btn-sm ${directoryPage === pNum ? 'btn-primary' : 'btn-secondary'}`}
+                        >
+                          {pNum}
+                        </button>
+                      );
+                    })}
+
+                    <button
+                      disabled={directoryPage >= totalPages}
+                      onClick={() => setDirectoryPage((p) => Math.min(totalPages, p + 1))}
+                      className="btn btn-secondary btn-sm"
+                      style={{ opacity: directoryPage >= totalPages ? 0.5 : 1, cursor: directoryPage >= totalPages ? 'not-allowed' : 'pointer' }}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -354,6 +461,13 @@ export const PersonInvestigation: React.FC<PersonInvestigationProps> = ({
           { label: 'Connected Cases', value: detail.connected_cases.length },
           { label: 'Evidence Diversity', value: `${detail.evidence_diversity} Categories` }
         ]}
+      />
+
+      {/* AI Role Intelligence & Hybrid Assessment Section */}
+      <HybridIntelligenceCard
+        hybridData={detail.hybrid_intelligence}
+        explainabilityData={detail.explainability}
+        onNavigate={onNavigate}
       />
 
       {/* Verified Non-Criminal Badge & Audit Banner if Innocent Control */}

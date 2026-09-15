@@ -38,6 +38,9 @@ from src.evidence_traceability import EvidenceTracer, EvidenceItem
 from src.influencer_detection import InfluencerDetector, InfluencerResult, RoleType
 from src.pattern_detection import PatternDetector, Finding
 from src.investigation_insights import InvestigationInsightsGenerator
+from src.ml_role_classifier import RoleClassifier
+from src.hybrid_intelligence import HybridIntelligence
+from src.explainability import ExplainabilityEngine
 from src.api_models import (
     HealthResponse,
     ErrorResponse,
@@ -57,7 +60,14 @@ from src.api_models import (
     CrossCaseResponse,
     InvestigationDossierResponse,
     SearchResultItem,
-    SearchResponse
+    SearchResponse,
+    HybridIntelligenceResponse,
+    ExplainabilityResponse,
+    ExplainabilityReasonItem,
+    CaseSummaryItem,
+    CaseListResponse,
+    PersonSummaryItem,
+    PersonListResponse
 )
 from src.utils.logger import get_logger
 
@@ -76,6 +86,9 @@ class AppState:
         self.influencer_detector: Optional[InfluencerDetector] = None
         self.pattern_detector: Optional[PatternDetector] = None
         self.insights_generator: Optional[InvestigationInsightsGenerator] = None
+        self.ml_classifier: Optional[RoleClassifier] = None
+        self.hybrid_intelligence: Optional[HybridIntelligence] = None
+        self.explainability_engine: Optional[ExplainabilityEngine] = None
 
         self.roles: Dict[str, InfluencerResult] = {}
         self.findings: List[Finding] = []
@@ -126,6 +139,36 @@ def init_app_state() -> AppState:
     state.roles = state.insights_generator._get_roles()
     state.findings = state.insights_generator._get_findings()
     state.findings_by_id = {f.finding_id: f for f in state.findings}
+
+    # 5b. Instantiate ML classifier, hybrid intelligence, and explainability engine
+    try:
+        ml_cls = RoleClassifier(model_path="models/role_classifier.joblib")
+        ml_cls.load()
+        state.ml_classifier = ml_cls
+        logger.info("Loaded ML Role Classifier model successfully.")
+    except Exception as e:
+        logger.warning(f"Could not load ML Role Classifier: {e}")
+        state.ml_classifier = None
+
+    try:
+        state.hybrid_intelligence = HybridIntelligence(
+            influencer_detector=state.influencer_detector,
+            ml_classifier=state.ml_classifier,
+            roles=state.roles
+        )
+        logger.info("Initialized Hybrid Intelligence engine successfully.")
+    except Exception as e:
+        logger.warning(f"Could not initialize Hybrid Intelligence: {e}")
+
+    try:
+        state.explainability_engine = ExplainabilityEngine(
+            graph=state.graph,
+            tracer=state.tracer,
+            influencer_detector=state.influencer_detector
+        )
+        logger.info("Initialized Explainability Engine successfully.")
+    except Exception as e:
+        logger.warning(f"Could not initialize Explainability Engine: {e}")
 
     # 6. Precompute lookup sets
     state.person_ids = set(state.data.persons["person_id"].dropna().unique())
@@ -308,7 +351,7 @@ def get_person(person_id: str) -> PersonDetailResponse:
     """
     Returns full investigative profile for a person:
     predicted role, confidence, criminal significance, topological features,
-    connected cases, suspicious patterns, evidence diversity, and narrative.
+    connected cases, suspicious patterns, evidence diversity, hybrid intelligence assessment, and explainability.
     """
     state = get_app_state()
     if person_id not in state.person_ids:
@@ -319,13 +362,110 @@ def get_person(person_id: str) -> PersonDetailResponse:
 
     insight = state.insights_generator.generate_person_insight(person_id)
 
+    rule_role = insight.predicted_role
+    rule_conf = insight.confidence
+
+    ml_pred = None
+    if state.ml_classifier:
+        try:
+            person_features = state.influencer_detector.compute_person_features().get(person_id, {})
+            ml_pred = state.ml_classifier.predict(person_features)
+        except Exception as e:
+            logger.warning(f"ML prediction failed for {person_id}: {e}")
+
+    hybrid_resp: Optional[HybridIntelligenceResponse] = None
+    final_role = rule_role
+    final_conf = rule_conf
+
+    if state.hybrid_intelligence and ml_pred:
+        try:
+            hybrid_dict = state.hybrid_intelligence.predict(
+                person_id=person_id,
+                rule_prediction=rule_role,
+                rule_confidence=rule_conf,
+                ml_prediction=ml_pred
+            )
+            final_role = hybrid_dict.get("role", rule_role)
+            final_conf = hybrid_dict.get("confidence", rule_conf)
+            hybrid_resp = HybridIntelligenceResponse(
+                person_id=person_id,
+                role=hybrid_dict["role"],
+                confidence=hybrid_dict["confidence"],
+                rule_prediction=hybrid_dict["rule_prediction"],
+                rule_confidence=hybrid_dict["rule_confidence"],
+                rule_score=hybrid_dict["rule_score"],
+                ml_prediction=hybrid_dict.get("ml_prediction"),
+                ml_confidence=hybrid_dict.get("ml_confidence", 0.0),
+                ml_score=hybrid_dict.get("ml_score", 0.0),
+                evidence_score=hybrid_dict.get("evidence_score", 0.0),
+                agreement=hybrid_dict.get("agreement", False),
+                confidence_level=hybrid_dict.get("confidence_level", "LOW"),
+                ml_probabilities=hybrid_dict.get("ml_probabilities", {})
+            )
+        except Exception as e:
+            logger.warning(f"Hybrid Intelligence predict failed for {person_id}: {e}")
+
+    explain_resp: Optional[ExplainabilityResponse] = None
+    if state.explainability_engine:
+        try:
+            explain_dict = state.explainability_engine.explain(
+                person_id=person_id,
+                rule_role=rule_role,
+                hybrid_role=final_role,
+                confidence=final_conf
+            )
+            reasons_list = []
+            for r in explain_dict.get("reasons", []):
+                reasons_list.append(ExplainabilityReasonItem(
+                    type=r.get("type", "UNKNOWN"),
+                    severity=r.get("severity", "MEDIUM"),
+                    title=r.get("title"),
+                    relationship=r.get("relationship"),
+                    reason=r.get("reason"),
+                    person_id=r.get("person_id"),
+                    person_name=r.get("person_name"),
+                    caller=r.get("caller"),
+                    other_person=r.get("other_person"),
+                    other_person_name=r.get("other_person_name"),
+                    minutes_between=r.get("minutes_between"),
+                    evidence_count=r.get("evidence_count"),
+                    source_types=r.get("source_types", []),
+                    record_ids=r.get("record_ids", []),
+                    chain=r.get("chain", []),
+                    readable_chain=r.get("readable_chain", []),
+                    op_in_links=r.get("op_in_links"),
+                    op_out_links=r.get("op_out_links"),
+                    source_categories=r.get("source_categories", []),
+                    call_record_id=r.get("call_record_id"),
+                    transaction_record_id=r.get("transaction_record_id"),
+                    call_timestamp=r.get("call_timestamp"),
+                    transaction_timestamp=r.get("transaction_timestamp"),
+                    case_id=r.get("case_id"),
+                    transaction_description=r.get("transaction_description")
+                ))
+
+            explain_resp = ExplainabilityResponse(
+                person_id=person_id,
+                role=explain_dict.get("role"),
+                confidence=explain_dict.get("confidence"),
+                flagged=explain_dict.get("flagged", False),
+                summary=explain_dict.get("summary", ""),
+                reason_count=explain_dict.get("reason_count", 0),
+                high_severity_reasons=explain_dict.get("high_severity_reasons", 0),
+                reasons=reasons_list,
+                evidence_count=explain_dict.get("evidence_count", 0),
+                evidence_source_categories=explain_dict.get("evidence_source_categories", [])
+            )
+        except Exception as e:
+            logger.warning(f"ExplainabilityEngine explain failed for {person_id}: {e}")
+
     return PersonDetailResponse(
         person_id=insight.person_id,
         name=insight.name,
         city=insight.city,
         occupation=insight.occupation,
-        predicted_role=insight.predicted_role,
-        confidence=insight.confidence,
+        predicted_role=final_role,
+        confidence=final_conf,
         criminal_significance=insight.is_criminally_significant,
         graph_features={
             "degree": insight.degree,
@@ -337,7 +477,9 @@ def get_person(person_id: str) -> PersonDetailResponse:
         source_categories=insight.source_categories,
         investigator_narrative=insight.narrative,
         explanation=insight.explanation,
-        strongest_supporting_evidence=insight.strongest_supporting_evidence
+        strongest_supporting_evidence=insight.strongest_supporting_evidence,
+        hybrid_intelligence=hybrid_resp,
+        explainability=explain_resp
     )
 
 
@@ -456,9 +598,145 @@ def get_person_evidence(person_id: str) -> List[EvidenceItemResponse]:
     ]
 
 
+@app.get(
+    "/persons",
+    response_model=PersonListResponse,
+    summary="List all persons with pagination and search",
+    tags=["Persons"]
+)
+def get_persons_list(
+    page: int = Query(1, ge=1, description="Page number (1-indexed)"),
+    limit: int = Query(20, ge=1, le=100, description="Items per page"),
+    search: Optional[str] = Query(None, description="Search by Person ID, Name, City, Occupation, or Role")
+) -> PersonListResponse:
+    """
+    Returns full paginated directory of available persons with optional search filtering.
+    """
+    state = get_app_state()
+    persons_df = state.data.persons.copy() if hasattr(state.data, 'persons') and state.data.persons is not None else pd.DataFrame()
+
+    items: List[PersonSummaryItem] = []
+    if not persons_df.empty:
+        for _, row in persons_df.iterrows():
+            pid = str(row["person_id"])
+            name = str(row.get("name", pid))
+            city = str(row.get("city", "N/A"))
+            occ = str(row.get("occupation", "N/A"))
+
+            r_info = state.roles.get(pid)
+            role = r_info.predicted_role if r_info else "CIVILIAN"
+            conf = r_info.confidence_score if r_info else 0.85
+            is_crim = r_info.is_criminally_significant if r_info else False
+
+            items.append(PersonSummaryItem(
+                person_id=pid,
+                name=name,
+                city=city,
+                occupation=occ,
+                predicted_role=role,
+                confidence=round(conf, 2),
+                criminal_significance=is_crim
+            ))
+
+    if search:
+        s_lower = search.strip().lower()
+        items = [
+            it for it in items
+            if s_lower in it.person_id.lower()
+            or s_lower in it.name.lower()
+            or s_lower in it.city.lower()
+            or s_lower in it.occupation.lower()
+            or s_lower in it.predicted_role.lower()
+        ]
+
+    total_persons = len(items)
+    total_pages = max(1, (total_persons + limit - 1) // limit)
+    start_idx = (page - 1) * limit
+    end_idx = start_idx + limit
+    page_persons = items[start_idx:end_idx]
+
+    return PersonListResponse(
+        total_persons=total_persons,
+        page=page,
+        page_size=limit,
+        total_pages=total_pages,
+        persons=page_persons
+    )
+
+
 # =============================================================================
 # 3. Case Endpoints
 # =============================================================================
+
+@app.get(
+    "/cases",
+    response_model=CaseListResponse,
+    summary="List all criminal cases with pagination and search",
+    tags=["Cases"]
+)
+def get_cases(
+    page: int = Query(1, ge=1, description="Page number (1-indexed)"),
+    limit: int = Query(20, ge=1, le=100, description="Items per page"),
+    search: Optional[str] = Query(None, description="Search by Case ID, Crime Type, FIR Reference, or Location")
+) -> CaseListResponse:
+    """
+    Returns full paginated directory of available criminal cases with optional multi-field search filtering.
+    """
+    state = get_app_state()
+    cases_df = state.data.cases.copy() if hasattr(state.data, 'cases') and state.data.cases is not None else pd.DataFrame()
+    fir_df = state.data.fir_records if hasattr(state.data, 'fir_records') else None
+
+    fir_map = {}
+    if fir_df is not None and not fir_df.empty:
+        for _, row in fir_df.iterrows():
+            cid = str(row.get("case_id", ""))
+            if cid and cid not in fir_map:
+                fir_map[cid] = row
+
+    items: List[CaseSummaryItem] = []
+    if not cases_df.empty:
+        for _, row in cases_df.iterrows():
+            cid = str(row["case_id"])
+            crime = str(row.get("crime_type", "Criminal Case"))
+            status_val = str(row.get("status", "UNDER_INVESTIGATION"))
+            frow = fir_map.get(cid)
+            fir_id = str(frow.get("fir_id", "")) if frow is not None else None
+            loc_id = str(frow.get("location_id", "")) if frow is not None else (str(row.get("location_id", "")) or None)
+            inc_date = str(frow.get("date", "")) if frow is not None else (str(row.get("incident_date", "")) or None)
+
+            items.append(CaseSummaryItem(
+                case_id=cid,
+                crime_type=crime,
+                status=status_val,
+                fir_id=fir_id if fir_id and fir_id != "nan" else None,
+                location_id=loc_id if loc_id and loc_id != "nan" else None,
+                incident_date=inc_date if inc_date and inc_date != "nan" else None
+            ))
+
+    if search:
+        s_lower = search.strip().lower()
+        items = [
+            it for it in items
+            if s_lower in it.case_id.lower()
+            or s_lower in it.crime_type.lower()
+            or (it.fir_id and s_lower in it.fir_id.lower())
+            or (it.location_id and s_lower in it.location_id.lower())
+            or (it.status and s_lower in it.status.lower())
+        ]
+
+    total_cases = len(items)
+    total_pages = max(1, (total_cases + limit - 1) // limit)
+    start_idx = (page - 1) * limit
+    end_idx = start_idx + limit
+    page_cases = items[start_idx:end_idx]
+
+    return CaseListResponse(
+        total_cases=total_cases,
+        page=page,
+        page_size=limit,
+        total_pages=total_pages,
+        cases=page_cases
+    )
 
 @app.get(
     "/cases/{case_id}",

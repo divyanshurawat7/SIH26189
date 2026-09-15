@@ -49,6 +49,63 @@ export interface EvidenceItemResponse {
   description: string;
 }
 
+export interface HybridIntelligenceData {
+  person_id: string;
+  role: string;
+  confidence: number;
+  rule_prediction: string;
+  rule_confidence: number;
+  rule_score: number;
+  ml_prediction?: string | null;
+  ml_confidence: number;
+  ml_score: number;
+  evidence_score: number;
+  agreement: boolean;
+  confidence_level: 'HIGH' | 'MEDIUM' | 'LOW' | string;
+  ml_probabilities: Record<string, number>;
+}
+
+export interface ExplainabilityReason {
+  type: string;
+  severity: 'HIGH' | 'MEDIUM' | 'LOW' | string;
+  title?: string | null;
+  relationship?: string | null;
+  reason?: string | null;
+  person_id?: string | null;
+  person_name?: string | null;
+  caller?: string | null;
+  other_person?: string | null;
+  other_person_name?: string | null;
+  minutes_between?: number | null;
+  evidence_count?: number | null;
+  source_types?: string[];
+  record_ids?: string[];
+  chain?: string[];
+  readable_chain?: string[];
+  op_in_links?: number | null;
+  op_out_links?: number | null;
+  source_categories?: string[];
+  call_record_id?: string | null;
+  transaction_record_id?: string | null;
+  call_timestamp?: string | null;
+  transaction_timestamp?: string | null;
+  case_id?: string | null;
+  transaction_description?: string | null;
+}
+
+export interface ExplainabilityData {
+  person_id: string;
+  role?: string | null;
+  confidence?: number | null;
+  flagged: boolean;
+  summary: string;
+  reason_count: number;
+  high_severity_reasons: number;
+  reasons: ExplainabilityReason[];
+  evidence_count: number;
+  evidence_source_categories: string[];
+}
+
 export interface PersonDetailResponse {
   person_id: string;
   name: string;
@@ -69,6 +126,43 @@ export interface PersonDetailResponse {
   investigator_narrative: string;
   explanation: string;
   strongest_supporting_evidence: any[];
+  hybrid_intelligence?: HybridIntelligenceData | null;
+  explainability?: ExplainabilityData | null;
+}
+
+export interface CaseSummaryItem {
+  case_id: string;
+  crime_type: string;
+  status: string;
+  fir_id?: string | null;
+  location_id?: string | null;
+  incident_date?: string | null;
+}
+
+export interface CaseListResponse {
+  total_cases: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  cases: CaseSummaryItem[];
+}
+
+export interface PersonSummaryItem {
+  person_id: string;
+  name: string;
+  city: string;
+  occupation: string;
+  predicted_role: string;
+  confidence: number;
+  criminal_significance: boolean;
+}
+
+export interface PersonListResponse {
+  total_persons: number;
+  page: number;
+  page_size: number;
+  total_pages: number;
+  persons: PersonSummaryItem[];
 }
 
 export interface StrongestRelationship {

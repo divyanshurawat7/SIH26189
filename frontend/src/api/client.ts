@@ -17,7 +17,9 @@ import type {
   FindingDetailResponse,
   CrossCaseResponse,
   InvestigationDossierResponse,
-  SearchResponse
+  SearchResponse,
+  CaseListResponse,
+  PersonListResponse
 } from './types';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
@@ -120,5 +122,23 @@ export const apiClient = {
     fetchJson<InvestigationDossierResponse>(`/investigation/${encodeURIComponent(caseId)}`),
 
   search: (query: string) =>
-    fetchJson<SearchResponse>(`/search?q=${encodeURIComponent(query)}`)
+    fetchJson<SearchResponse>(`/search?q=${encodeURIComponent(query)}`),
+
+  getCases: (params?: { page?: number; limit?: number; search?: string }) => {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set('page', params.page.toString());
+    if (params?.limit) searchParams.set('limit', params.limit.toString());
+    if (params?.search) searchParams.set('search', params.search);
+    const qs = searchParams.toString();
+    return fetchJson<CaseListResponse>(`/cases${qs ? `?${qs}` : ''}`);
+  },
+
+  getPersons: (params?: { page?: number; limit?: number; search?: string }) => {
+    const searchParams = new URLSearchParams();
+    if (params?.page) searchParams.set('page', params.page.toString());
+    if (params?.limit) searchParams.set('limit', params.limit.toString());
+    if (params?.search) searchParams.set('search', params.search);
+    const qs = searchParams.toString();
+    return fetchJson<PersonListResponse>(`/persons${qs ? `?${qs}` : ''}`);
+  }
 };

@@ -9,7 +9,10 @@ from sklearn.metrics import (
     classification_report,
     f1_score,
 )
-from xgboost import XGBClassifier
+try:
+    from xgboost import XGBClassifier
+except ImportError:
+    XGBClassifier = None
 from sklearn.metrics import classification_report, accuracy_score
 
 

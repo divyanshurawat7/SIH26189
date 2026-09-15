@@ -14,7 +14,9 @@ import type {
   CaseDetailResponse,
   InvestigationDossierResponse,
   CaseTimelineResponse,
-  CaseEvidenceResponse
+  CaseEvidenceResponse,
+  CaseListResponse,
+  CaseSummaryItem
 } from '../api/types';
 import { OperationalChain } from '../components/OperationalChain';
 import { Timeline } from '../components/Timeline';
@@ -39,6 +41,12 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Directory State for full API-backed case list
+  const [directoryPage, setDirectoryPage] = useState<number>(1);
+  const [directorySearch, setDirectorySearch] = useState<string>('');
+  const [directoryData, setDirectoryData] = useState<CaseListResponse | null>(null);
+  const [directoryLoading, setDirectoryLoading] = useState<boolean>(false);
+
   useEffect(() => {
     if (!caseId) {
       setCaseDetail(null);
@@ -46,6 +54,16 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
       setTimeline(null);
       setEvidenceData(null);
       setLoading(false);
+
+      setDirectoryLoading(true);
+      apiClient.getCases({ page: directoryPage, limit: 20, search: directorySearch })
+        .then((res) => {
+          setDirectoryData(res);
+          setDirectoryLoading(false);
+        })
+        .catch(() => {
+          setDirectoryLoading(false);
+        });
       return;
     }
 
@@ -69,25 +87,28 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
         setError(err.message || `Failed to load case investigation for ${caseId}`);
         setLoading(false);
       });
-  }, [caseId]);
+  }, [caseId, directoryPage, directorySearch]);
 
   if (!caseId) {
     const recentItems = getRecentInvestigations();
-    const recentIds = new Set(recentItems.map((item) => item.id));
+    const recentCases = recentItems.filter((it) => it.type === 'case' || it.id.startsWith('CASE_'));
 
-    const defaultCandidates = [
-      { case_id: 'CASE_0001', crime_type: 'Extortion Racket', fir_id: 'FIR_0001', location: 'LOCATION_0041' },
-      { case_id: 'CASE_0002', crime_type: 'Cyber Financial Scam', fir_id: 'FIR_0002', location: 'LOCATION_0012' },
-      { case_id: 'CASE_0003', crime_type: 'Money Laundering', fir_id: 'FIR_0003', location: 'LOCATION_0088' },
-      { case_id: 'CASE_0004', crime_type: 'Extortion Call Cascade', fir_id: 'FIR_0004', location: 'LOCATION_0015' },
-      { case_id: 'CASE_0005', crime_type: 'Cross-Jurisdictional Fraud', fir_id: 'FIR_0005', location: 'LOCATION_0023' },
-      { case_id: 'CASE_0012', crime_type: 'Financial Transfer Chain', fir_id: 'FIR_0012', location: 'LOCATION_0045' },
-      { case_id: 'CASE_0025', crime_type: 'Cross-Border Syndicate Operation', fir_id: 'FIR_0025', location: 'LOCATION_0099' }
+    // Fallback static list if API directory fails or loading
+    const defaultCandidates: CaseSummaryItem[] = [
+      { case_id: 'CASE_0001', crime_type: 'Extortion Racket', fir_id: 'FIR_0001', location_id: 'LOCATION_0041', status: 'UNDER_INVESTIGATION' },
+      { case_id: 'CASE_0002', crime_type: 'Cyber Financial Scam', fir_id: 'FIR_0002', location_id: 'LOCATION_0012', status: 'UNDER_INVESTIGATION' },
+      { case_id: 'CASE_0003', crime_type: 'Money Laundering', fir_id: 'FIR_0003', location_id: 'LOCATION_0088', status: 'UNDER_INVESTIGATION' },
+      { case_id: 'CASE_0004', crime_type: 'Extortion Call Cascade', fir_id: 'FIR_0004', location_id: 'LOCATION_0015', status: 'UNDER_INVESTIGATION' },
+      { case_id: 'CASE_0005', crime_type: 'Cross-Jurisdictional Fraud', fir_id: 'FIR_0005', location_id: 'LOCATION_0023', status: 'UNDER_INVESTIGATION' },
+      { case_id: 'CASE_0012', crime_type: 'Financial Transfer Chain', fir_id: 'FIR_0012', location_id: 'LOCATION_0045', status: 'UNDER_INVESTIGATION' },
+      { case_id: 'CASE_0025', crime_type: 'Cross-Border Syndicate Operation', fir_id: 'FIR_0025', location_id: 'LOCATION_0099', status: 'UNDER_INVESTIGATION' }
     ];
 
-    // Filter out cases that have already been investigated
-    const pendingCases = defaultCandidates.filter((c) => !recentIds.has(c.case_id));
-    const recentCases = recentItems.filter((it) => it.type === 'case' || it.id.startsWith('CASE_'));
+    const activeCasesList = directoryData?.cases || defaultCandidates;
+    const totalCasesCount = directoryData?.total_cases || activeCasesList.length;
+    const totalPages = directoryData?.total_pages || 1;
+    const startNum = directoryData ? (directoryData.page - 1) * directoryData.page_size + 1 : 1;
+    const endNum = directoryData ? Math.min(startNum + activeCasesList.length - 1, totalCasesCount) : activeCasesList.length;
 
     return (
       <div className="page-container">
@@ -103,12 +124,49 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
             Case Investigation Directory
           </h1>
           <p className="page-subtitle">
-            Select an uninvestigated criminal case to inspect FIR parameters, forensic timeline events, and operational chain
+            Browse and search all available criminal cases to inspect FIR details, forensic event timelines, and multi-hop operational chains
           </p>
         </div>
 
+        {/* Search & Filter Bar */}
+        <div className="card" style={{ marginBottom: '20px', background: '#FFFFFF', padding: '16px 20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            <div style={{ flex: '1 1 300px', display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--bg-panel)', border: '1px solid var(--border-subtle)', borderRadius: 'var(--radius-md)', padding: '8px 12px' }}>
+              <Briefcase size={16} color="var(--text-muted)" />
+              <input
+                type="text"
+                value={directorySearch}
+                onChange={(e) => {
+                  setDirectorySearch(e.target.value);
+                  setDirectoryPage(1);
+                }}
+                placeholder="Search cases by Case ID, Crime type, FIR reference, Location..."
+                style={{
+                  width: '100%',
+                  background: 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '0.85rem',
+                  color: 'var(--text-primary)'
+                }}
+              />
+            </div>
+            {directorySearch && (
+              <button
+                onClick={() => {
+                  setDirectorySearch('');
+                  setDirectoryPage(1);
+                }}
+                className="btn btn-secondary btn-sm"
+              >
+                Clear Search
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* 1. Recent Case Investigations */}
-        {recentCases.length > 0 && (
+        {recentCases.length > 0 && !directorySearch && (
           <div className="card" style={{ marginBottom: '24px', background: '#FFFFFF' }}>
             <div className="card-header">
               <div className="card-title">
@@ -157,67 +215,129 @@ export const CaseInvestigation: React.FC<CaseInvestigationProps> = ({
           </div>
         )}
 
-        {/* 2. Pending Cases Selection List */}
+        {/* 2. Full Available Cases Table */}
         <div className="card" style={{ background: '#FFFFFF' }}>
           <div className="card-header">
             <div className="card-title">
               <Briefcase size={18} color="#DC2626" />
-              Cases to Investigate (Pending Selection)
+              Criminal Cases Directory
             </div>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              {pendingCases.length} Uninvestigated Cases Available
+              {directoryLoading ? 'Loading cases...' : `Showing ${startNum}–${endNum} of ${totalCasesCount} cases`}
             </span>
           </div>
 
-          {pendingCases.length === 0 ? (
+          {activeCasesList.length === 0 ? (
             <div style={{ padding: '30px 20px', textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
               <CheckCircle2 size={32} color="#059669" style={{ margin: '0 auto 8px auto' }} />
-              All candidate cases have been investigated.
-              <div style={{ fontSize: '0.8rem', marginTop: '4px' }}>
-                Use Global Search above to search for any case ID or FIR number.
-              </div>
+              No cases found matching "{directorySearch}".
             </div>
           ) : (
-            <div className="table-container">
-              <table className="investigation-table">
-                <thead>
-                  <tr>
-                    <th>Case ID</th>
-                    <th>Crime Type</th>
-                    <th>FIR Reference</th>
-                    <th>Location</th>
-                    <th style={{ textAlign: 'right' }}>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pendingCases.map((c) => (
-                    <tr key={c.case_id}>
-                      <td style={{ fontFamily: 'JetBrains Mono', fontWeight: 700, color: 'var(--text-primary)' }}>
-                        {c.case_id}
-                      </td>
-                      <td style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
-                        {c.crime_type}
-                      </td>
-                      <td style={{ fontFamily: 'JetBrains Mono', fontSize: '0.8rem', color: '#2563EB' }}>
-                        {c.fir_id}
-                      </td>
-                      <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                        {c.location}
-                      </td>
-                      <td style={{ textAlign: 'right' }}>
-                        <button
-                          onClick={() => onNavigate('case', c.case_id)}
-                          className="btn btn-primary btn-sm"
-                          style={{ background: '#DC2626', borderColor: '#DC2626' }}
-                        >
-                          Investigate
-                        </button>
-                      </td>
+            <>
+              <div className="table-container">
+                <table className="investigation-table">
+                  <thead>
+                    <tr>
+                      <th>Case ID</th>
+                      <th>Crime Type</th>
+                      <th>FIR Reference</th>
+                      <th>Location</th>
+                      <th style={{ textAlign: 'right' }}>Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {activeCasesList.map((c: CaseSummaryItem) => (
+                      <tr
+                        key={c.case_id}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => onNavigate('case', c.case_id)}
+                      >
+                        <td style={{ fontFamily: 'JetBrains Mono', fontWeight: 700, color: 'var(--text-primary)' }}>
+                          {c.case_id}
+                        </td>
+                        <td style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>
+                          {c.crime_type}
+                        </td>
+                        <td style={{ fontFamily: 'JetBrains Mono', fontSize: '0.8rem', color: '#2563EB' }}>
+                          {c.fir_id || 'N/A'}
+                        </td>
+                        <td style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                          {c.location_id || 'N/A'}
+                        </td>
+                        <td style={{ textAlign: 'right' }}>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onNavigate('case', c.case_id);
+                            }}
+                            className="btn btn-primary btn-sm"
+                            style={{ background: '#DC2626', borderColor: '#DC2626' }}
+                          >
+                            Investigate
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    paddingTop: '16px',
+                    marginTop: '16px',
+                    borderTop: '1px solid var(--border-subtle)',
+                    flexWrap: 'wrap',
+                    gap: '12px'
+                  }}
+                >
+                  <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    Page {directoryPage} of {totalPages}
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <button
+                      disabled={directoryPage <= 1}
+                      onClick={() => setDirectoryPage((p) => Math.max(1, p - 1))}
+                      className="btn btn-secondary btn-sm"
+                      style={{ opacity: directoryPage <= 1 ? 0.5 : 1, cursor: directoryPage <= 1 ? 'not-allowed' : 'pointer' }}
+                    >
+                      Previous
+                    </button>
+
+                    {Array.from({ length: Math.min(5, totalPages) }, (_, idx) => {
+                      let pNum = directoryPage - 2 + idx;
+                      if (pNum < 1) pNum = idx + 1;
+                      if (pNum > totalPages) return null;
+                      return (
+                        <button
+                          key={pNum}
+                          onClick={() => setDirectoryPage(pNum)}
+                          className={`btn btn-sm ${directoryPage === pNum ? 'btn-primary' : 'btn-secondary'}`}
+                          style={directoryPage === pNum ? { background: '#DC2626', borderColor: '#DC2626' } : {}}
+                        >
+                          {pNum}
+                        </button>
+                      );
+                    })}
+
+                    <button
+                      disabled={directoryPage >= totalPages}
+                      onClick={() => setDirectoryPage((p) => Math.min(totalPages, p + 1))}
+                      className="btn btn-secondary btn-sm"
+                      style={{ opacity: directoryPage >= totalPages ? 0.5 : 1, cursor: directoryPage >= totalPages ? 'not-allowed' : 'pointer' }}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

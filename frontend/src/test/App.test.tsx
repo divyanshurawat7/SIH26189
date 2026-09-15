@@ -19,7 +19,9 @@ vi.mock('../api/client', () => ({
     getFindingDetail: vi.fn(),
     getCrossCase: vi.fn(),
     getInvestigationDossier: vi.fn(),
-    search: vi.fn()
+    search: vi.fn(),
+    getCases: vi.fn(),
+    getPersons: vi.fn()
   }
 }));
 
@@ -44,6 +46,38 @@ describe('SIH26189 Frontend Application Test Suite', () => {
       service: 'SIH26189 Investigation API',
       dataset: 'synthetic',
       phases_completed: 6
+    });
+
+    (apiClient.getCases as any).mockResolvedValue({
+      total_cases: 300,
+      page: 1,
+      page_size: 20,
+      total_pages: 15,
+      cases: [
+        { case_id: 'CASE_0001', crime_type: 'Extortion Racket', fir_id: 'FIR_0001', location_id: 'LOCATION_0041', status: 'UNDER_INVESTIGATION' },
+        { case_id: 'CASE_0002', crime_type: 'Cyber Financial Scam', fir_id: 'FIR_0002', location_id: 'LOCATION_0012', status: 'UNDER_INVESTIGATION' },
+        { case_id: 'CASE_0003', crime_type: 'Money Laundering', fir_id: 'FIR_0003', location_id: 'LOCATION_0088', status: 'UNDER_INVESTIGATION' },
+        { case_id: 'CASE_0004', crime_type: 'Extortion Call Cascade', fir_id: 'FIR_0004', location_id: 'LOCATION_0015', status: 'UNDER_INVESTIGATION' },
+        { case_id: 'CASE_0005', crime_type: 'Cross-Jurisdictional Fraud', fir_id: 'FIR_0005', location_id: 'LOCATION_0023', status: 'UNDER_INVESTIGATION' },
+        { case_id: 'CASE_0012', crime_type: 'Financial Transfer Chain', fir_id: 'FIR_0012', location_id: 'LOCATION_0045', status: 'UNDER_INVESTIGATION' },
+        { case_id: 'CASE_0025', crime_type: 'Cross-Border Syndicate Operation', fir_id: 'FIR_0025', location_id: 'LOCATION_0099', status: 'UNDER_INVESTIGATION' }
+      ]
+    });
+
+    (apiClient.getPersons as any).mockResolvedValue({
+      total_persons: 1500,
+      page: 1,
+      page_size: 20,
+      total_pages: 75,
+      persons: [
+        { person_id: 'PERSON_1476', name: 'Person 1476', city: 'Mumbai', occupation: 'Businessman', predicted_role: 'UPSTREAM_COORDINATOR', confidence: 0.95, criminal_significance: true },
+        { person_id: 'PERSON_0026', name: 'Person 0026', city: 'Delhi', occupation: 'Trader', predicted_role: 'BROKER', confidence: 0.92, criminal_significance: true },
+        { person_id: 'PERSON_0397', name: 'Person 0397', city: 'Kolkata', occupation: 'Agent', predicted_role: 'BROKER', confidence: 0.89, criminal_significance: true },
+        { person_id: 'PERSON_0405', name: 'Person 0405', city: 'Chennai', occupation: 'Manager', predicted_role: 'BROKER', confidence: 0.88, criminal_significance: true },
+        { person_id: 'PERSON_0432', name: 'Person 0432', city: 'Bangalore', occupation: 'Technician', predicted_role: 'OPERATIONAL_MEMBER', confidence: 0.86, criminal_significance: true },
+        { person_id: 'PERSON_0553', name: 'Person 0553', city: 'Delhi', occupation: 'Merchant', predicted_role: 'CIVILIAN', confidence: 0.88, criminal_significance: false },
+        { person_id: 'PERSON_1459', name: 'Person 1459', city: 'Hyderabad', occupation: 'Driver', predicted_role: 'OPERATIONAL_MEMBER', confidence: 0.91, criminal_significance: true }
+      ]
     });
 
     (apiClient.getOverview as any).mockResolvedValue({
@@ -204,7 +238,42 @@ describe('SIH26189 Frontend Application Test Suite', () => {
         connected_cases: ['CASE_0001'],
         suspicious_patterns: ['layered_financial_call_chain'],
         evidence_diversity: 7,
-        investigator_narrative: 'Mastermind operating with 0 direct crime scene edges. Unmasked via 5-hop cascading chain.'
+        investigator_narrative: 'Mastermind operating with 0 direct crime scene edges. Unmasked via 5-hop cascading chain.',
+        hybrid_intelligence: {
+          person_id: 'PERSON_1476',
+          role: 'UPSTREAM_COORDINATOR',
+          confidence: 0.95,
+          rule_prediction: 'UPSTREAM_COORDINATOR',
+          rule_confidence: 0.95,
+          rule_score: 0.57,
+          ml_prediction: 'UPSTREAM_COORDINATOR',
+          ml_confidence: 0.92,
+          ml_score: 0.23,
+          evidence_score: 0.15,
+          agreement: true,
+          confidence_level: 'HIGH',
+          ml_probabilities: { UPSTREAM_COORDINATOR: 0.92 }
+        },
+        explainability: {
+          person_id: 'PERSON_1476',
+          role: 'UPSTREAM_COORDINATOR',
+          confidence: 0.95,
+          flagged: true,
+          summary: 'Person 1476 is flagged as potential Upstream Coordinator based on multi-hop communication and financial correlation.',
+          reason_count: 2,
+          high_severity_reasons: 2,
+          reasons: [
+            {
+              type: 'DIRECT_RELATIONSHIP',
+              severity: 'HIGH',
+              title: 'Direct relationship with Person 0026',
+              reason: 'PERSON_1476 has direct communication and financial ties with PERSON_0026.',
+              other_person: 'PERSON_0026'
+            }
+          ],
+          evidence_count: 7,
+          evidence_source_categories: ['CDR', 'FINANCIAL_TRANSACTION']
+        }
       });
     });
 
@@ -365,8 +434,8 @@ describe('SIH26189 Frontend Application Test Suite', () => {
     fireEvent.click(casesNavBtn);
 
     // Select CASE_0001
-    const caseSelectBtn = await screen.findByText('CASE_0001');
-    fireEvent.click(caseSelectBtn);
+    const caseSelectBtns = await screen.findAllByText('CASE_0001');
+    fireEvent.click(caseSelectBtns[0]);
 
     // Verify Case file header
     expect(await screen.findByText(/Criminal Case File: CASE_0001/i)).toBeInTheDocument();
@@ -504,5 +573,23 @@ describe('SIH26189 Frontend Application Test Suite', () => {
 
     // Verify CASE_0025 appears under Recent Case Investigations
     expect(await screen.findByText(/Recent Case Investigations/i)).toBeInTheDocument();
+  });
+
+  it('renders AI Role Intelligence card and Explainability outputs on Person Investigation page', async () => {
+    render(<App />);
+
+    // Navigate to Person Investigation for PERSON_1476
+    const personShortcut = await screen.findByText(/Mastermind: PERSON_1476/i);
+    fireEvent.click(personShortcut);
+
+    // Verify AI Role Intelligence card header & agreement badge
+    expect(await screen.findByText(/AI Role Intelligence & Hybrid Assessment/i)).toBeInTheDocument();
+    expect(screen.getByText(/Model & Rule Agreement/i)).toBeInTheDocument();
+    expect(screen.getByText(/HIGH CONFIDENCE \(95%\)/i)).toBeInTheDocument();
+
+    // Verify Explainability summary and reasons
+    expect(screen.getByText(/Investigator Forensic Explanation/i)).toBeInTheDocument();
+    expect(screen.getByText(/Person 1476 is flagged as potential Upstream Coordinator/i)).toBeInTheDocument();
+    expect(screen.getByText(/Direct relationship with Person 0026/i)).toBeInTheDocument();
   });
 });

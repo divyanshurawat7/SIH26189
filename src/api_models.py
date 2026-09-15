@@ -77,6 +77,72 @@ class EvidenceItemResponse(BaseModel):
 # 3. Person Models
 # =============================================================================
 
+class HybridIntelligenceResponse(BaseModel):
+    """Hybrid intelligence result combining rule-based, ML model, and evidence strength signals."""
+    model_config = ConfigDict(extra="ignore")
+
+    person_id: str = Field(..., description="Person ID")
+    role: str = Field(..., description="Final combined role prediction")
+    confidence: float = Field(..., description="Final combined confidence score")
+    rule_prediction: str = Field(..., description="Rule-based predicted role")
+    rule_confidence: float = Field(..., description="Rule-based confidence score")
+    rule_score: float = Field(..., description="Rule component score")
+    ml_prediction: Optional[str] = Field(None, description="ML classifier predicted role")
+    ml_confidence: float = Field(0.0, description="ML classifier confidence score")
+    ml_score: float = Field(0.0, description="ML component score")
+    evidence_score: float = Field(0.0, description="Evidence strength component score")
+    agreement: bool = Field(False, description="Whether rule and ML predictions agree")
+    confidence_level: str = Field("LOW", description="Qualitative confidence rating (HIGH/MEDIUM/LOW)")
+    ml_probabilities: Dict[str, float] = Field(default_factory=dict, description="ML class probabilities")
+
+
+class ExplainabilityReasonItem(BaseModel):
+    """Individual evidence-backed investigative reason item."""
+    model_config = ConfigDict(extra="ignore")
+
+    type: str = Field(..., description="Reason category type")
+    severity: str = Field("MEDIUM", description="Severity (HIGH, MEDIUM, LOW)")
+    title: Optional[str] = Field(None, description="Short title")
+    relationship: Optional[str] = Field(None, description="Relationship description")
+    reason: Optional[str] = Field(None, description="Detailed explanatory text")
+    person_id: Optional[str] = Field(None, description="Associated person ID")
+    person_name: Optional[str] = Field(None, description="Associated person name")
+    caller: Optional[str] = Field(None, description="Caller person ID if call correlation")
+    other_person: Optional[str] = Field(None, description="Other person ID in pair")
+    other_person_name: Optional[str] = Field(None, description="Other person name in pair")
+    minutes_between: Optional[float] = Field(None, description="Minutes between correlated events")
+    evidence_count: Optional[int] = Field(None, description="Evidence record count")
+    source_types: List[str] = Field(default_factory=list, description="Source categories")
+    record_ids: List[str] = Field(default_factory=list, description="Source record IDs")
+    chain: List[str] = Field(default_factory=list, description="Hop-by-hop chain IDs")
+    readable_chain: List[str] = Field(default_factory=list, description="Human-readable chain names")
+    op_in_links: Optional[int] = Field(None, description="Operational incoming links count")
+    op_out_links: Optional[int] = Field(None, description="Operational outgoing links count")
+    source_categories: List[str] = Field(default_factory=list, description="Source category list")
+    call_record_id: Optional[str] = Field(None, description="Call record ID")
+    transaction_record_id: Optional[str] = Field(None, description="Transaction record ID")
+    call_timestamp: Optional[str] = Field(None, description="Call timestamp")
+    transaction_timestamp: Optional[str] = Field(None, description="Transaction timestamp")
+    case_id: Optional[str] = Field(None, description="Case ID")
+    transaction_description: Optional[str] = Field(None, description="Transaction description")
+
+
+class ExplainabilityResponse(BaseModel):
+    """Evidence-backed explainability engine output."""
+    model_config = ConfigDict(extra="ignore")
+
+    person_id: str = Field(..., description="Person ID")
+    role: Optional[str] = Field(None, description="Role evaluated")
+    confidence: Optional[float] = Field(None, description="Confidence score")
+    flagged: bool = Field(False, description="Whether flagged for high-severity investigation")
+    summary: str = Field("", description="Investigative explanation summary")
+    reason_count: int = Field(0, description="Total reasons count")
+    high_severity_reasons: int = Field(0, description="High-severity reasons count")
+    reasons: List[ExplainabilityReasonItem] = Field(default_factory=list, description="List of evidence-backed reasons")
+    evidence_count: int = Field(0, description="Total supporting evidence records count")
+    evidence_source_categories: List[str] = Field(default_factory=list, description="Categories of supporting evidence")
+
+
 class PersonDetailResponse(BaseModel):
     """Detailed actor profile, role detection, and forensic evidence diversity."""
     model_config = ConfigDict(extra="ignore")
@@ -96,6 +162,56 @@ class PersonDetailResponse(BaseModel):
     investigator_narrative: str = Field(..., description="Comprehensive investigative narrative")
     explanation: str = Field(..., description="Role classification explanation")
     strongest_supporting_evidence: List[Dict[str, Any]] = Field(default_factory=list, description="Top evidence items")
+    hybrid_intelligence: Optional[HybridIntelligenceResponse] = Field(None, description="Hybrid intelligence assessment (rules + ML + evidence)")
+    explainability: Optional[ExplainabilityResponse] = Field(None, description="Evidence-backed explainability engine output")
+
+
+class CaseSummaryItem(BaseModel):
+    """Summary of a case for directory list displays."""
+    model_config = ConfigDict(extra="ignore")
+
+    case_id: str = Field(..., description="Case ID")
+    crime_type: str = Field(..., description="Crime category")
+    status: str = Field("UNDER_INVESTIGATION", description="Status")
+    fir_id: Optional[str] = Field(None, description="FIR Reference ID")
+    location_id: Optional[str] = Field(None, description="Primary location ID")
+    incident_date: Optional[str] = Field(None, description="Incident timestamp/date")
+
+
+class CaseListResponse(BaseModel):
+    """Paginated list of all criminal cases in directory."""
+    model_config = ConfigDict(extra="ignore")
+
+    total_cases: int = Field(..., description="Total count of available cases")
+    page: int = Field(..., description="Current page number (1-indexed)")
+    page_size: int = Field(..., description="Items per page")
+    total_pages: int = Field(..., description="Total available pages")
+    cases: List[CaseSummaryItem] = Field(default_factory=list, description="Page of case items")
+
+
+class PersonSummaryItem(BaseModel):
+    """Summary of a person for directory list displays."""
+    model_config = ConfigDict(extra="ignore")
+
+    person_id: str = Field(..., description="Person ID")
+    name: str = Field(..., description="Name")
+    city: str = Field(..., description="City")
+    occupation: str = Field(..., description="Occupation")
+    predicted_role: str = Field(..., description="Predicted role")
+    confidence: float = Field(..., description="Confidence score")
+    criminal_significance: bool = Field(..., description="Criminal predicate flag")
+
+
+class PersonListResponse(BaseModel):
+    """Paginated list of all persons in directory."""
+    model_config = ConfigDict(extra="ignore")
+
+    total_persons: int = Field(..., description="Total count of persons")
+    page: int = Field(..., description="Current page number (1-indexed)")
+    page_size: int = Field(..., description="Items per page")
+    total_pages: int = Field(..., description="Total available pages")
+    persons: List[PersonSummaryItem] = Field(default_factory=list, description="Page of person items")
+
 
 
 class PersonNetworkResponse(BaseModel):

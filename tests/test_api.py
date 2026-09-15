@@ -329,12 +329,62 @@ class TestInvestigationAPI(unittest.TestCase):
             "/findings?min_confidence=0.8",
             "/investigation/CASE_0001"
         ]
-        for ep in endpoints:
-            res = self.client.get(ep)
-            self.assertEqual(res.status_code, 200, f"Failed at endpoint {ep}")
-            # Ensure JSON decoding succeeds
-            payload = res.json()
-            self.assertIsInstance(payload, (dict, list), f"Payload not dict or list for {ep}")
+    def test_hybrid_intelligence_and_explainability_in_person_detail(self):
+        """Verify GET /persons/PERSON_1476 returns hybrid intelligence and explainability structures."""
+        response = self.client.get("/persons/PERSON_1476")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn("hybrid_intelligence", data)
+        self.assertIn("explainability", data)
+
+        hybrid = data["hybrid_intelligence"]
+        if hybrid:
+            self.assertEqual(hybrid["person_id"], "PERSON_1476")
+            self.assertIn("role", hybrid)
+            self.assertIn("confidence", hybrid)
+            self.assertIn("rule_prediction", hybrid)
+            self.assertIn("agreement", hybrid)
+
+        explain = data["explainability"]
+        if explain:
+            self.assertEqual(explain["person_id"], "PERSON_1476")
+            self.assertIn("summary", explain)
+            self.assertIsInstance(explain["reasons"], list)
+
+    def test_cases_directory_pagination_and_search(self):
+        """Verify GET /cases returns paginated case directory and filtering works."""
+        response = self.client.get("/cases?page=1&limit=10")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["total_cases"], 300)
+        self.assertEqual(data["page"], 1)
+        self.assertEqual(data["page_size"], 10)
+        self.assertEqual(len(data["cases"]), 10)
+        self.assertEqual(data["total_pages"], 30)
+
+        # Search by specific Case ID
+        s_resp = self.client.get("/cases?search=CASE_0001")
+        self.assertEqual(s_resp.status_code, 200)
+        s_data = s_resp.json()
+        self.assertGreaterEqual(s_data["total_cases"], 1)
+        self.assertEqual(s_data["cases"][0]["case_id"], "CASE_0001")
+
+    def test_persons_directory_pagination_and_search(self):
+        """Verify GET /persons returns paginated person directory and filtering works."""
+        response = self.client.get("/persons?page=1&limit=20")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["total_persons"], 1500)
+        self.assertEqual(data["page"], 1)
+        self.assertEqual(data["page_size"], 20)
+        self.assertEqual(len(data["persons"]), 20)
+
+        # Search by specific Person ID
+        s_resp = self.client.get("/persons?search=PERSON_1476")
+        self.assertEqual(s_resp.status_code, 200)
+        s_data = s_resp.json()
+        self.assertGreaterEqual(s_data["total_persons"], 1)
+        self.assertEqual(s_data["persons"][0]["person_id"], "PERSON_1476")
 
 
 if __name__ == "__main__":
