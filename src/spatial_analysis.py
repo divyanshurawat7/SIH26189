@@ -152,12 +152,13 @@ class SpatialAnalyzer:
 
     def detect_co_travel(
         self,
-        min_shared_trips: int = 2,
-        time_window_minutes: int = 45
+        min_shared_trips: int = 1,
+        time_window_minutes: int = 90
     ) -> List[SpatialFinding]:
         """
         Detects vehicle convoy co-travel where two vehicles appear at the
-        same location within `time_window_minutes` across multiple distinct events.
+        same location within `time_window_minutes` across distinct events.
+        Differentiates high-confidence multi-trip convoys from occasional co-presence.
         """
         findings: List[SpatialFinding] = []
         if self.veh_df.empty:
@@ -190,7 +191,8 @@ class SpatialAnalyzer:
                             "time_1": pd.to_datetime(dts[i]).isoformat(),
                             "time_2": pd.to_datetime(dts[j]).isoformat(),
                             "event_1": eids[i],
-                            "event_2": eids[j]
+                            "event_2": eids[j],
+                            "diff_minutes": diff_min
                         })
 
         idx = 1
@@ -207,16 +209,24 @@ class SpatialAnalyzer:
 
                 start_t = min(t["time_1"] for t in trips)
                 end_t = max(t["time_2"] for t in trips)
+                min_diff = min(t["diff_minutes"] for t in trips)
 
-                # Confidence and score scale with number of verified shared sightings
-                confidence = min(0.96, 0.70 + (0.05 * len(trips)))
-                score = min(0.95, 0.60 + (0.05 * len(shared_locs)))
+                # Differentiate strong multi-trip convoy vs weak single co-presence
+                is_strong = (len(trips) >= 4 and len(shared_locs) >= 2 and min_diff <= 2.0)
+                strength = "strong" if is_strong else "weak"
+
+                if is_strong:
+                    confidence = min(0.98, 0.85 + (0.02 * len(trips)))
+                    score = min(0.95, 0.75 + (0.04 * len(shared_locs)))
+                else:
+                    confidence = 0.70
+                    score = 0.60
 
                 p_str = f" ({p1} & {p2})" if p1 and p2 else ""
                 expl = (
-                    f"Confirmed vehicle co-travel convoy between {v1} and {v2}{p_str} "
+                    f"Confirmed vehicle co-travel convoy ({strength}) between {v1} and {v2}{p_str} "
                     f"across {len(trips)} shared sightings in {len(shared_locs)} distinct locations "
-                    f"({', '.join(shared_locs[:3])})."
+                    f"({', '.join(shared_locs[:3])}) with min temporal gap of {min_diff:.1f}m."
                 )
 
                 findings.append(SpatialFinding(
@@ -234,11 +244,15 @@ class SpatialAnalyzer:
                     source_record_ids=all_rec_ids[:20],
                     evidence_sources=["vehicle"],
                     explanation=expl,
-                    metadata={"trip_records_count": len(trips)}
+                    metadata={
+                        "trip_records_count": len(trips),
+                        "strength": strength,
+                        "min_diff_minutes": round(min_diff, 1)
+                    }
                 ))
                 idx += 1
 
-        findings.sort(key=lambda x: x.trip_count, reverse=True)
+        findings.sort(key=lambda x: (x.metadata.get("strength") == "strong", x.trip_count), reverse=True)
         return findings
 
     def detect_co_locations(

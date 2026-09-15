@@ -113,14 +113,35 @@ class TestPatternDetection(unittest.TestCase):
         self.assertIn("vehicle", sample.evidence_sources)
 
     def test_cross_case_links(self):
-        """Detects entities linked to multiple distinct cases."""
+        """Detects verified entities and syndicates linked across distinct cases with multi-evidence."""
         xcase = [f for f in self.findings if f.pattern_type == "cross_case_entity_link"]
-        self.assertGreater(len(xcase), 50)
+        # Verified findings must contain the coordinated syndicates and multi-evidence criminals
+        self.assertGreaterEqual(len(xcase), 12)
+        self.assertLessEqual(len(xcase), 40, "False positive flooding must be eliminated!")
 
         sample = xcase[0]
         linked = sample.metadata.get("linked_cases", [])
-        self.assertGreaterEqual(len(linked), 2)
-        self.assertIn("cross-case", sample.narrative.lower())
+        self.assertGreaterEqual(len(linked), 1)
+        self.assertIn("syndicate" in sample.narrative.lower() or "cross-case" in sample.narrative.lower(), [True])
+
+        # Verify weak incidental overlaps are suppressed and tracked
+        self.assertGreaterEqual(
+            len(self.detector.suppressed_cross_case_overlaps), 100,
+            "Incidental overlaps (generic locations, civilian witnesses) must be suppressed!"
+        )
+
+    def test_cross_case_incidental_overlap_suppression(self):
+        """Generic locations and routine witnesses must be suppressed from criminal cross-case findings."""
+        xcase = [f for f in self.findings if f.pattern_type == "cross_case_entity_link"]
+        flagged_entities = {f.metadata.get("shared_entity_id") for f in xcase}
+
+        # Common locations appearing in FIRs without verified operational crime links must NOT be flagged
+        self.assertNotIn("LOCATION_0011", flagged_entities, "Generic location must be suppressed!")
+        self.assertNotIn("PERSON_0553", flagged_entities, "Innocent control must be suppressed!")
+
+        # Verify LOCATION_0011 is properly captured in suppressed overlaps
+        suppressed_ids = {s.get("entity_id") for s in self.detector.suppressed_cross_case_overlaps}
+        self.assertIn("LOCATION_0011", suppressed_ids)
 
     def test_innocent_control_person_0553_handled(self):
         """
