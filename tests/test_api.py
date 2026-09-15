@@ -37,6 +37,20 @@ class TestInvestigationAPI(unittest.TestCase):
         self.assertEqual(data["dataset"], "synthetic")
         self.assertEqual(data["phases_completed"], 6)
 
+    def test_overview_endpoint(self):
+        """Verify GET /overview returns aggregate stats, top influencers, and findings."""
+        response = self.client.get("/overview")
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertEqual(data["total_persons"], 1500)
+        self.assertEqual(data["total_cases"], 300)
+        self.assertEqual(data["total_networks"], 12)
+        self.assertGreater(data["total_findings"], 0)
+        self.assertGreater(len(data["top_influencers"]), 0)
+        # Verify PERSON_1476 is recognized in top influencers
+        coord_ids = [inf["person_id"] for inf in data["top_influencers"]]
+        self.assertIn("PERSON_1476", coord_ids)
+
     # =========================================================================
     # 2. Person Endpoints Tests
     # =========================================================================

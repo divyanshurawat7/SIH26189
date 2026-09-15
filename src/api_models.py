@@ -30,6 +30,32 @@ class ErrorResponse(BaseModel):
     detail: str = Field(..., description="Explanation of error")
 
 
+class InfluencerOverviewItem(BaseModel):
+    """Top influencer summary for dashboard display."""
+    model_config = ConfigDict(extra="ignore")
+
+    person_id: str
+    name: str
+    predicted_role: str
+    confidence: float
+    is_criminally_significant: bool
+    degree: int
+    connected_cases_count: int
+
+
+class OverviewResponse(BaseModel):
+    """System-wide intelligence overview and dashboard statistics."""
+    model_config = ConfigDict(extra="ignore")
+
+    total_persons: int = Field(..., description="Total unique persons in database")
+    total_cases: int = Field(..., description="Total criminal cases indexed")
+    total_networks: int = Field(..., description="Total syndicates/networks identified")
+    total_findings: int = Field(..., description="Total behavioral pattern findings detected")
+    top_influencers: List[InfluencerOverviewItem] = Field(default_factory=list, description="Top key criminal coordinators and brokers")
+    high_confidence_findings_count: int = Field(..., description="Count of findings with confidence >= 0.85")
+    recent_activity: List[Dict[str, Any]] = Field(default_factory=list, description="Recent forensic events & detections")
+
+
 # =============================================================================
 # 2. Evidence Models
 # =============================================================================

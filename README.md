@@ -349,9 +349,78 @@ curl -s http://localhost:8000/investigation/CASE_0001
 }
 ```
 
+### Running the Investigation Dashboard / Frontend (Phase 8)
+
+The investigation dashboard is a modern, responsive web application built with **React 19**, **TypeScript**, **Vite**, and **@xyflow/react** (React Flow). It is designed specifically for criminal intelligence analysts, consuming live data directly from the FastAPI backend with **zero mock data**.
+
+#### 1. Quick Start
+
+Ensure the FastAPI backend is running first:
+```bash
+# Terminal 1: Launch Backend API
+uvicorn src.api:app --reload --port 8000
+```
+
+Then start the frontend development server:
+```bash
+# Terminal 2: Launch Frontend Dashboard
+npm run dev
+```
+Open **[http://localhost:5173](http://localhost:5173)** in your browser.
+
+#### 2. Running Frontend Tests & Production Build
+```bash
+# Run Vitest frontend test suite (9/9 passing)
+npm test
+
+# Run production build (zero TypeScript or bundling errors)
+npm run build
+```
+
+#### 3. Investigation Views & Capabilities
+
+- **1. Command Center Dashboard (`Dashboard.tsx`)**:
+  - Top-level metrics: 1,500 Persons Profiled, 300 Cases Indexed, 12 Syndicates, 329 Behavioral Findings.
+  - Flagship `CASE_0001` fast-action audit banner.
+  - Ranked table of top criminal influencers (coordinators, brokers, operatives) with confidence and centrality.
+  - Stream of high-confidence unsupervised behavioral detections.
+
+- **2. Flagship CASE_0001 Investigation Demo (`FlagshipDemo.tsx`)**:
+  - Showcases the unmasking of Upstream Coordinator **`PERSON_1476`** who has **0 direct edges** to the crime scene and 0 FIR mentions.
+  - Interactive multi-hop operational command chain: `PERSON_1476` (Mastermind) → `PERSON_0026` (Broker 1) → `PERSON_0397` (Broker 2) → `PERSON_0405` (Broker 3) → `PERSON_1459` (Operative Accused) → `CASE_0001` (Offense).
+  - Corroborated across 7 forensic categories (CDR calls, wire transfers, FIR filings, surveillance, intelligence).
+  - Chronological forensic event timeline and source evidence provenance.
+
+- **3. Actor Profile & Local Topology (`PersonInvestigation.tsx`)**:
+  - Full forensic profile with predicted role, degree, betweenness centrality, connected cases, and evidence diversity.
+  - **Innocent Control Protection**: Explicitly audits non-criminal actors such as **`PERSON_0553`** (merchant with 15 contacts and 80 calls), displaying a verified non-criminal badge and explaining the benign nature of their commercial activity.
+  - Interactive 1-hop local network topology powered by React Flow with custom node badges, roles, and slide-over entity inspector.
+
+- **4. Case File Dossier (`CaseInvestigation.tsx`)**:
+  - FIR information, IPC offenses, incident location, and investigator narrative.
+  - Dynamically reconstructed operational command chain.
+  - Chronological event timeline and grouped traceable evidence records.
+
+- **5. Suspicious Behavioral Findings (`FindingsPage.tsx`)**:
+  - Live filterable table supporting Case ID, Person ID, Pattern Type, and a Minimum Confidence threshold slider (0% to 100%).
+  - Slide-over / modal inspector displaying finding narrative and supporting evidence records.
+
+- **6. Multi-Jurisdictional Cross-Case Analysis (`CrossCaseView.tsx`)**:
+  - Queries multi-case linkages, distinguishing verified recurring criminal syndicates (`NET_001`, `NET_002`) from suppressed incidental civilian overlaps (`LOCATION_0011`, `PERSON_0553`).
+
+- **7. Global Investigation Search (`GlobalSearch.tsx`)**:
+  - Real-time autocomplete search in navbar for Person IDs, Case IDs, and Syndicate Network IDs.
+
 ### Running Automated Tests
 ```bash
+# Backend Test Suite (118/118 PASS)
 python -m unittest discover tests/ -v
+
+# Frontend Test Suite (9/9 PASS)
+npm test
+
+# Dataset Integrity & Directed Chain Validation (100% CLEAN)
+python validate_sih26189_dataset.py
 ```
 
 ---
@@ -364,4 +433,6 @@ python -m unittest discover tests/ -v
 - [x] **Phase 4: Upstream Coordinator Discovery & Influencer Detection**: Complete (Graph feature extraction, broker detection, multi-hop directed chain recovery, innocent high-degree trap differentiation, post-prediction GT evaluation — 10/10 tests passing).
 - [x] **Phase 5: Suspicious Pattern, Temporal, Spatial, & Cross-Case Analysis**: Complete (Activity timelines, communication bursts, rapid transfer chains, layered financial+call cascades, dual-tier vehicle convoys, audited cross-case entity links, innocent control handling, post-prediction GT evaluation — 20/20 tests passing).
 - [x] **Phase 6: Evidence Traceability & Investigation Insights**: Complete (Unified evidence tracing across all 11 source categories, in-memory O(1) indexing of 98,904 records, hop-by-hop multi-hop chain tracing, source diversity scoring, explainable confidence aggregation, Person/Case/Network/Cross-Case dossiers, innocent PERSON_0553 forensic justification — 93/93 tests passing).
-- [x] **Phase 7: Investigation REST API Backend**: Complete (FastAPI, Pydantic v2, Uvicorn service layer, 12 endpoints covering actor profiles, case timelines, grouped evidence, syndicate structures, filterable pattern findings, cross-case analysis, and dynamic flagship investigation dossiers; sub-millisecond query latencies — **117/117 total tests passing**).
+- [x] **Phase 7: Investigation REST API Backend**: Complete (FastAPI, Pydantic v2, Uvicorn service layer, 13 endpoints covering overview metrics, actor profiles, case timelines, grouped evidence, syndicate structures, filterable pattern findings, cross-case analysis, and dynamic flagship investigation dossiers; sub-millisecond query latencies — 118/118 total backend tests passing).
+- [x] **Phase 8: Investigation Dashboard / Frontend**: Complete (React 19, TypeScript, Vite, React Flow, dark-mode intelligence command center, 0 mock data, 9/9 frontend tests passing, production build passing).
+

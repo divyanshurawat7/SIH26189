@@ -41,6 +41,8 @@ from src.investigation_insights import InvestigationInsightsGenerator
 from src.api_models import (
     HealthResponse,
     ErrorResponse,
+    OverviewResponse,
+    InfluencerOverviewItem,
     EvidenceItemResponse,
     PersonDetailResponse,
     PersonNetworkResponse,
@@ -217,6 +219,76 @@ def get_health() -> HealthResponse:
         service="SIH26189 Investigation API",
         dataset="synthetic",
         phases_completed=6
+    )
+
+
+@app.get(
+    "/overview",
+    response_model=OverviewResponse,
+    summary="Dashboard intelligence overview and statistics",
+    tags=["System"]
+)
+def get_overview() -> OverviewResponse:
+    """Returns system-wide intelligence metrics, top criminal coordinators/brokers, and activity."""
+    state = get_app_state()
+
+    # Top influencers prioritized by coordinators, brokers, and betweenness
+    priority_order = {
+        RoleType.UPSTREAM_COORDINATOR.value: 1,
+        RoleType.BROKER.value: 2,
+        RoleType.OPERATIONAL_MEMBER.value: 3,
+        RoleType.FINANCIAL_FACILITATOR.value: 4,
+        RoleType.HIGH_DEGREE.value: 5,
+        RoleType.PERIPHERAL_ASSOCIATE.value: 6
+    }
+
+    # Fetch names efficiently from persons table
+    p_names = dict(zip(state.data.persons["person_id"], state.data.persons["name"]))
+
+    sorted_influencers = sorted(
+        state.roles.values(),
+        key=lambda r: (
+            priority_order.get(r.predicted_role, 99),
+            -r.confidence_score,
+            -r.graph_features.get("degree", 0)
+        )
+    )
+
+    top_items = [
+        InfluencerOverviewItem(
+            person_id=r.person_id,
+            name=p_names.get(r.person_id, r.person_id),
+            predicted_role=r.predicted_role,
+            confidence=round(r.confidence_score, 3),
+            is_criminally_significant=r.is_criminally_significant,
+            degree=r.graph_features.get("degree", 0),
+            connected_cases_count=len(r.connected_cases)
+        )
+        for r in sorted_influencers[:15]
+    ]
+
+    high_conf_count = sum(1 for f in state.findings if f.confidence >= 0.85)
+
+    recent_act = [
+        {
+            "finding_id": f.finding_id,
+            "pattern_type": f.pattern_type,
+            "case_id": f.case_id,
+            "confidence": f.confidence,
+            "entities_count": len(f.entities),
+            "narrative": f.narrative[:120] + "..." if len(f.narrative) > 120 else f.narrative
+        }
+        for f in state.findings[:10]
+    ]
+
+    return OverviewResponse(
+        total_persons=len(state.person_ids),
+        total_cases=len(state.case_ids),
+        total_networks=12,
+        total_findings=len(state.findings),
+        top_influencers=top_items,
+        high_confidence_findings_count=high_conf_count,
+        recent_activity=recent_act
     )
 
 

@@ -1,0 +1,11 @@
+{
+  "name": "sih26189-criminal-network-analysis",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SIH26189 — AI-Powered Criminal Network Analysis & Intelligence Platform",
+  "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "build": "npm run build --prefix frontend",
+    "test": "npm run test --prefix frontend"
+  }
+}

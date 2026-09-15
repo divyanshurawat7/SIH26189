@@ -1,0 +1,440 @@
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import App from '../App';
+import { apiClient } from '../api/client';
+
+// Mock API client methods
+vi.mock('../api/client', () => ({
+  apiClient: {
+    getHealth: vi.fn(),
+    getOverview: vi.fn(),
+    getPerson: vi.fn(),
+    getPersonNetwork: vi.fn(),
+    getPersonEvidence: vi.fn(),
+    getCase: vi.fn(),
+    getCaseTimeline: vi.fn(),
+    getCaseEvidence: vi.fn(),
+    getNetwork: vi.fn(),
+    getFindings: vi.fn(),
+    getFindingDetail: vi.fn(),
+    getCrossCase: vi.fn(),
+    getInvestigationDossier: vi.fn()
+  }
+}));
+
+// Mock @xyflow/react directly in test file for JSDOM
+vi.mock('@xyflow/react', () => ({
+  ReactFlow: ({ children }: any) => <div data-testid="mock-react-flow">{children}</div>,
+  Background: () => <div data-testid="mock-rf-background" />,
+  Controls: () => <div data-testid="mock-rf-controls" />,
+  MiniMap: () => <div data-testid="mock-rf-minimap" />,
+  Handle: () => <div data-testid="mock-rf-handle" />,
+  Position: { Top: 'top', Bottom: 'bottom', Left: 'left', Right: 'right' },
+  MarkerType: { ArrowClosed: 'arrowclosed' }
+}));
+
+describe('SIH26189 Frontend Application Test Suite', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    // Default mock implementations matching FastAPI backend responses
+    (apiClient.getHealth as any).mockResolvedValue({
+      status: 'ok',
+      service: 'SIH26189 Investigation API',
+      dataset: 'synthetic',
+      phases_completed: 6
+    });
+
+    (apiClient.getOverview as any).mockResolvedValue({
+      total_persons: 1500,
+      total_cases: 300,
+      total_networks: 12,
+      total_findings: 329,
+      top_influencers: [
+        {
+          person_id: 'PERSON_1476',
+          name: 'Person 1476',
+          predicted_role: 'UPSTREAM_COORDINATOR',
+          confidence: 0.95,
+          degree: 18,
+          betweenness: 0.045
+        },
+        {
+          person_id: 'PERSON_0026',
+          name: 'Person 0026',
+          predicted_role: 'BROKER',
+          confidence: 0.92,
+          degree: 14,
+          betweenness: 0.038
+        }
+      ],
+      recent_activity: [
+        {
+          finding_id: 'FINDING_0001',
+          pattern_type: 'layered_financial_call_chain',
+          case_id: 'CASE_0001',
+          confidence: 0.96,
+          narrative: 'Cascading financial transfer aligned with telecommunications burst'
+        }
+      ]
+    });
+
+    (apiClient.getInvestigationDossier as any).mockResolvedValue({
+      case_id: 'CASE_0001',
+      case_summary: {
+        crime_type: 'Extortion',
+        fir_id: 'FIR_0001',
+        incident_date: '2024-03-15',
+        location: 'LOCATION_0041'
+      },
+      upstream_coordinator: 'PERSON_1476',
+      brokers: ['PERSON_0026', 'PERSON_0397', 'PERSON_0405'],
+      operational_members: ['PERSON_1459'],
+      operational_chain: ['PERSON_1476', 'PERSON_0026', 'PERSON_0397', 'PERSON_0405', 'PERSON_1459', 'CASE_0001'],
+      evidence_traceability: {
+        total_records: 18,
+        evidence_diversity_score: 7,
+        categories: ['CDR', 'FINANCIAL_TRANSACTION', 'FIR_RECORD', 'LOCATION_EVENT']
+      },
+      confidence: 0.95,
+      investigator_narrative: 'Mastermind PERSON_1476 orchestrated extortion via 3 intermediary brokers to isolate from field operative PERSON_1459.',
+      communication_evidence: [
+        { source_record_id: 'CALL_001', timestamp: '2024-03-14 10:00:00', entities: ['PERSON_1476', 'PERSON_0026'], confidence: 0.95 }
+      ],
+      financial_evidence: [
+        { source_record_id: 'TXN_001', amount: 18885.32, timestamp: '2024-03-14 11:30:00', entities: ['ACC_1476', 'ACC_0026'], confidence: 0.96 }
+      ]
+    });
+
+    (apiClient.getCaseTimeline as any).mockResolvedValue({
+      case_id: 'CASE_0001',
+      events: [
+        {
+          event_type: 'CDR',
+          timestamp: '2024-03-14 10:00:00',
+          source_record_id: 'CALL_001',
+          description: 'Telecommunications contact initiating operation',
+          entities: ['PERSON_1476', 'PERSON_0026']
+        },
+        {
+          event_type: 'FINANCIAL_TRANSACTION',
+          timestamp: '2024-03-14 11:30:00',
+          source_record_id: 'TXN_001',
+          description: 'Transfer of funds to broker account',
+          entities: ['PERSON_0026', 'PERSON_0397']
+        }
+      ]
+    });
+
+    (apiClient.getCase as any).mockResolvedValue({
+      case_id: 'CASE_0001',
+      crime_type: 'Extortion',
+      status: 'UNDER_INVESTIGATION',
+      fir_information: {
+        fir_id: 'FIR_0001',
+        date: '2024-03-15',
+        section: '384 IPC',
+        location_id: 'LOCATION_0041'
+      },
+      investigation_narrative: 'Extortion racket targeting local merchants.',
+      operational_chain: ['PERSON_1476', 'PERSON_0026', 'PERSON_0397', 'PERSON_0405', 'PERSON_1459', 'CASE_0001'],
+      evidence_diversity_score: 7,
+      timeline_events_count: 12
+    });
+
+    (apiClient.getCaseEvidence as any).mockResolvedValue({
+      case_id: 'CASE_0001',
+      total_evidence_records: 12,
+      evidence_by_category: {
+        CDR: [
+          {
+            source_type: 'CDR',
+            source_record_id: 'CALL_001',
+            timestamp: '2024-03-14 10:00:00',
+            description: 'Direct call from coordinator to broker',
+            entities: ['PERSON_1476', 'PERSON_0026'],
+            confidence: 0.95
+          }
+        ]
+      }
+    });
+
+    (apiClient.getPerson as any).mockImplementation((personId: string) => {
+      if (personId === 'PERSON_0553') {
+        return Promise.resolve({
+          person_id: 'PERSON_0553',
+          name: 'Person 0553',
+          city: 'Delhi',
+          occupation: 'Merchant',
+          predicted_role: 'PERIPHERAL_ASSOCIATE',
+          confidence: 0.88,
+          criminal_significance: false,
+          graph_features: {
+            degree: 15,
+            in_degree: 8,
+            out_degree: 7,
+            weighted_degree: 80,
+            betweenness_centrality: 0.012,
+            connected_cases_count: 0
+          },
+          connected_cases: [],
+          suspicious_patterns: [],
+          evidence_diversity: 1,
+          investigator_narrative: 'Verified Non-Criminal Civilian Control: High degree driven entirely by benign commercial calls. 0 criminal predicates.'
+        });
+      }
+
+      return Promise.resolve({
+        person_id: 'PERSON_1476',
+        name: 'Person 1476',
+        city: 'Mumbai',
+        occupation: 'Businessman',
+        predicted_role: 'UPSTREAM_COORDINATOR',
+        confidence: 0.95,
+        criminal_significance: true,
+        graph_features: {
+          degree: 18,
+          in_degree: 10,
+          out_degree: 8,
+          weighted_degree: 92,
+          betweenness_centrality: 0.045,
+          connected_cases_count: 2
+        },
+        connected_cases: ['CASE_0001'],
+        suspicious_patterns: ['layered_financial_call_chain'],
+        evidence_diversity: 7,
+        investigator_narrative: 'Mastermind operating with 0 direct crime scene edges. Unmasked via 5-hop cascading chain.'
+      });
+    });
+
+    (apiClient.getPersonNetwork as any).mockResolvedValue({
+      person_id: 'PERSON_1476',
+      total_direct_contacts: 2,
+      direct_connections: ['PERSON_0026', 'PERSON_0397'],
+      roles_of_connected_persons: {
+        'PERSON_0026': 'BROKER',
+        'PERSON_0397': 'BROKER'
+      }
+    });
+
+    (apiClient.getPersonEvidence as any).mockResolvedValue([
+      {
+        source_type: 'CDR',
+        source_record_id: 'CALL_001',
+        timestamp: '2024-03-14 10:00:00',
+        description: 'Command phone call',
+        entities: ['PERSON_1476', 'PERSON_0026'],
+        confidence: 0.95
+      }
+    ]);
+
+    (apiClient.getFindings as any).mockResolvedValue([
+      {
+        finding_id: 'FINDING_0001',
+        finding_type: 'layered_financial_call_chain',
+        entities: ['PERSON_1476', 'PERSON_0026', 'PERSON_1459'],
+        case: 'CASE_0001',
+        score: 4.85,
+        confidence: 0.96,
+        evidence_count: 6
+      }
+    ]);
+
+    (apiClient.getFindingDetail as any).mockResolvedValue({
+      finding_id: 'FINDING_0001',
+      finding_type: 'layered_financial_call_chain',
+      entities: ['PERSON_1476', 'PERSON_0026', 'PERSON_1459'],
+      case: 'CASE_0001',
+      score: 4.85,
+      confidence: 0.96,
+      narrative: 'Layered coordination between remote coordinator and operational member.',
+      supporting_evidence: [
+        {
+          source_type: 'FINANCIAL_TRANSACTION',
+          source_record_id: 'TXN_001',
+          description: 'Wire transfer to intermediary'
+        }
+      ]
+    });
+
+    (apiClient.getCrossCase as any).mockImplementation((entityId: string) => {
+      if (entityId === 'LOCATION_0011' || entityId === 'PERSON_0553') {
+        return Promise.resolve({
+          entity: entityId,
+          connected_cases: ['CASE_0001', 'CASE_0002'],
+          strength_of_linkage: 'incidental_overlap',
+          explanation: 'Incidental civilian overlap. Shared location with no multi-hop criminal coordination.',
+          supporting_evidence: ['LOC_EV_001']
+        });
+      }
+
+      return Promise.resolve({
+        entity: entityId,
+        connected_cases: ['CASE_0001', 'CASE_0005', 'CASE_0012'],
+        strength_of_linkage: 'strong_criminal_coordination',
+        explanation: 'Strong criminal coordination across multiple jurisdictions with recurring operational members.',
+        supporting_evidence: ['TXN_001', 'CALL_001']
+      });
+    });
+  });
+
+  it('renders landing dashboard with accurate graph metrics and top influencers', async () => {
+    render(<App />);
+
+    // Verify Title & Subtitle
+    expect(await screen.findByText(/Criminal Intelligence Command Center/i)).toBeInTheDocument();
+
+    // Verify Metric Tiles
+    expect(await screen.findByText('1,500')).toBeInTheDocument();
+    expect(screen.getByText('300')).toBeInTheDocument();
+    expect(screen.getByText('12')).toBeInTheDocument();
+    expect(screen.getByText('329')).toBeInTheDocument();
+
+    // Verify Flagship Banner
+    expect(screen.getByText(/FLAGSHIP MASTERMIND AUDIT/i)).toBeInTheDocument();
+    expect(screen.getByText(/Upstream Coordinator PERSON_1476 Isolated & Corroborated/i)).toBeInTheDocument();
+
+    // Verify Top Influencers Table
+    expect(screen.getByText('PERSON_1476')).toBeInTheDocument();
+    expect(screen.getByText('UPSTREAM_COORDINATOR')).toBeInTheDocument();
+  });
+
+  it('navigates to Flagship Demo view and displays the 5-hop operational chain', async () => {
+    render(<App />);
+
+    // Click Flagship Demo button in banner or navbar
+    const flagshipBtn = await screen.findByText(/View Flagship CASE_0001/i);
+    fireEvent.click(flagshipBtn);
+
+    // Verify Flagship Header
+    expect(await screen.findByText(/CASE_0001: Upstream Coordinator Isolation & Unmasking/i)).toBeInTheDocument();
+
+    // Verify Coordinator Isolation metric
+    expect(screen.getByText('0 Direct Links')).toBeInTheDocument();
+    expect(screen.getByText(/Not in FIR, No Direct Phone Call to Crime Scene/i)).toBeInTheDocument();
+
+    // Verify 5-Hop Operational Chain Nodes
+    expect(screen.getByText('MASTERMIND')).toBeInTheDocument();
+    expect(screen.getByText('HOP 1')).toBeInTheDocument();
+    expect(screen.getByText('HOP 2')).toBeInTheDocument();
+    expect(screen.getByText('HOP 3')).toBeInTheDocument();
+    expect(screen.getByText('HOP 4')).toBeInTheDocument();
+    expect(screen.getByText('OFFENSE')).toBeInTheDocument();
+
+    // Verify recovered actors in the chain
+    expect(screen.getAllByText('PERSON_1476').length).toBeGreaterThan(0);
+    expect(screen.getByText('PERSON_0026')).toBeInTheDocument();
+    expect(screen.getByText('PERSON_0397')).toBeInTheDocument();
+    expect(screen.getByText('PERSON_0405')).toBeInTheDocument();
+    expect(screen.getAllByText('PERSON_1459').length).toBeGreaterThan(0);
+  });
+
+  it('audits innocent control PERSON_0553 and shows Verified Non-Criminal badge', async () => {
+    render(<App />);
+
+    // Click Innocent Shortcut in sidebar
+    const innocentBtn = await screen.findByTestId('shortcut-innocent-0553');
+    fireEvent.click(innocentBtn);
+
+    // Verify Verified Non-Criminal Badges
+    expect((await screen.findAllByText(/Verified Non-Criminal/i)).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Innocent Control Protection Audit:/i)).toBeInTheDocument();
+    expect(screen.getByText(/High degree driven entirely by benign commercial calls/i)).toBeInTheDocument();
+  });
+
+  it('navigates to Case Investigation page for CASE_0001', async () => {
+    render(<App />);
+
+    // Navigate to Cases tab
+    const casesNavBtn = await screen.findByText('Case Investigations');
+    fireEvent.click(casesNavBtn);
+
+    // Verify Case file header
+    expect(await screen.findByText(/Criminal Case File: CASE_0001/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Extortion/i).length).toBeGreaterThan(0);
+    expect(screen.getByText('FIR_0001')).toBeInTheDocument();
+  });
+
+  it('navigates to Behavioral Findings page and applies filters', async () => {
+    render(<App />);
+
+    // Navigate to Findings tab
+    const findingsNavBtn = await screen.findByText('Behavioral Findings');
+    fireEvent.click(findingsNavBtn);
+
+    // Verify Findings page header
+    expect(await screen.findByText(/Suspicious Behavioral Pattern Detections/i)).toBeInTheDocument();
+
+    // Check filter button
+    const filterBtn = screen.getByText('Filter Findings');
+    fireEvent.click(filterBtn);
+
+    // Verify table has finding
+    expect(await screen.findByText('FINDING_0001')).toBeInTheDocument();
+    expect(screen.getByText('layered_financial_call_chain')).toBeInTheDocument();
+  });
+
+  it('inspects finding detail in modal dialog', async () => {
+    render(<App />);
+
+    // Navigate to Findings tab
+    const findingsNavBtn = await screen.findByText('Behavioral Findings');
+    fireEvent.click(findingsNavBtn);
+
+    // Find and click Inspect button
+    const inspectBtn = await screen.findByText('Inspect');
+    fireEvent.click(inspectBtn);
+
+    // Verify Modal appears
+    expect(await screen.findByText(/Finding Detail: FINDING_0001/i)).toBeInTheDocument();
+    expect(screen.getByText(/Layered coordination between remote coordinator/i)).toBeInTheDocument();
+
+    // Close modal
+    const closeBtn = screen.getByText('Close Inspector');
+    fireEvent.click(closeBtn);
+  });
+
+  it('navigates to Cross-Case Linkages page and evaluates criminal vs incidental overlaps', async () => {
+    render(<App />);
+
+    // Navigate to Cross-Case tab
+    const crossCaseNavBtn = await screen.findByText('Cross-Case Linkages');
+    fireEvent.click(crossCaseNavBtn);
+
+    // Verify Header
+    expect(await screen.findByText(/Multi-Jurisdictional Cross-Case Linkage Analysis/i)).toBeInTheDocument();
+
+    // Verify initial syndicate NET_001 evaluation
+    expect(await screen.findByText(/Strong Criminal Syndicate Recurrence/i)).toBeInTheDocument();
+    expect(screen.getByText(/3 Connected Cases/i)).toBeInTheDocument();
+
+    // Click incidental preset
+    const incidentalPreset = screen.getByText(/Delhi Location 0011/i);
+    fireEvent.click(incidentalPreset);
+
+    // Verify incidental badge appears
+    expect(await screen.findByText(/Incidental Civilian \/ Geographic Overlap/i)).toBeInTheDocument();
+  });
+
+  it('performs global search and navigates to entered person dossier', async () => {
+    render(<App />);
+
+    // Search input in navbar
+    const searchInput = await screen.findByPlaceholderText(/Search Person ID/i);
+    fireEvent.change(searchInput, { target: { value: 'PERSON_1476' } });
+    fireEvent.submit(searchInput.closest('form')!);
+
+    // Verify Person Dossier loaded
+    expect(await screen.findByText(/1-Hop Local Network Topology/i)).toBeInTheDocument();
+  });
+
+  it('displays an error banner when API is unreachable', async () => {
+    (apiClient.getOverview as any).mockRejectedValueOnce(new Error('Network Connection Refused'));
+
+    render(<App />);
+
+    // Verify Error Banner
+    expect(await screen.findByText(/Backend API Connection Error:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Ensure Uvicorn is running/i)).toBeInTheDocument();
+  });
+});

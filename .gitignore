@@ -28,3 +28,8 @@ Thumbs.db
 # Temporary artifacts and scratch files
 *.log
 scratch/
+
+# Node / Frontend
+node_modules/
+dist/
+.tmp/
