@@ -167,7 +167,40 @@ top_influencers = detector.get_top_influencers(20)
 for rank, inf in enumerate(top_influencers, 1):
     print(f"{rank}. {inf.person_id} [{inf.predicted_role}] (Conf: {inf.confidence_score:.2f})")
     if inf.supporting_paths:
-        print("   Path:", " -> ".join(inf.supporting_paths[0]))
+### Running Temporal & Spatial Analysis in Python
+```python
+from src.data_loader import DataLoader
+from src.temporal_analysis import TemporalAnalyzer
+from src.spatial_analysis import SpatialAnalyzer
+
+loader = DataLoader()
+dataset = loader.load_all(validate=False)
+
+temporal = TemporalAnalyzer(dataset)
+timeline = temporal.build_person_timeline("PERSON_1476")
+print(f"Timeline events for PERSON_1476: {len(timeline)}")
+
+spatial = SpatialAnalyzer(dataset)
+convoys = spatial.detect_co_travel(min_shared_trips=2, time_window_minutes=45)
+print(f"Detected vehicle convoys: {len(convoys)}")
+```
+
+### Running Suspicious Pattern & Cross-Case Detection in Python
+```python
+from src.data_loader import DataLoader
+from src.pattern_detection import PatternDetector
+
+loader = DataLoader()
+dataset = loader.load_all(validate=False)
+
+detector = PatternDetector(dataset)
+findings = detector.detect_all_patterns()
+print(f"Total intelligence findings generated: {len(findings)}")
+
+# Inspect flagship case finding
+flagship = next(f for f in findings if f.case_id == "CASE_0001")
+print("Flagship Finding:")
+print(flagship)
 ```
 
 ### Running Automated Tests
@@ -182,7 +215,9 @@ python -m unittest discover tests/ -v
 - [x] **Phase 1: Data Ingestion & Schema Integrity**: Complete (20 raw tables loaded, FK validated, 6/6 tests passing).
 - [x] **Phase 2: Person Entity Resolution**: Complete (Explainable multi-attribute matching, candidate blocking, 0 false merges on 65 traps, 25/25 tests passing).
 - [x] **Phase 3: Graph Construction & Neo4j Integration**: Complete (NetworkX MultiDiGraph with 12 entity types, full source traceability, 0 coordinator direct edges, Cypher exporter, offline fallback, 15/15 tests passing).
-- [x] **Phase 4: Upstream Coordinator Discovery & Influencer Detection**: Complete (Graph feature extraction, broker detection, multi-hop directed chain recovery, innocent high-degree trap differentiation, post-prediction GT evaluation — **56/56 total tests passing**).
-- [ ] **Phase 5: Investigator Interface & Case Dossier Generation**: Pending.
+- [x] **Phase 4: Upstream Coordinator Discovery & Influencer Detection**: Complete (Graph feature extraction, broker detection, multi-hop directed chain recovery, innocent high-degree trap differentiation, post-prediction GT evaluation — 10/10 tests passing).
+- [x] **Phase 5: Suspicious Pattern, Temporal, Spatial, & Cross-Case Analysis**: Complete (Activity timelines, communication bursts, rapid transfer chains, layered financial+call cascades, vehicle convoys, cross-case entity links, innocent control handling, post-prediction GT evaluation — **75/75 total tests passing**).
+- [ ] **Phase 6: Investigator Interface & Case Dossier Generation**: Pending.
+
 
 
