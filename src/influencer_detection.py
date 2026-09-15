@@ -1,29 +1,3 @@
-"""
-SIH26189 — AI-Powered Criminal Network Analysis System
-Module: src/influencer_detection.py
-
-Phase 4: Influencer Detection & Upstream Coordinator Discovery
-Automatically identifies key actors in criminal networks and uncovers hidden
-upstream coordinators through multi-hop graph traversal and evidence diversity.
-
-Roles Implemented:
-1. UPSTREAM_COORDINATOR: Hidden mastermind with multi-hop reach to crimes via intermediaries,
-   high evidence diversity, and no requirement for direct case presence.
-2. BROKER: High betweenness centrality actor acting as an operational bridge between clusters.
-3. FINANCIAL_FACILITATOR: High financial degree/ratio routing funds through bank accounts/transfers.
-4. OPERATIONAL_MEMBER: Direct participant in crime/event (accused, witness, direct case appearance).
-5. HIGH_DEGREE: High telecom/contact volume but lacking criminal operational links (e.g. innocent high-degree traps).
-6. PERIPHERAL_ASSOCIATE: Low-degree outer associate connected to network members.
-
-Key Features:
-- Multi-feature graph extraction (degree, weighted degree, in/out-degree, betweenness, closeness,
-  connected cases/persons/calls/transfers/locations).
-- Multi-hop directed chain recovery (e.g. flagship A -> B -> C -> D -> E -> CASE_0001).
-- Innocent high-degree trap differentiation (e.g. PERSON_0553 is flagged as non-criminal high degree).
-- Evidence-source diversity scoring (CDR, financial, location, vehicle, surveillance, intelligence, relationships).
-- Explainable outputs with supporting paths and narrative for investigators.
-- Comprehensive post-prediction evaluation against ground truth (Precision, Recall, F1, FPR).
-"""
 
 from dataclasses import dataclass, field, asdict
 from enum import Enum
@@ -38,7 +12,6 @@ logger = get_logger("InfluencerDetection")
 
 
 class RoleType(str, Enum):
-    """Investigator-facing roles within criminal networks."""
     UPSTREAM_COORDINATOR = "UPSTREAM_COORDINATOR"
     BROKER = "BROKER"
     FINANCIAL_FACILITATOR = "FINANCIAL_FACILITATOR"
@@ -49,10 +22,6 @@ class RoleType(str, Enum):
 
 @dataclass
 class InfluencerResult:
-    """
-    Structured outcome of influencer and role detection for a PERSON node.
-    Contains role, confidence, features, supporting multi-hop paths, and investigator narrative.
-    """
     person_id: str
     predicted_role: str
     confidence_score: float
@@ -81,10 +50,6 @@ class InfluencerResult:
 
 
 class InfluencerDetector:
-    """
-    Detects key network influencers, brokers, financial facilitators, and upstream coordinators
-    from the multi-layer NetworkX graph.
-    """
 
     FLAGSHIP_COORDINATOR = "PERSON_1476"
     FLAGSHIP_CASE = "CASE_0001"
@@ -108,7 +73,6 @@ class InfluencerDetector:
         self._op_subgraph: Optional[nx.DiGraph] = None
 
     def _get_person_subgraph(self) -> nx.DiGraph:
-        """Constructs person-to-person directed projection for centrality calculations."""
         if self._p_subgraph is None:
             P = nx.DiGraph()
             for p in self._person_nodes:
@@ -121,7 +85,6 @@ class InfluencerDetector:
         return self._p_subgraph
 
     def _get_operational_subgraph(self) -> nx.DiGraph:
-        """Extracts directed operational and syndicate coordination edges."""
         if self._op_subgraph is None:
             Op = nx.DiGraph()
             op_edge_types = {
@@ -139,124 +102,423 @@ class InfluencerDetector:
 
     def compute_person_features(self) -> Dict[str, Dict[str, Any]]:
         """
-        Calculates topological, relational, and evidence diversity features for all PERSON nodes.
+        Compute graph features for all PERSON nodes.
+
+        Optimized version:
+        - Betweenness centrality uses sampling on large graphs.
+        - Operational paths to cases are computed using reverse BFS
+        instead of person × case nx.has_path() calls.
+        - Results are cached after the first computation.
         """
         if self._features is not None:
             return self._features
 
-        logger.info(f"Computing graph features for {len(self._person_nodes)} PERSON nodes...")
+        logger.info(
+            f"Computing graph features for {len(self._person_nodes)} PERSON nodes..."
+        )
+
         P_sub = self._get_person_subgraph()
         Op_sub = self._get_operational_subgraph()
 
-        # Structural centralities on Person-to-Person network
-        bc = nx.betweenness_centrality(P_sub, weight="weight")
+        # ============================================================
+        # 1. CENTRALITY
+        # ============================================================
+
+        person_count = len(P_sub)
+
+        # Exact betweenness on small graphs.
+        # Sampled betweenness on large graphs.
+        if person_count <= 500:
+            bc = nx.betweenness_centrality(
+                P_sub,
+                weight="weight"
+            )
+        else:
+            sample_size = min(250, person_count)
+
+            logger.info(
+                f"Using sampled betweenness centrality: "
+                f"k={sample_size}/{person_count}"
+            )
+
+            bc = nx.betweenness_centrality(
+                P_sub,
+                k=sample_size,
+                weight="weight",
+                seed=42
+            )
+
+        # Closeness is comparatively manageable for our PERSON graph.
         closeness = nx.closeness_centrality(P_sub)
 
+        # ============================================================
+        # 2. CASE NODES
+        # ============================================================
+
         case_nodes = [
-            n for n, d in self.G.nodes(data=True) if d.get("entity_type") == "CASE"
+            n
+            for n, d in self.G.nodes(data=True)
+            if d.get("entity_type") == "CASE"
         ]
+
+        # ============================================================
+        # 3. PRECOMPUTE OPERATIONAL PATHS TO CASES
+        # ============================================================
+        #
+        # OLD:
+        #
+        #   for every person:
+        #       for every case:
+        #           nx.has_path(...)
+        #           nx.shortest_path(...)
+        #
+        # That causes a huge amount of repeated graph traversal.
+        #
+        # NEW:
+        #
+        #   Reverse the operational graph.
+        #   Start BFS from every case.
+        #   A path:
+        #
+        #       PERSON -> ... -> CASE
+        #
+        #   becomes:
+        #
+        #       CASE -> ... -> PERSON
+        #
+        #   in the reversed graph.
+        #
+        # ============================================================
+
+        op_paths_by_person: Dict[str, List[Tuple[str, int, List[str]]]] = {
+            pid: []
+            for pid in self._person_nodes
+        }
+
+        if len(Op_sub) > 0 and len(case_nodes) > 0:
+
+            # Reverse graph so we can search outward from CASE nodes.
+            Op_reverse = Op_sub.reverse(copy=False)
+
+            for case_id in case_nodes:
+
+                if case_id not in Op_reverse:
+                    continue
+
+                # One BFS per CASE.
+                # This is dramatically cheaper than person × case
+                # has_path/shortest_path calls.
+                try:
+                    shortest_paths = nx.single_source_shortest_path(
+                        Op_reverse,
+                        case_id
+                    )
+                except Exception as exc:
+                    logger.warning(
+                        f"Operational BFS failed for {case_id}: {exc}"
+                    )
+                    continue
+
+                for person_id, reverse_path in shortest_paths.items():
+
+                    if person_id not in op_paths_by_person:
+                        continue
+
+                    # reverse_path:
+                    # CASE -> PERSON
+                    #
+                    # Convert back:
+                    # PERSON -> CASE
+                    forward_path = list(reversed(reverse_path))
+
+                    hops = len(forward_path) - 1
+
+                    # We only care about meaningful multi-hop chains.
+                    if hops >= 1:
+                        op_paths_by_person[person_id].append(
+                            (
+                                case_id,
+                                hops,
+                                forward_path
+                            )
+                        )
+
+            # Keep only the shortest 5 paths per person.
+            # This prevents unnecessarily large feature objects.
+            for pid in op_paths_by_person:
+                op_paths_by_person[pid].sort(key=lambda x: x[1])
+                op_paths_by_person[pid] = op_paths_by_person[pid][:5]
+
+        # ============================================================
+        # 4. COMPUTE PERSON-LEVEL FEATURES
+        # ============================================================
 
         features: Dict[str, Dict[str, Any]] = {}
 
+        person_set = set(self._person_nodes)
+
         for pid in self._person_nodes:
+
             out_e = list(self.G.out_edges(pid, data=True))
             in_e = list(self.G.in_edges(pid, data=True))
             all_e = out_e + in_e
 
+            # --------------------------------------------------------
+            # Basic degree features
+            # --------------------------------------------------------
+
             deg = len(all_e)
             in_deg = len(in_e)
             out_deg = len(out_e)
-            weighted_deg = sum(float(d.get("weight", 1.0)) for _, _, d in all_e)
 
-            # Categorize edge types
-            etypes = [d.get("edge_type", "") for _, _, d in all_e]
-            stypes = {d.get("source_type", "") for _, _, d in all_e if d.get("source_type")}
+            weighted_deg = sum(
+                float(d.get("weight", 1.0))
+                for _, _, d in all_e
+            )
 
-            call_count = sum(1 for e in etypes if "CALL" in e or "COMMUNICATED" in e)
-            tx_count = sum(1 for e in etypes if "TRANSFERRED" in e)
-            loc_count = sum(1 for e in etypes if "LOCATION" in e or "RESIDES" in e or "EVENT" in e)
-            op_in_links = sum(1 for _, _, d in in_e if d.get("edge_type") == "POTENTIAL_OPERATIONAL_LINK")
-            op_out_links = sum(1 for _, _, d in out_e if d.get("edge_type") == "POTENTIAL_OPERATIONAL_LINK")
-            op_links = op_in_links + op_out_links
+            # --------------------------------------------------------
+            # Edge/source types
+            # --------------------------------------------------------
 
-            # Connected distinct persons
-            connected_persons = set()
-            for u, v, _ in out_e:
-                if v in self._person_nodes and v != pid:
-                    connected_persons.add(v)
-            for u, v, _ in in_e:
-                if u in self._person_nodes and u != pid:
-                    connected_persons.add(u)
-
-            # Direct case appearances
-            direct_cases = [
-                v for _, v, d in out_e
-                if d.get("edge_type") == "APPEARED_IN_CASE" or v.startswith("CASE_")
+            etypes = [
+                d.get("edge_type", "")
+                for _, _, d in all_e
             ]
 
-            # Operational multi-hop reach to cases via Op_sub
-            op_paths_to_cases: List[Tuple[str, int, List[str]]] = []
-            if pid in Op_sub:
-                for c in case_nodes:
-                    if c in Op_sub and nx.has_path(Op_sub, pid, c):
-                        path = nx.shortest_path(Op_sub, pid, c)
-                        op_paths_to_cases.append((c, len(path) - 1, path))
+            stypes = {
+                d.get("source_type", "")
+                for _, _, d in all_e
+                if d.get("source_type")
+            }
 
-            # General multi-hop reach to cases via full graph (if no op_sub path)
-            general_paths_to_cases: List[Tuple[str, int, List[str]]] = []
+            # --------------------------------------------------------
+            # Communication / financial / location signals
+            # --------------------------------------------------------
+
+            call_count = sum(
+                1
+                for e in etypes
+                if "CALL" in e or "COMMUNICATED" in e
+            )
+
+            tx_count = sum(
+                1
+                for e in etypes
+                if "TRANSFERRED" in e
+            )
+
+            loc_count = sum(
+                1
+                for e in etypes
+                if (
+                    "LOCATION" in e
+                    or "RESIDES" in e
+                    or "EVENT" in e
+                )
+            )
+
+            # --------------------------------------------------------
+            # Operational links
+            # --------------------------------------------------------
+
+            op_in_links = sum(
+                1
+                for _, _, d in in_e
+                if d.get("edge_type") == "POTENTIAL_OPERATIONAL_LINK"
+            )
+
+            op_out_links = sum(
+                1
+                for _, _, d in out_e
+                if d.get("edge_type") == "POTENTIAL_OPERATIONAL_LINK"
+            )
+
+            op_links = op_in_links + op_out_links
+
+            # --------------------------------------------------------
+            # Connected persons
+            # --------------------------------------------------------
+
+            connected_persons = set()
+
+            for u, v, _ in out_e:
+                if v in person_set and v != pid:
+                    connected_persons.add(v)
+
+            for u, v, _ in in_e:
+                if u in person_set and u != pid:
+                    connected_persons.add(u)
+
+            # --------------------------------------------------------
+            # Direct case appearances
+            # --------------------------------------------------------
+
+            direct_cases = [
+                v
+                for _, v, d in out_e
+                if (
+                    d.get("edge_type") == "APPEARED_IN_CASE"
+                    or str(v).startswith("CASE_")
+                )
+            ]
+
+            # Also check incoming case edges.
+            for u, v, d in in_e:
+                if (
+                    d.get("edge_type") == "APPEARED_IN_CASE"
+                    and str(u).startswith("CASE_")
+                ):
+                    if u not in direct_cases:
+                        direct_cases.append(u)
+
+            # --------------------------------------------------------
+            # Operational multi-hop paths
+            # --------------------------------------------------------
+
+            op_paths_to_cases = op_paths_by_person.get(pid, [])
+
+            # --------------------------------------------------------
+            # General graph fallback
+            #
+            # Only perform this if there is NO operational path.
+            # This keeps the expensive search away from the normal path.
+            # --------------------------------------------------------
+
+            general_paths_to_cases: List[
+                Tuple[str, int, List[str]]
+            ] = []
+
             if not op_paths_to_cases:
-                for c in case_nodes[:30]:  # sample check
-                    if nx.has_path(self.G, pid, c):
-                        path = nx.shortest_path(self.G, pid, c)
-                        if len(path) <= 6:
-                            general_paths_to_cases.append((c, len(path) - 1, path))
 
-            # Evidence source diversity mapping
+                # Limit search to a small number of cases.
+                # Operational paths are preferred whenever available.
+                for case_id in case_nodes[:30]:
+
+                    try:
+                        path = nx.shortest_path(
+                            self.G,
+                            pid,
+                            case_id
+                        )
+                    except nx.NetworkXNoPath:
+                        continue
+                    except Exception:
+                        continue
+
+                    if len(path) <= 6:
+                        general_paths_to_cases.append(
+                            (
+                                case_id,
+                                len(path) - 1,
+                                path
+                            )
+                        )
+
+                general_paths_to_cases.sort(
+                    key=lambda x: x[1]
+                )
+
+            # --------------------------------------------------------
+            # Evidence source diversity
+            # --------------------------------------------------------
+
             evidence_categories = set()
-            for s in stypes:
+
+            for source_type in stypes:
+
+                s = str(source_type).upper()
+
                 if "CDR" in s:
                     evidence_categories.add("CDR")
+
                 elif "FINANCIAL" in s or "BANK" in s:
                     evidence_categories.add("financial")
+
                 elif "LOCATION" in s or "CIVIL" in s:
                     evidence_categories.add("location")
+
                 elif "VEHICLE" in s:
                     evidence_categories.add("vehicle")
+
                 elif "SURVEILLANCE" in s:
                     evidence_categories.add("surveillance")
+
                 elif "INTEL" in s:
                     evidence_categories.add("intelligence")
+
                 elif "RELATIONSHIP" in s:
                     evidence_categories.add("relationships")
+
                 elif "FIR" in s:
                     evidence_categories.add("legal_fir")
+
                 elif "EVIDENCE" in s:
                     evidence_categories.add("forensic_evidence")
+
+            # --------------------------------------------------------
+            # Store features
+            # --------------------------------------------------------
 
             features[pid] = {
                 "degree": deg,
                 "weighted_degree": round(weighted_deg, 2),
+
                 "in_degree": in_deg,
                 "out_degree": out_deg,
-                "betweenness_centrality": round(bc.get(pid, 0.0), 5),
-                "closeness_centrality": round(closeness.get(pid, 0.0), 5),
-                "connected_persons_count": len(connected_persons),
+
+                "betweenness_centrality": round(
+                    bc.get(pid, 0.0),
+                    5
+                ),
+
+                "closeness_centrality": round(
+                    closeness.get(pid, 0.0),
+                    5
+                ),
+
+                "connected_persons_count": len(
+                    connected_persons
+                ),
+
                 "communication_links_count": call_count,
                 "financial_links_count": tx_count,
                 "location_links_count": loc_count,
+
                 "operational_links_count": op_links,
                 "op_in_links": op_in_links,
                 "op_out_links": op_out_links,
-                "direct_case_count": len(direct_cases),
+
+                "direct_case_count": len(
+                    direct_cases
+                ),
+
                 "direct_cases": direct_cases,
-                "operational_paths_to_cases": sorted(op_paths_to_cases, key=lambda x: x[1]),
-                "general_paths_to_cases": sorted(general_paths_to_cases, key=lambda x: x[1]),
-                "evidence_sources": sorted(list(evidence_categories)),
-                "evidence_source_diversity": len(evidence_categories),
+
+                "operational_paths_to_cases": sorted(
+                    op_paths_to_cases,
+                    key=lambda x: x[1]
+                ),
+
+                "general_paths_to_cases": sorted(
+                    general_paths_to_cases,
+                    key=lambda x: x[1]
+                ),
+
+                "evidence_sources": sorted(
+                    list(evidence_categories)
+                ),
+
+                "evidence_source_diversity": len(
+                    evidence_categories
+                ),
             }
 
         self._features = features
-        logger.info("Graph feature computation complete.")
+
+        logger.info(
+            "Graph feature computation complete."
+        )
+
         return features
 
     def detect_influencers(self) -> List[InfluencerResult]:
