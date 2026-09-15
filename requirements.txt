@@ -9,3 +9,4 @@ pydantic>=2.6.0
 pytest>=8.0.0
 rich>=13.7.0
 python-dateutil>=2.8.2
+neo4j>=5.18.0

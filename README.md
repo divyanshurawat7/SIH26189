@@ -129,6 +129,26 @@ summary = EntityResolver.get_summary(results)
 print("Resolution summary:", summary)
 ```
 
+### Running Graph Construction in Python
+```python
+from src.data_loader import DataLoader
+from src.graph_builder import GraphBuilder, GraphStatisticsReporter
+from src.neo4j_loader import Neo4jLoader
+
+loader = DataLoader()
+dataset = loader.load_all(validate=False)
+
+builder = GraphBuilder()
+G = builder.build_graph(dataset)
+
+stats = GraphStatisticsReporter.generate_statistics(G)
+print(f"Graph nodes: {stats.total_nodes}, edges: {stats.total_edges}")
+print(f"Flagship directed path: {' -> '.join(stats.flagship_shortest_path)}")
+
+# Export Cypher script for offline Neo4j loading
+Neo4jLoader.export_cypher_script(G, output_file="export_sih26189_graph.cypher")
+```
+
 ### Running Automated Tests
 ```bash
 python -m unittest discover tests/ -v
@@ -139,8 +159,8 @@ python -m unittest discover tests/ -v
 ## 5. Phase Summary & Status
 
 - [x] **Phase 1: Data Ingestion & Schema Integrity**: Complete (20 raw tables loaded, FK validated, 6/6 tests passing).
-- [x] **Phase 2: Person Entity Resolution**: Complete (Explainable multi-attribute matching, candidate blocking, 0 false merges on 65 traps, 31/31 tests passing).
-- [ ] **Phase 3: Graph Construction & Network Topology**: Pending.
+- [x] **Phase 2: Person Entity Resolution**: Complete (Explainable multi-attribute matching, candidate blocking, 0 false merges on 65 traps, 25/25 tests passing).
+- [x] **Phase 3: Graph Construction & Neo4j Integration**: Complete (NetworkX MultiDiGraph with 12 entity types, full source traceability, 0 coordinator direct edges, Cypher exporter, offline fallback, 15/15 tests passing — **46/46 total passing**).
 - [ ] **Phase 4: Upstream Coordinator Discovery & Multi-Hop Traversal**: Pending.
 - [ ] **Phase 5: Investigator Interface & Case Dossier Generation**: Pending.
 
