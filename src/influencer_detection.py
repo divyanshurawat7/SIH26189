@@ -279,98 +279,287 @@ class InfluencerDetector:
             call_count = feat["communication_links_count"]
             sources = feat["evidence_sources"]
             div = feat["evidence_source_diversity"]
+            # Operational path information
+            has_op_reach = len(op_paths) > 0
+            min_op_hops = (
+                op_paths[0][1]
+                if has_op_reach
+                else 999
+            )
+            accused_in_fir = any(
+                d.get("edge_type") == "ACCUSED_IN"
+                for _, _, d in self.G.out_edges(pid, data=True)
+            )
 
+            complainant_in_fir = any(
+                d.get("edge_type") == "COMPLAINANT_IN"
+                for _, _, d in self.G.out_edges(pid, data=True)
+            )
+
+            witness_in_fir = any(
+                d.get("edge_type") == "WITNESS_IN"
+                for _, _, d in self.G.out_edges(pid, data=True)
+            )
+
+            has_operational_signal = (
+                op_links > 0 or has_op_reach
+            )
+
+            has_strong_operational_signal = (
+                accused_in_fir
+                or (
+                    has_op_reach
+                    and len(direct_cases) > 0
+                )
+            )
+
+            has_financial_network_signal = (
+                tx_count >= 3
+                and (tx_count / max(deg, 1)) >= 0.15
+                and (
+                    len(direct_cases) > 0
+                    or has_op_reach
+                )
+            )
+
+            has_supported_case_involvement = (
+                len(direct_cases) > 0
+                and (
+                    accused_in_fir
+                    or (
+                        op_links >= 2
+                        and has_op_reach
+                    )
+                )
+            )
             has_op_reach = len(op_paths) > 0
             min_op_hops = op_paths[0][1] if has_op_reach else 999
             reachable_cases = [c for c, _, _ in op_paths] if has_op_reach else direct_cases
 
-            # Role Decision Logic:
-            # -------------------------------------------------------------
-            # 1. UPSTREAM_COORDINATOR:
-            # - Origin of operational directives: op_in_links == 0 and op_out_links >= 1
-            # - Multi-hop operational chain (hops >= 2) to crime/case node
-            # - Zero direct case appearance (isolated from direct event)
-            # - Meaningful operational connections
-            if op_in_links == 0 and op_out_links >= 1 and has_op_reach and min_op_hops >= 2 and len(direct_cases) == 0:
+            if (
+                op_in_links == 0
+                and op_out_links >= 1
+                and has_op_reach
+                and min_op_hops >= 2
+                and len(direct_cases) == 0
+            ):
                 role = RoleType.UPSTREAM_COORDINATOR.value
-                confidence = min(0.98, 0.70 + (0.05 * div) + (0.1 * min(bc_val * 10, 1.0)))
+
+                confidence = min(
+                    0.98,
+                    0.70
+                    + (0.05 * div)
+                    + (0.10 * min(bc_val * 10, 1.0))
+                )
+
                 is_crim = True
+
                 paths = [p for _, _, p in op_paths[:3]]
+
                 explanation = (
-                    f"Identified as UPSTREAM_COORDINATOR: Orchestrates case(s) ({', '.join(reachable_cases[:2])}) "
-                    f"via a {min_op_hops}-hop directed operational chain without directly appearing in the crime. "
-                    f"Exhibits root initiator status (op_in=0, op_out={op_out_links}), betweenness centrality of {bc_val:.4f}, "
-                    f"and multi-source evidence across {div} categories ({', '.join(sources)})."
+                    f"Identified as UPSTREAM_COORDINATOR: "
+                    f"origin of an operational chain reaching "
+                    f"{', '.join(reachable_cases[:2])}. "
+                    f"The subject has {op_out_links} outgoing operational links, "
+                    f"zero incoming operational links, and a "
+                    f"{min_op_hops}-hop path to a case without direct case appearance."
                 )
 
-            # 2. OPERATIONAL_MEMBER:
-            # - Directly appears in case or FIR (direct_cases > 0)
-            # - Or operational executor / recruiter cell in immediate contact with field agents
-            elif len(direct_cases) > 0 or (op_links >= 2 and bc_val < 0.015):
+
+            # 2. OPERATIONAL_MEMBER
+            #
+            # IMPORTANT:
+            # Direct case appearance alone is NOT enough.
+            #
+            # Need either:
+            # - accused in FIR
+            # - OR operational link/path
+            #
+            elif (
+                accused_in_fir
+                or has_supported_case_involvement
+                or (
+                    op_links >= 2
+                    and has_op_reach
+                    and len(direct_cases) > 0
+                    and bc_val < 0.015
+                )
+            ):
                 role = RoleType.OPERATIONAL_MEMBER.value
-                confidence = min(0.95, 0.75 + (0.05 * min(deg // 5, 4)))
-                is_crim = True
-                paths = [[pid, c] for c in direct_cases] if direct_cases else ([p for _, _, p in op_paths[:2]] if has_op_reach else [])
-                explanation = (
-                    f"Identified as OPERATIONAL_MEMBER: Active field/operational participant in criminal network. "
-                    f"Direct case links: {direct_cases if direct_cases else 'Field execution operative'}. Node degree={deg}."
+
+                confidence = min(
+                    0.95,
+                    0.72
+                    + (0.05 * min(deg // 5, 4))
                 )
 
-            # 3. BROKER:
-            # - Intermediary bridging upstream planners to execution cells:
-            #   high betweenness centrality (bc >= 0.015) with operational links,
-            #   or bridging multiple operational branches (op_links >= 2 and bc >= 0.015)
-            elif (op_links >= 2 and bc_val >= 0.015) or (bc_val >= 0.015 and op_links >= 1):
+                is_crim = True
+
+                paths = (
+                    [[pid, c] for c in direct_cases]
+                    if direct_cases
+                    else [p for _, _, p in op_paths[:2]]
+                )
+
+                if accused_in_fir:
+                    case_basis = "direct FIR accused association"
+                elif has_supported_case_involvement:
+                    case_basis = "case involvement supported by operational links"
+                else:
+                    case_basis = "multiple operational links and an operational case path"
+
+                explanation = (
+                    f"Identified as OPERATIONAL_MEMBER based on {case_basis}. "
+                    f"Communication volume alone was not used as the criminal basis."
+                )
+
+
+            # 3. BROKER
+            #
+            # Broker requires actual operational bridging.
+            # Betweenness alone is NOT enough.
+            #
+            elif (
+                bc_val >= 0.015
+                and op_links >= 1
+            ):
                 role = RoleType.BROKER.value
-                confidence = min(0.95, 0.70 + (0.15 * min(bc_val * 10, 1.0)) + (0.05 * op_links))
-                is_crim = True
-                paths = [p for _, _, p in op_paths[:3]] if has_op_reach else []
-                explanation = (
-                    f"Identified as BROKER: Key structural bridge connecting operational clusters with betweenness "
-                    f"centrality {bc_val:.4f} and {op_links} operational coordination links (in={op_in_links}, out={op_out_links})."
+
+                confidence = min(
+                    0.95,
+                    0.70
+                    + (0.15 * min(bc_val * 10, 1.0))
+                    + (0.05 * min(op_links, 4))
                 )
 
-            # 4. FINANCIAL_FACILITATOR:
-            # - High financial transfer volume and ratio without operational command links
-            elif tx_count >= 3 and (tx_count / max(deg, 1)) >= 0.15 and op_links == 0:
+                is_crim = True
+
+                paths = (
+                    [p for _, _, p in op_paths[:3]]
+                    if has_op_reach
+                    else []
+                )
+
+                explanation = (
+                    f"Identified as BROKER because the subject has "
+                    f"betweenness centrality {bc_val:.4f} and "
+                    f"{op_links} operational coordination links. "
+                    f"The criminal significance is based on operational "
+                    f"network bridging rather than communication volume."
+                )
+
+
+            # 4. FINANCIAL_FACILITATOR
+            #
+            # Financial activity alone is NOT automatically criminal.
+            # Require:
+            # - repeated financial activity
+            # - meaningful financial ratio
+            # - connection to a case/network
+            #
+            elif (
+                tx_count >= 3
+                and (tx_count / max(deg, 1)) >= 0.15
+                and op_links == 0
+                and has_financial_network_signal
+                and (
+                    len(direct_cases) > 0
+                    or has_op_reach
+                )
+            ):
                 role = RoleType.FINANCIAL_FACILITATOR.value
-                confidence = min(0.92, 0.65 + (0.05 * min(tx_count, 5)))
+
+                confidence = min(
+                    0.92,
+                    0.65 + (0.05 * min(tx_count, 5))
+                )
+
                 is_crim = True
+
                 paths = []
+
                 explanation = (
-                    f"Identified as FINANCIAL_FACILITATOR: High financial volume with {tx_count} fund transfer links "
-                    f"({(tx_count/deg)*100:.1f}% of total interactions) routing money across network accounts without direct operational field links."
+                    f"Identified as FINANCIAL_FACILITATOR due to "
+                    f"{tx_count} financial links representing "
+                    f"{(tx_count / max(deg, 1)) * 100:.1f}% of interactions, "
+                    f"combined with a multi-hop connection to case activity. "
+                    f"Financial activity was not treated as criminal in isolation."
                 )
 
-            # 5. HIGH_DEGREE (Innocent high-degree trap differentiation):
-            # - High call/telecom volume (deg >= 12 or call_count >= 5), BUT:
-            #   * Zero operational links (op_links == 0)
-            #   * Low betweenness centrality (bc < 0.005)
-            #   * No multi-hop operational chain to cases
-            # - Correctly marked as NON-CRIMINAL / INNOCENT CONTACT
-            elif (deg >= 12 or call_count >= 5) and op_links == 0 and not has_op_reach and bc_val < 0.005:
+
+            # 5. HIGH_DEGREE / ROUTINE CONTACT
+            #
+            # Communication-heavy people without criminal operational
+            # indicators are explicitly treated as non-criminal.
+            #
+            elif (
+                (deg >= 12 or call_count >= 5)
+                and op_links == 0
+                and not has_op_reach
+                and not accused_in_fir
+                and not has_financial_network_signal
+                and bc_val < 0.005
+            ):
                 role = RoleType.HIGH_DEGREE.value
+
                 confidence = 0.85
+
                 is_crim = False
+
                 paths = []
+
                 explanation = (
-                    f"Identified as HIGH_DEGREE (Innocent contact): High communication volume ({call_count} calls, "
-                    f"degree={deg}) but lacks criminal operational links, exhibits near-zero betweenness ({bc_val:.5f}), "
-                    f"and has zero multi-hop operational paths to crime cases. Classified as non-criminal high-degree contact."
+                    f"Identified as HIGH_DEGREE routine contact: "
+                    f"{call_count} communication links and degree={deg}, "
+                    f"but no operational links, no operational case path, "
+                    f"no FIR accused association, and no qualifying financial "
+                    f"network signal. Classified as non-criminally significant."
                 )
 
-            # 6. PERIPHERAL_ASSOCIATE:
-            # - Outer associate connected to network members
+
+            # 6. PERIPHERAL_ASSOCIATE
+            #
+            # Peripheral contacts are NOT automatically criminal.
+            # Only operationally connected peripheral actors are significant.
+            #
             else:
                 role = RoleType.PERIPHERAL_ASSOCIATE.value
+
                 confidence = 0.70
-                is_crim = True if (op_links > 0 or has_op_reach) else False
-                paths = [p for _, _, p in op_paths[:2]] if has_op_reach else []
-                explanation = (
-                    f"Identified as PERIPHERAL_ASSOCIATE: Outer contact with degree={deg}, betweenness={bc_val:.5f}, "
-                    f"participating in routine calls/transfers on the periphery."
+
+                is_crim = bool(
+                    accused_in_fir
+                    or (
+                        has_op_reach
+                        and len(direct_cases) > 0
+                    )
+                    or (
+                        op_links >= 2
+                        and has_op_reach
+                        and len(direct_cases) > 0
+                    )
                 )
 
+                paths = (
+                    [p for _, _, p in op_paths[:2]]
+                    if has_op_reach
+                    else []
+                )
+
+                if is_crim:
+                    explanation = (
+                        f"Identified as PERIPHERAL_ASSOCIATE with "
+                        f"supporting operational involvement "
+                        f"(operational links={op_links})."
+                    )
+                else:
+                    explanation = (
+                        f"Identified as PERIPHERAL_ASSOCIATE: "
+                        f"degree={deg}, betweenness={bc_val:.5f}. "
+                        f"No sufficiently strong criminal operational signal "
+                        f"was identified. Routine communication/contact was "
+                        f"not treated as criminal evidence."
+                    )
             res = InfluencerResult(
                 person_id=pid,
                 predicted_role=role,
