@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Network,
-  ArrowRight,
   ShieldAlert,
   ShieldCheck,
-  Search,
-  Briefcase,
-  AlertCircle
+  Search
 } from 'lucide-react';
 import { apiClient } from '../api/client';
 import type { CrossCaseResponse } from '../api/types';
 
 interface CrossCaseViewProps {
-  onNavigate: (type: 'person' | 'case', id: string) => void;
+  onNavigate: (type: string, id?: string) => void;
 }
 
 export const CrossCaseView: React.FC<CrossCaseViewProps> = ({ onNavigate }) => {
@@ -22,10 +18,10 @@ export const CrossCaseView: React.FC<CrossCaseViewProps> = ({ onNavigate }) => {
   const [error, setError] = useState<string | null>(null);
 
   const sampleTargets = [
-    { id: 'NET_001', type: 'SYNDICATE', label: 'Syndicate Network 001 (Verified)' },
-    { id: 'NET_002', type: 'SYNDICATE', label: 'Syndicate Network 002 (Verified)' },
-    { id: 'LOCATION_0011', type: 'LOCATION', label: 'Delhi Location 0011 (Incidental Overlap)' },
-    { id: 'PERSON_0553', type: 'CIVILIAN', label: 'Civilian Control (Non-Criminal)' }
+    { id: 'NET_001', type: 'SYNDICATE', label: 'NET_001 (Verified Syndicate)' },
+    { id: 'NET_002', type: 'SYNDICATE', label: 'NET_002 (Verified Syndicate)' },
+    { id: 'LOCATION_0011', type: 'LOCATION', label: 'LOCATION_0011 (Civilian Overlap)' },
+    { id: 'PERSON_0553', type: 'CIVILIAN', label: 'PERSON_0553 (Civilian Control)' }
   ];
 
   const fetchCrossCase = (entityId: string) => {
@@ -59,195 +55,134 @@ export const CrossCaseView: React.FC<CrossCaseViewProps> = ({ onNavigate }) => {
 
   return (
     <div className="page-container">
-      {/* Header */}
-      <div style={{ marginBottom: '24px' }}>
-        <h1 className="page-title">
-          <Network size={24} color="#A855F7" />
-          Multi-Jurisdictional Cross-Case Linkage Analysis
+      {/* Top Header */}
+      <div style={{ marginBottom: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+          <span className="stamp stamp-accent">MULTI-JURISDICTIONAL LINKAGE</span>
+          <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
+            INTER-CASE INTELLIGENCE OVERLAP
+          </span>
+        </div>
+        <h1 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>
+          Cross-Case Syndicate Coordination vs. Incidental Overlap
         </h1>
-        <p className="page-subtitle">
-          Distinguishing coordinated syndicate recurrence from routine civilian witness & geographic overlaps
-        </p>
       </div>
 
-      {/* Entity Query Bar */}
-      <form onSubmit={handleSearchSubmit} className="card" style={{ marginBottom: '24px', padding: '18px 24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
-          <div style={{ flex: '1 1 320px', display: 'flex', alignItems: 'center', background: 'var(--bg-input)', borderRadius: 'var(--radius-md)', padding: '8px 14px', border: '1px solid var(--border-subtle)' }}>
-            <Search size={16} color="var(--text-muted)" style={{ marginRight: '8px' }} />
-            <input
-              type="text"
-              placeholder="Enter Entity ID (e.g. NET_001, ORG_0001, LOCATION_0011)..."
-              value={searchEntity}
-              onChange={(e) => setSearchEntity(e.target.value)}
-              style={{
-                background: 'transparent',
-                border: 'none',
-                outline: 'none',
-                color: 'var(--text-primary)',
-                fontSize: '0.9rem',
-                width: '100%'
-              }}
-            />
-          </div>
-
-          <button type="submit" className="btn btn-primary">
-            Analyze Cross-Case Links
-          </button>
-        </div>
-
-        {/* Quick presets */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
-          <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Quick Presets:</span>
-          {sampleTargets.map((t) => (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => {
-                setSearchEntity(t.id);
-                fetchCrossCase(t.id);
-              }}
-              style={{
-                fontSize: '0.75rem',
-                padding: '3px 8px',
-                borderRadius: 'var(--radius-sm)',
-                background: searchEntity === t.id ? 'rgba(168,85,247,0.2)' : 'rgba(255,255,255,0.03)',
-                border: `1px solid ${searchEntity === t.id ? '#A855F7' : 'var(--border-subtle)'}`,
-                color: searchEntity === t.id ? '#E9D5FF' : 'var(--text-secondary)',
-                cursor: 'pointer'
-              }}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-      </form>
-
-      {/* Result Display */}
-      {loading ? (
-        <div className="state-container" style={{ height: '40vh' }}>
-          <div className="spinner" />
-          <div style={{ color: 'var(--text-muted)' }}>Evaluating Cross-Case Forensics for {searchEntity}...</div>
-        </div>
-      ) : error ? (
-        <div className="card" style={{ padding: '36px', textAlign: 'center' }}>
-          <AlertCircle size={28} color="#F59E0B" style={{ margin: '0 auto 12px auto' }} />
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '4px' }}>
-            No Multi-Case Criminal Connection Found
-          </h3>
-          <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', maxWidth: '520px', margin: '0 auto' }}>
-            {error}. Entity does not satisfy multi-hop operational coordination or recurrence thresholds.
-          </p>
-        </div>
-      ) : data ? (
-        <div className="card" style={{
-          borderLeft: `5px solid ${isCriminalLink ? '#A855F7' : '#14B8A6'}`
-        }}>
-          {/* Status Header */}
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <span style={{ fontFamily: 'JetBrains Mono', fontSize: '1.3rem', fontWeight: 700, color: 'var(--text-primary)' }}>
-                {data.entity}
-              </span>
-
-              <span className={`badge ${isCriminalLink ? 'badge-coordinator' : 'badge-innocent'}`}>
-                {isCriminalLink ? (
-                  <>
-                    <ShieldAlert size={12} />
-                    Strong Criminal Syndicate Recurrence
-                  </>
-                ) : (
-                  <>
-                    <ShieldCheck size={12} />
-                    Incidental Civilian / Geographic Overlap
-                  </>
-                )}
-              </span>
+      {/* Target Search & Preset Row */}
+      <div className="panel" style={{ marginBottom: '16px' }}>
+        <div className="panel-body" style={{ padding: '12px 16px' }}>
+          <form onSubmit={handleSearchSubmit} style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ flex: 1, minWidth: '240px', position: 'relative' }}>
+              <input
+                type="text"
+                placeholder="Enter Target ID (e.g. NET_001, LOCATION_0011, PERSON_0553)..."
+                value={searchEntity}
+                onChange={(e) => setSearchEntity(e.target.value)}
+                className="input-terminal"
+                style={{ paddingLeft: '28px' }}
+              />
+              <Search size={12} color="var(--text-muted)" style={{ position: 'absolute', left: '10px', top: '9px' }} />
             </div>
 
-            <span className="badge badge-info">
-              {data.connected_cases.length} Connected Cases
+            <button type="submit" className="btn btn-sm btn-primary">
+              Run Linkage Audit
+            </button>
+          </form>
+
+          {/* Quick Targets */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '10px', flexWrap: 'wrap' }}>
+            <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase' }}>Quick Presets:</span>
+            {sampleTargets.map((target) => (
+              <button
+                key={target.id}
+                onClick={() => {
+                  setSearchEntity(target.id);
+                  fetchCrossCase(target.id);
+                }}
+                className={`btn btn-sm ${searchEntity === target.id ? 'btn-primary' : ''}`}
+                style={{ fontSize: '10px', padding: '2px 8px' }}
+              >
+                {target.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {loading && (
+        <div style={{ textAlign: 'center', padding: '40px 0' }}>
+          <div className="spinner" style={{ margin: '0 auto 12px' }} />
+          <div style={{ color: 'var(--text-secondary)', fontSize: '11px', fontFamily: 'var(--font-mono)' }}>
+            ANALYZING MULTI-JURISDICTIONAL COORDINATION GRAPH...
+          </div>
+        </div>
+      )}
+
+      {error && !loading && (
+        <div className="panel" style={{ borderColor: 'var(--border-subtle)' }}>
+          <div className="panel-body" style={{ color: 'var(--text-secondary)', fontSize: '12px' }}>
+            {error}
+          </div>
+        </div>
+      )}
+
+      {data && !loading && (
+        <div className="panel" style={{ borderLeft: `3px solid ${isCriminalLink ? 'var(--alert-red)' : 'var(--safe-green)'}` }}>
+          <div className="panel-header">
+            <div className="panel-title">
+              {isCriminalLink ? (
+                <ShieldAlert size={14} color="var(--alert-red-bright)" />
+              ) : (
+                <ShieldCheck size={14} color="var(--safe-green)" />
+              )}
+              <span>LINKAGE VERDICT: {isCriminalLink ? 'VERIFIED CRIMINAL COORDINATION' : 'INCIDENTAL CIVILIAN OVERLAP'}</span>
+            </div>
+            <span className={`stamp ${isCriminalLink ? 'stamp-alert' : 'stamp-safe'}`}>
+              {isCriminalLink ? 'ORGANIZED CRIME' : 'SUPPRESSED BENIGN'}
             </span>
           </div>
 
-          {/* Explanation Banner */}
-          <div style={{
-            background: isCriminalLink ? 'rgba(168,85,247,0.08)' : 'rgba(20,184,166,0.08)',
-            border: `1px solid ${isCriminalLink ? 'rgba(168,85,247,0.3)' : 'rgba(20,184,166,0.3)'}`,
-            borderRadius: 'var(--radius-md)',
-            padding: '16px',
-            fontSize: '0.9rem',
-            color: 'var(--text-primary)',
-            lineHeight: 1.5,
-            marginBottom: '24px'
-          }}>
-            <strong>Forensic Evaluation: </strong>
-            {data.explanation}
-          </div>
-
-          {/* Connected Cases Tree */}
-          <h3 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-primary)', marginBottom: '14px' }}>
-            Linked Criminal Cases
-          </h3>
-
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px', marginBottom: '24px' }}>
-            {data.connected_cases.map((caseId) => (
-              <div
-                key={caseId}
-                onClick={() => onNavigate('case', caseId)}
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid var(--border-subtle)',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '12px 16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  cursor: 'pointer',
-                  transition: 'border-color 0.15s, background 0.15s'
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.borderColor = '#EF4444')}
-                onMouseLeave={(e) => (e.currentTarget.style.borderColor = 'var(--border-subtle)')}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Briefcase size={15} color="#F87171" />
-                  <span style={{ fontFamily: 'JetBrains Mono', fontWeight: 600, color: 'var(--text-primary)' }}>
-                    {caseId}
-                  </span>
+          <div className="panel-body">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+              <div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '2px' }}>
+                  Target Identifier
                 </div>
-                <ArrowRight size={14} color="var(--text-muted)" />
+                <div className="data-id" style={{ fontSize: '15px', fontWeight: 700 }}>
+                  {data.entity}
+                </div>
               </div>
-            ))}
-          </div>
 
-          {/* Supporting Evidence IDs */}
-          {data.supporting_evidence && data.supporting_evidence.length > 0 && (
-            <div>
-              <h4 style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '8px' }}>
-                Supporting Corroboration Records
-              </h4>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                {data.supporting_evidence.map((rid) => (
-                  <span
-                    key={rid}
-                    style={{
-                      fontFamily: 'JetBrains Mono',
-                      fontSize: '0.75rem',
-                      padding: '3px 8px',
-                      borderRadius: 'var(--radius-sm)',
-                      background: 'rgba(255,255,255,0.05)',
-                      color: '#60A5FA',
-                      border: '1px solid var(--border-subtle)'
-                    }}
-                  >
-                    {rid}
-                  </span>
-                ))}
+              <div>
+                <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '2px' }}>
+                  Linked Investigation Dockets
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                  {data.connected_cases.map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => onNavigate('case', c)}
+                      className="btn btn-sm"
+                      style={{ padding: '2px 6px', fontSize: '10px' }}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-          )}
+
+            <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '12px' }}>
+              <div style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>
+                Forensic Reasoning & Suppression Safeguard
+              </div>
+              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', lineHeight: 1.6 }}>
+                {data.explanation}
+              </p>
+            </div>
+          </div>
         </div>
-      ) : null}
+      )}
     </div>
   );
 };

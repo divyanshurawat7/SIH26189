@@ -1,13 +1,14 @@
 import React from 'react';
 import {
-  LayoutDashboard,
-  Sparkles,
-  Users,
-  Briefcase,
-  AlertTriangle,
-  Network,
+  FolderKanban,
+  GitFork,
+  UserCheck,
+  FileSpreadsheet,
+  Clock,
+  Printer,
+  Share2,
   ShieldCheck,
-  Info
+  AlertCircle
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -23,91 +24,95 @@ export const Sidebar: React.FC<SidebarProps> = ({
   selectedCaseId,
   onSelectTab
 }) => {
-  const mainNavItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  const operationalModes = [
     {
-      id: 'persons',
-      label: selectedPersonId ? `Person (${selectedPersonId})` : 'Persons & Influencers',
-      icon: Users,
-      badge: selectedPersonId ? 'ACTIVE' : undefined
+      id: 'dashboard',
+      label: 'Case Directory & Overview',
+      icon: FolderKanban,
+      description: 'Active case dockets & telemetry'
     },
     {
-      id: 'cases',
-      label: selectedCaseId ? `Case (${selectedCaseId})` : 'Case Investigations',
-      icon: Briefcase,
-      badge: selectedCaseId ? 'ACTIVE' : undefined
+      id: 'graph',
+      label: 'Network Graph & Topology',
+      icon: GitFork,
+      description: 'Multi-hop path tracing canvas'
     },
-    { id: 'findings', label: 'Behavioral Findings', icon: AlertTriangle },
-    { id: 'cross-case', label: 'Cross-Case Linkages', icon: Network },
+    {
+      id: 'person',
+      label: selectedPersonId ? `Entity: ${selectedPersonId}` : 'Entity Profile & Dossier',
+      icon: UserCheck,
+      description: 'Suspect records & ML inference',
+      activeId: selectedPersonId
+    },
+    {
+      id: 'case',
+      label: selectedCaseId ? `Docket: ${selectedCaseId}` : 'Case Investigation Docket',
+      icon: FileSpreadsheet,
+      description: 'FIR, evidence matrix & chain',
+      activeId: selectedCaseId
+    },
+    {
+      id: 'timeline',
+      label: 'Timeline & Pattern Detection',
+      icon: Clock,
+      description: 'Chronological sequence & anomalies'
+    },
+    {
+      id: 'dossier',
+      label: 'Case Dossier Export',
+      icon: Printer,
+      description: 'Official printable police report'
+    },
+    {
+      id: 'cross-case',
+      label: 'Cross-Case Syndicate Linkage',
+      icon: Share2,
+      description: 'Multi-jurisdiction overlap audit'
+    }
   ];
 
   return (
-    <aside style={{
-      width: '240px',
-      background: 'var(--bg-sidebar)',
-      borderRight: '1px solid var(--border-subtle)',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      flexShrink: 0,
-      height: '100vh',
-      position: 'sticky',
-      top: 0
-    }}>
-      {/* Navigation Links */}
-      <div style={{ padding: '20px 12px', overflowY: 'auto' }}>
-        <div style={{
-          fontSize: '0.7rem',
-          fontWeight: 600,
-          letterSpacing: '0.05em',
-          color: 'var(--text-muted)',
-          textTransform: 'uppercase',
-          padding: '0 12px 10px 12px'
-        }}>
-          Command Center
+    <aside className="workstation-sidebar">
+      {/* Top Workspace Modes */}
+      <div style={{ flex: 1, overflowY: 'auto' }}>
+        <div className="sidebar-section-title">
+          Operational Workspaces
         </div>
 
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          {mainNavItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentTab === item.id || (currentTab === 'person' && item.id === 'persons') || (currentTab === 'case' && item.id === 'cases');
+        <nav role="navigation" aria-label="Workstation modes">
+          {operationalModes.map((mode) => {
+            const Icon = mode.icon;
+            const isActive =
+              currentTab === mode.id ||
+              (mode.id === 'person' && (currentTab === 'person' || currentTab === 'persons')) ||
+              (mode.id === 'case' && (currentTab === 'case' || currentTab === 'cases')) ||
+              (mode.id === 'timeline' && currentTab === 'findings') ||
+              (mode.id === 'graph' && currentTab === 'flagship');
+
             return (
               <button
-                key={item.id}
-                onClick={() => onSelectTab(item.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                  padding: '10px 12px',
-                  borderRadius: 'var(--radius-md)',
-                  background: isActive ? 'rgba(37, 99, 235, 0.08)' : 'transparent',
-                  color: isActive ? '#2563EB' : 'var(--text-secondary)',
-                  border: isActive ? '1px solid rgba(37, 99, 235, 0.25)' : '1px solid transparent',
-                  cursor: 'pointer',
-                  fontWeight: isActive ? 600 : 500,
-                  fontSize: '0.85rem',
-                  textAlign: 'left',
-                  transition: 'all 0.15s'
-                }}
+                key={mode.id}
+                data-testid={`nav-${mode.id}`}
+                onClick={() => onSelectTab(mode.id, mode.activeId || undefined)}
+                className={`nav-item ${isActive ? 'active' : ''}`}
+                title={mode.description}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  <Icon size={17} color={isActive ? '#2563EB' : 'var(--text-secondary)'} />
-                  <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                    {item.label}
-                  </span>
-                </div>
-                {item.badge && (
-                  <span style={{
-                    fontSize: '0.65rem',
-                    fontWeight: 700,
-                    padding: '1px 6px',
-                    borderRadius: '4px',
-                    background: '#2563EB',
-                    color: '#FFFFFF'
+                <Icon size={15} color={isActive ? '#3B82F6' : '#94A3B8'} style={{ flexShrink: 0 }} />
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{
+                    fontSize: '12px',
+                    fontWeight: isActive ? 600 : 500,
+                    color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
                   }}>
-                    {item.badge}
+                    {mode.label}
+                  </div>
+                </div>
+                {mode.activeId && (
+                  <span className="stamp" style={{ fontSize: '9px', padding: '1px 4px' }}>
+                    ACTIVE
                   </span>
                 )}
               </button>
@@ -115,110 +120,82 @@ export const Sidebar: React.FC<SidebarProps> = ({
           })}
         </nav>
 
-        {/* Demo & Shortcuts */}
-        <div style={{
-          fontSize: '0.7rem',
-          fontWeight: 600,
-          letterSpacing: '0.05em',
-          color: 'var(--text-muted)',
-          textTransform: 'uppercase',
-          padding: '24px 12px 10px 12px'
-        }}>
-          Demo & Fast Audits
-        </div>
+        {/* Pinned Case File / High-Priority Targets */}
+        <div style={{ marginTop: '16px', borderTop: '1px solid var(--border-subtle)', paddingTop: '10px' }}>
+          <div className="sidebar-section-title">
+            Priority Docket Targets
+          </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <button
-            onClick={() => onSelectTab('flagship')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '9px 12px',
-              borderRadius: 'var(--radius-md)',
-              background: currentTab === 'flagship' ? 'rgba(124, 58, 237, 0.08)' : 'transparent',
-              border: currentTab === 'flagship' ? '1px solid rgba(124, 58, 237, 0.25)' : '1px solid transparent',
-              color: currentTab === 'flagship' ? '#7C3AED' : 'var(--text-secondary)',
-              cursor: 'pointer',
-              fontSize: '0.8rem',
-              fontWeight: 500
-            }}
-          >
-            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Sparkles size={14} color="#7C3AED" />
-              Flagship CASE_0001
-            </span>
-            <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '4px', background: 'rgba(124, 58, 237, 0.1)', color: '#7C3AED', fontWeight: 600 }}>
-              Demo
-            </span>
-          </button>
+          <div style={{ padding: '0 12px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            {/* Flagship Docket */}
+            <button
+              onClick={() => onSelectTab('case', 'CASE_0001')}
+              className="btn btn-sm"
+              style={{
+                width: '100%',
+                justifyContent: 'flex-start',
+                backgroundColor: 'var(--bg-surface-elevated)',
+                borderColor: selectedCaseId === 'CASE_0001' ? 'var(--border-focus)' : 'var(--border-subtle)'
+              }}
+            >
+              <FileSpreadsheet size={12} color="#60A5FA" />
+              <span className="data-id" style={{ fontSize: '11px' }}>CASE_0001</span>
+              <span className="stamp" style={{ fontSize: '9px', marginLeft: 'auto' }}>EXTORTION</span>
+            </button>
 
-          <button
-            onClick={() => onSelectTab('person', 'PERSON_1476')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '8px 12px',
-              borderRadius: 'var(--radius-md)',
-              background: 'transparent',
-              border: 'none',
-              color: 'var(--text-secondary)',
-              cursor: 'pointer',
-              fontSize: '0.8rem',
-              textAlign: 'left'
-            }}
-          >
-            <span>Mastermind: PERSON_1476</span>
-            <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '4px', background: 'var(--role-coordinator-bg)', color: 'var(--role-coordinator)', fontWeight: 600 }}>
-              Coord
-            </span>
-          </button>
+            {/* Target Mastermind */}
+            <button
+              onClick={() => onSelectTab('person', 'PERSON_1476')}
+              className="btn btn-sm btn-alert"
+              data-testid="shortcut-mastermind-1476"
+              style={{ width: '100%', justifyContent: 'flex-start' }}
+            >
+              <AlertCircle size={12} />
+              <span className="data-id" style={{ fontSize: '11px' }}>Mastermind: PERSON_1476</span>
+              <span className="stamp stamp-alert" style={{ fontSize: '9px', marginLeft: 'auto' }}>COORDINATOR</span>
+            </button>
 
-          <button
-            data-testid="shortcut-innocent-0553"
-            aria-label="Innocent Control PERSON_0553"
-            onClick={() => onSelectTab('person', 'PERSON_0553')}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '8px 12px',
-              borderRadius: 'var(--radius-md)',
-              background: 'transparent',
-              border: 'none',
-              color: 'var(--text-secondary)',
-              cursor: 'pointer',
-              fontSize: '0.8rem',
-              textAlign: 'left'
-            }}
-          >
-            <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <ShieldCheck size={14} color="#0D9488" />
-              Innocent: PERSON_0553
-            </span>
-            <span style={{ fontSize: '0.65rem', padding: '1px 6px', borderRadius: '4px', background: 'var(--role-innocent-bg)', color: 'var(--role-innocent)', fontWeight: 600 }}>
-              Civilian
-            </span>
-          </button>
+            {/* Civilian Control */}
+            <button
+              onClick={() => onSelectTab('person', 'PERSON_0553')}
+              className="btn btn-sm"
+              data-testid="shortcut-innocent-0553"
+              style={{ width: '100%', justifyContent: 'flex-start', backgroundColor: 'var(--safe-green-bg)', borderColor: 'var(--safe-green-border)' }}
+            >
+              <ShieldCheck size={12} color="#059669" />
+              <span className="data-id" style={{ fontSize: '11px', color: '#059669' }}>PERSON_0553</span>
+              <span className="stamp stamp-safe" style={{ fontSize: '9px', marginLeft: 'auto' }}>CIVILIAN SAFE</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Footer Info */}
+      {/* Bottom Telemetry & Jurisdiction Badge */}
       <div style={{
-        padding: '16px',
+        padding: '12px 16px',
         borderTop: '1px solid var(--border-subtle)',
-        fontSize: '0.75rem',
-        color: 'var(--text-muted)'
+        backgroundColor: 'var(--bg-toolbar)',
+        fontSize: '11px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px', color: 'var(--text-secondary)' }}>
-          <Info size={13} />
-          Synthetic Intelligence Dataset
+        <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)', marginBottom: '4px' }}>
+          <span>DATABASE GRAPH</span>
+          <span className="font-mono">36,151 NODES</span>
         </div>
-        <div>36,151 nodes • 133,816 edges</div>
-        <div style={{ marginTop: '6px', color: '#059669', fontWeight: 600 }}>Phase 8 Complete • 117 Tests</div>
+        <div style={{ display: 'flex', justifyContent: 'space-between', color: 'var(--text-muted)' }}>
+          <span>EVIDENCE EDGES</span>
+          <span className="font-mono">133,816 EDGES</span>
+        </div>
+        <div style={{
+          marginTop: '8px',
+          paddingTop: '6px',
+          borderTop: '1px dashed var(--border-subtle)',
+          fontSize: '9px',
+          color: 'var(--text-muted)',
+          fontFamily: 'var(--font-mono)'
+        }}>
+          NODE: DEL-HQ-SIT-01 · MHA CCTNS
+        </div>
       </div>
     </aside>
   );
 };
-

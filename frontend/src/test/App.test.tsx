@@ -27,7 +27,16 @@ vi.mock('../api/client', () => ({
 
 // Mock @xyflow/react directly in test file for JSDOM
 vi.mock('@xyflow/react', () => ({
-  ReactFlow: ({ children }: any) => <div data-testid="mock-react-flow">{children}</div>,
+  ReactFlow: ({ children, nodes }: any) => (
+    <div data-testid="mock-react-flow">
+      {nodes?.map((n: any) => (
+        <div key={n.id} data-testid={`rf-node-${n.id}`}>
+          {n.data?.id || n.id} - {n.data?.label} - {n.data?.role}
+        </div>
+      ))}
+      {children}
+    </div>
+  ),
   Background: () => <div data-testid="mock-rf-background" />,
   Controls: () => <div data-testid="mock-rf-controls" />,
   MiniMap: () => <div data-testid="mock-rf-minimap" />,
@@ -36,7 +45,7 @@ vi.mock('@xyflow/react', () => ({
   MarkerType: { ArrowClosed: 'arrowclosed' }
 }));
 
-describe('SIH26189 Frontend Application Test Suite', () => {
+describe('SIH26189 Tactical Workstation Frontend Test Suite', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -171,6 +180,13 @@ describe('SIH26189 Frontend Application Test Suite', () => {
         section: '384 IPC',
         location_id: 'LOCATION_0041'
       },
+      important_persons: {
+        upstream_coordinator: 'PERSON_1476',
+        brokers: ['PERSON_0026', 'PERSON_0397', 'PERSON_0405'],
+        operational_members: ['PERSON_1459'],
+        financial_facilitators: [],
+        operational_chain: ['PERSON_1476', 'PERSON_0026', 'PERSON_0397', 'PERSON_0405', 'PERSON_1459', 'CASE_0001']
+      },
       investigation_narrative: 'Extortion racket targeting local merchants.',
       operational_chain: ['PERSON_1476', 'PERSON_0026', 'PERSON_0397', 'PERSON_0405', 'PERSON_1459', 'CASE_0001'],
       evidence_diversity_score: 7,
@@ -201,7 +217,7 @@ describe('SIH26189 Frontend Application Test Suite', () => {
           name: 'Person 0553',
           city: 'Delhi',
           occupation: 'Merchant',
-          predicted_role: 'PERIPHERAL_ASSOCIATE',
+          predicted_role: 'CIVILIAN',
           confidence: 0.88,
           criminal_significance: false,
           graph_features: {
@@ -306,7 +322,8 @@ describe('SIH26189 Frontend Application Test Suite', () => {
         case: 'CASE_0001',
         score: 4.85,
         confidence: 0.96,
-        evidence_count: 6
+        evidence_count: 6,
+        narrative: 'Layered coordination between remote coordinator and operational member.'
       }
     ]);
 
@@ -366,7 +383,7 @@ describe('SIH26189 Frontend Application Test Suite', () => {
     render(<App />);
 
     // Verify Title & Subtitle
-    expect(await screen.findByText(/Investigation Command Center/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Case Directory & Operational Telemetry/i)).toBeInTheDocument();
 
     // Verify Metric Tiles
     expect(await screen.findByText('1,500')).toBeInTheDocument();
@@ -375,37 +392,26 @@ describe('SIH26189 Frontend Application Test Suite', () => {
     expect(screen.getByText('329')).toBeInTheDocument();
 
     // Verify Flagship Demo Card
-    expect(screen.getByText(/Featured Demo Case/i)).toBeInTheDocument();
+    expect(screen.getByText(/PRIMARY DEMO DOCKET: CASE_0001/i)).toBeInTheDocument();
     expect(screen.getAllByText(/PERSON_1476/i).length).toBeGreaterThan(0);
 
     // Verify Top Influencers Table
     expect(screen.getAllByText('PERSON_1476').length).toBeGreaterThan(0);
-    expect(screen.getByText('COORDINATOR')).toBeInTheDocument();
+    expect(screen.getAllByText('COORDINATOR').length).toBeGreaterThan(0);
   });
 
   it('navigates to Flagship Demo view and displays the 5-hop operational chain', async () => {
     render(<App />);
 
     // Click Flagship Demo button in banner or navbar
-    const flagshipBtn = await screen.findByText(/Featured Demo \(CASE_0001\)/i);
+    const flagshipBtn = await screen.findByText(/Inspect Flagship \(CASE_0001\)/i);
     fireEvent.click(flagshipBtn);
 
-    // Verify Flagship Header
-    expect(await screen.findByText(/CASE_0001: Upstream Coordinator Isolation & Unmasking/i)).toBeInTheDocument();
+    // Verify Case Docket View Header
+    expect(await screen.findByText(/POLICE STATION & JURISDICTION/i)).toBeInTheDocument();
+    expect(screen.getByText(/Recovered Directed Operational Chain/i)).toBeInTheDocument();
 
-    // Verify Coordinator Isolation metric
-    expect(screen.getByText('0 Direct Links')).toBeInTheDocument();
-    expect(screen.getByText(/Not in FIR, No Direct Phone Call to Crime Scene/i)).toBeInTheDocument();
-
-    // Verify 5-Hop Operational Chain Nodes
-    expect(screen.getByText('MASTERMIND')).toBeInTheDocument();
-    expect(screen.getByText('HOP 1')).toBeInTheDocument();
-    expect(screen.getByText('HOP 2')).toBeInTheDocument();
-    expect(screen.getByText('HOP 3')).toBeInTheDocument();
-    expect(screen.getByText('HOP 4')).toBeInTheDocument();
-    expect(screen.getByText('OFFENSE')).toBeInTheDocument();
-
-    // Verify recovered actors in the chain
+    // Verify Recovered Chain Entities
     expect(screen.getAllByText('PERSON_1476').length).toBeGreaterThan(0);
     expect(screen.getByText('PERSON_0026')).toBeInTheDocument();
     expect(screen.getByText('PERSON_0397')).toBeInTheDocument();
@@ -421,87 +427,75 @@ describe('SIH26189 Frontend Application Test Suite', () => {
     fireEvent.click(innocentBtn);
 
     // Verify Verified Non-Criminal Badges
-    expect((await screen.findAllByText(/Verified Non-Criminal/i)).length).toBeGreaterThan(0);
-    expect(screen.getByText(/Innocent Control Protection Audit:/i)).toBeInTheDocument();
-    expect(screen.getByText(/High degree driven entirely by benign commercial calls/i)).toBeInTheDocument();
+    expect((await screen.findAllByText(/VERIFIED NON-CRIMINAL/i)).length).toBeGreaterThan(0);
+    expect(screen.getByText(/False-Positive Protection Audit/i)).toBeInTheDocument();
+    expect(screen.getByText(/benign civilian contact/i)).toBeInTheDocument();
   });
 
   it('navigates to Case Investigation page for CASE_0001', async () => {
     render(<App />);
 
     // Navigate to Cases tab
-    const casesNavBtn = await screen.findByText('Case Investigations');
+    const casesNavBtn = await screen.findByTestId('nav-case');
     fireEvent.click(casesNavBtn);
 
-    // Select CASE_0001
-    const caseSelectBtns = await screen.findAllByText('CASE_0001');
-    fireEvent.click(caseSelectBtns[0]);
-
-    // Verify Case file header
-    expect(await screen.findByText(/Criminal Case File: CASE_0001/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/Extortion/i).length).toBeGreaterThan(0);
-    expect(screen.getByText(/FIR_0001/i)).toBeInTheDocument();
+    // Verify Case Docket Loaded
+    expect(await screen.findByText(/FIR: FIR_0001/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/EXTORTION/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/384 IPC/i)).toBeInTheDocument();
   });
 
   it('navigates to Behavioral Findings page and applies filters', async () => {
     render(<App />);
 
     // Navigate to Findings tab
-    const findingsNavBtn = await screen.findByText('Behavioral Findings');
+    const findingsNavBtn = await screen.findByTestId('nav-timeline');
     fireEvent.click(findingsNavBtn);
 
     // Verify Findings page header
-    expect(await screen.findByText(/Suspicious Behavioral Pattern Detections/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Timeline Sequence & Behavioral Pattern Detection/i)).toBeInTheDocument();
 
-    // Check filter button
-    const filterBtn = screen.getByText('Filter Findings');
-    fireEvent.click(filterBtn);
-
-    // Verify table has finding
+    // Verify findings table has finding
     expect(await screen.findByText('FINDING_0001')).toBeInTheDocument();
-    expect(screen.getByText('layered_financial_call_chain')).toBeInTheDocument();
+    expect(screen.getByText(/LAYERED FINANCIAL CALL CHAIN/i)).toBeInTheDocument();
   });
 
-  it('inspects finding detail in modal dialog', async () => {
+  it('navigates to Network Graph view and displays topology nodes', async () => {
     render(<App />);
 
-    // Navigate to Findings tab
-    const findingsNavBtn = await screen.findByText('Behavioral Findings');
-    fireEvent.click(findingsNavBtn);
+    // Navigate to Graph tab
+    const graphNavBtn = await screen.findByTestId('nav-graph');
+    fireEvent.click(graphNavBtn);
 
-    // Find and click Inspect button
-    const inspectBtn = await screen.findByText('Inspect');
-    fireEvent.click(inspectBtn);
+    // Verify Coordinator Isolation Badge
+    expect(await screen.findByText(/COORDINATOR ISOLATION VERIFIED/i)).toBeInTheDocument();
+    expect(screen.getByText(/0 direct crime-scene edges/i)).toBeInTheDocument();
 
-    // Verify Modal appears
-    expect(await screen.findByText(/Finding Detail: FINDING_0001/i)).toBeInTheDocument();
-    expect(screen.getByText(/Layered coordination between remote coordinator/i)).toBeInTheDocument();
-
-    // Close modal
-    const closeBtn = screen.getByText('Close Inspector');
-    fireEvent.click(closeBtn);
+    // Verify Nodes in topology
+    expect(screen.getAllByText(/PERSON_1476/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/PERSON_1459/i).length).toBeGreaterThan(0);
   });
 
   it('navigates to Cross-Case Linkages page and evaluates criminal vs incidental overlaps', async () => {
     render(<App />);
 
     // Navigate to Cross-Case tab
-    const crossCaseNavBtn = await screen.findByText('Cross-Case Linkages');
+    const crossCaseNavBtn = await screen.findByTestId('nav-cross-case');
     fireEvent.click(crossCaseNavBtn);
 
     // Verify Header
-    expect(await screen.findByText(/Multi-Jurisdictional Cross-Case Linkage Analysis/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Cross-Case Syndicate Coordination vs. Incidental Overlap/i)).toBeInTheDocument();
 
     // Verify initial syndicate NET_001 evaluation
-    expect(await screen.findByText(/Strong Criminal Syndicate Recurrence/i)).toBeInTheDocument();
-    expect(screen.getByText(/3 Connected Cases/i)).toBeInTheDocument();
+    expect(await screen.findByText(/VERIFIED CRIMINAL COORDINATION/i)).toBeInTheDocument();
+    expect(screen.getByText(/ORGANIZED CRIME/i)).toBeInTheDocument();
 
     // Click incidental preset
-    const incidentalPreset = screen.getByText(/Delhi Location 0011/i);
+    const incidentalPreset = screen.getByText(/LOCATION_0011 \(Civilian Overlap\)/i);
     fireEvent.click(incidentalPreset);
 
     // Verify incidental badge appears
-    expect(await screen.findByText(/Incidental Civilian \/ Geographic Overlap/i)).toBeInTheDocument();
+    expect(await screen.findByText(/SUPPRESSED BENIGN/i)).toBeInTheDocument();
   });
 
   it('performs global search and navigates to entered person dossier', async () => {
@@ -514,7 +508,8 @@ describe('SIH26189 Frontend Application Test Suite', () => {
     fireEvent.submit(searchInput.closest('form')!);
 
     // Verify Person Dossier loaded
-    expect(await screen.findByText(/1-Hop Local Network Topology/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Forensic Evidence Traceability & Rationale/i)).toBeInTheDocument();
+    expect(screen.getByText(/Dual-Channel Inference:/i)).toBeInTheDocument();
   });
 
   it('displays an error banner when API is unreachable', async () => {
@@ -523,63 +518,48 @@ describe('SIH26189 Frontend Application Test Suite', () => {
     render(<App />);
 
     // Verify Error Banner
-    expect(await screen.findByText(/Backend API Connection Error:/i)).toBeInTheDocument();
-    expect(screen.getByText(/Ensure Uvicorn is running/i)).toBeInTheDocument();
+    expect(await screen.findByText(/SYSTEM ERROR:/i)).toBeInTheDocument();
+    expect(screen.getByText(/Network Connection Refused/i)).toBeInTheDocument();
   });
 
-  it('moves investigated PERSON_0432 from Pending list to Recent Investigations without deleting backend entity', async () => {
+  it('navigates to Persons Directory and opens a suspect file', async () => {
     render(<App />);
 
     // 1. Navigate to Persons tab
-    const personsBtn = await screen.findByText('Persons & Influencers');
+    const personsBtn = await screen.findByTestId('nav-person');
     fireEvent.click(personsBtn);
 
-    // Verify PERSON_0432 is in pending list initially
-    expect(await screen.findByText('PERSON_0432')).toBeInTheDocument();
+    // Verify Directory loaded with profiles
+    expect(await screen.findByText(/PERSON_0432/i)).toBeInTheDocument();
 
-    // 2. Click Investigate on PERSON_0432 row
+    // 2. Click Open Dossier on PERSON_0432 row
     const personCell = screen.getByText('PERSON_0432');
     const personRow = personCell.closest('tr')!;
-    const investigateBtn = personRow.querySelector('button')!;
-    fireEvent.click(investigateBtn);
+    const openDossierBtn = personRow.querySelector('button')!;
+    fireEvent.click(openDossierBtn);
 
-    // 3. Return to Persons Directory by clicking breadcrumb
-    const navBtn = await screen.findByText('Persons');
-    fireEvent.click(navBtn);
-
-    // Verify PERSON_0432 appears under Recent Person Investigations
-    expect(await screen.findByText(/Recent Person Investigations/i)).toBeInTheDocument();
+    // 3. Verify Dossier loaded for PERSON_0432
+    expect(await screen.findByText(/Forensic Evidence Traceability & Rationale/i)).toBeInTheDocument();
   });
 
-  it('moves investigated CASE_0025 from Pending list to Recent Case Investigations', async () => {
+  it('navigates to Case Dossier Export view with print readiness', async () => {
     render(<App />);
 
-    // 1. Navigate to Cases tab
-    const casesBtn = await screen.findByText('Case Investigations');
-    fireEvent.click(casesBtn);
+    // Navigate to Dossier export tab
+    const dossierBtn = await screen.findByTestId('nav-dossier');
+    fireEvent.click(dossierBtn);
 
-    // Verify CASE_0025 is in pending list
-    expect(await screen.findByText('CASE_0025')).toBeInTheDocument();
-
-    // 2. Click Investigate on CASE_0025 row
-    const caseCell = screen.getByText('CASE_0025');
-    const caseRow = caseCell.closest('tr')!;
-    const investigateBtn = caseRow.querySelector('button')!;
-    fireEvent.click(investigateBtn);
-
-    // 3. Return to Cases Directory by clicking breadcrumb
-    const navBtn = await screen.findByText('Cases');
-    fireEvent.click(navBtn);
-
-    // Verify CASE_0025 appears under Recent Case Investigations
-    expect(await screen.findByText(/Recent Case Investigations/i)).toBeInTheDocument();
+    // Verify Official Dossier Document Header
+    expect(await screen.findByText(/CONFIDENTIAL DOSSIER/i)).toBeInTheDocument();
+    expect(screen.getByText(/Print Official Dossier/i)).toBeInTheDocument();
+    expect(screen.getByText(/SUPERVISING INVESTIGATION OFFICER \(SIT-TASKFORCE\)/i)).toBeInTheDocument();
   });
 
   it('renders AI Role Intelligence card and Explainability outputs on Person Investigation page', async () => {
     render(<App />);
 
-    // Navigate to Person Investigation for PERSON_1476
-    const personShortcut = await screen.findByText(/Mastermind: PERSON_1476/i);
+    // Navigate to Person Investigation for PERSON_1476 via sidebar shortcut
+    const personShortcut = await screen.findByTestId('shortcut-mastermind-1476');
     fireEvent.click(personShortcut);
 
     // Verify AI Role Intelligence card header & agreement badge

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { ShieldAlert, Sparkles } from 'lucide-react';
+import { Shield, Radio, FileText } from 'lucide-react';
 import { GlobalSearch } from './GlobalSearch';
 import { apiClient } from '../api/client';
 
 interface NavbarProps {
-  onNavigate: (type: 'dashboard' | 'flagship' | 'person' | 'case' | 'network' | 'findings' | 'cross-case' | string, id?: string) => void;
+  onNavigate: (type: 'dashboard' | 'flagship' | 'person' | 'case' | 'network' | 'findings' | 'cross-case' | 'dossier' | string, id?: string) => void;
+  activeCaseId?: string | null;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onNavigate, activeCaseId = 'CASE_0001' }) => {
   const [isOnline, setIsOnline] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -17,91 +18,101 @@ export const Navbar: React.FC<NavbarProps> = ({ onNavigate }) => {
   }, []);
 
   return (
-    <header style={{
-      height: '64px',
-      background: 'var(--bg-sidebar)',
-      borderBottom: '1px solid var(--border-subtle)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 24px',
-      position: 'sticky',
-      top: 0,
-      zIndex: 30,
-      boxShadow: 'var(--shadow-sm)'
-    }}>
-      {/* Brand */}
-      <div
-        onClick={() => onNavigate('dashboard')}
-        style={{ display: 'flex', alignItems: 'center', gap: '12px', cursor: 'pointer' }}
-      >
-        <div style={{
-          width: '36px',
-          height: '36px',
-          background: 'linear-gradient(135deg, #2563EB, #7C3AED)',
-          borderRadius: 'var(--radius-md)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: 'var(--shadow-sm)'
-        }}>
-          <ShieldAlert size={20} color="#FFFFFF" />
-        </div>
-        <div>
-          <div style={{ fontWeight: 700, fontSize: '0.95rem', letterSpacing: '-0.01em', color: 'var(--text-primary)' }}>
-            SIH26189 <span style={{ color: '#2563EB', fontWeight: 600, fontSize: '0.8rem' }}>COMMAND CENTER</span>
-          </div>
-          <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-            AI-Powered Criminal Network Analysis System
-          </div>
-        </div>
+    <>
+      {/* Top Classification Banner */}
+      <div className="classification-banner">
+        <span>RESTRICTED // FOR OFFICIAL USE ONLY</span>
+        <span>MHA CRIME ANALYSIS GRID // CCTNS INTEGRATED</span>
+        <span className="classification-tag">CONFIDENTIAL LAW ENFORCEMENT SENSITIVE</span>
       </div>
 
-      {/* Global Search Bar */}
-      <GlobalSearch onNavigate={(type, id) => onNavigate(type, id)} />
-
-      {/* Flagship Fast Action & Health Status */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-        <button
-          onClick={() => onNavigate('flagship')}
-          className="btn btn-secondary btn-sm"
-          style={{
-            background: 'rgba(124, 58, 237, 0.08)',
-            borderColor: 'rgba(124, 58, 237, 0.25)',
-            color: '#7C3AED',
-            fontWeight: 600,
+      {/* Primary Workstation Chrome Header */}
+      <header className="workstation-header">
+        {/* System Identity */}
+        <div
+          onClick={() => onNavigate('dashboard')}
+          className="system-brand"
+          style={{ cursor: 'pointer' }}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter') onNavigate('dashboard'); }}
+        >
+          <div style={{
+            width: '28px',
+            height: '28px',
+            backgroundColor: 'var(--bg-surface-elevated)',
+            border: '1px solid var(--border-strong)',
+            borderRadius: 'var(--radius-sm)',
             display: 'flex',
             alignItems: 'center',
-            gap: '6px'
-          }}
-        >
-          <Sparkles size={13} color="#7C3AED" />
-          Flagship Demo: CASE_0001
-        </button>
-
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '7px',
-          padding: '4px 10px',
-          background: 'var(--bg-panel)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 'var(--radius-full)',
-          fontSize: '0.75rem'
-        }}>
-          <span style={{
-            width: '8px',
-            height: '8px',
-            borderRadius: '50%',
-            backgroundColor: isOnline === true ? '#059669' : isOnline === false ? '#DC2626' : '#D97706',
-            boxShadow: isOnline === true ? '0 0 6px rgba(5, 150, 105, 0.4)' : 'none'
-          }} />
-          <span style={{ color: isOnline === true ? '#059669' : isOnline === false ? '#DC2626' : 'var(--text-muted)', fontWeight: 500 }}>
-            {isOnline === true ? 'API Live (8000)' : isOnline === false ? 'API Offline' : 'Connecting...'}
-          </span>
+            justifyContent: 'center'
+          }}>
+            <Shield size={16} color="#1E40AF" />
+          </div>
+          <div>
+            <div className="system-title">
+              CRIMINAL NETWORK ANALYSIS SYSTEM
+            </div>
+            <div className="system-subtitle">
+              NATIONAL INTELLIGENCE & INVESTIGATION WORKSTATION
+            </div>
+          </div>
         </div>
-      </div>
-    </header>
+
+        {/* Active Docket Context */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span style={{ fontSize: '10px', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: 600 }}>
+            Active Docket:
+          </span>
+          <button
+            onClick={() => onNavigate('case', activeCaseId || 'CASE_0001')}
+            className="stamp stamp-accent"
+            style={{ cursor: 'pointer' }}
+            title="Open active case investigation"
+          >
+            {activeCaseId || 'CASE_0001'} (FLAGSHIP)
+          </button>
+        </div>
+
+        {/* Global Search Bar */}
+        <div style={{ flex: '1 1 360px', maxWidth: '440px' }}>
+          <GlobalSearch onNavigate={(type, id) => onNavigate(type, id)} />
+        </div>
+
+        {/* Operator Context & Engine Telemetry */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          {/* Quick Case Dossier Export Button */}
+          <button
+            onClick={() => onNavigate('dossier', activeCaseId || 'CASE_0001')}
+            className="btn btn-sm"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            title="Export official printable case dossier"
+          >
+            <FileText size={12} />
+            Export Case File
+          </button>
+
+          {/* Institutional Multi-Officer Taskforce Identity (No individual person name) */}
+          <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
+              TASKFORCE // JOINT SIT CELL
+            </span>
+            <span style={{ fontSize: '9px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              TERMINAL: MHA-SIT-HQ · CLEARANCE: L3
+            </span>
+          </div>
+
+          {/* Engine Status Stamp */}
+          <div
+            className={`stamp ${isOnline ? 'stamp-safe' : 'stamp-alert'}`}
+            style={{ padding: '3px 8px' }}
+            title={isOnline ? 'FastAPI Engine Connected on Port 8000' : 'Backend Engine Offline'}
+          >
+            <Radio size={10} />
+            <span>{isOnline ? 'API LIVE' : 'API DISCONNECTED'}</span>
+          </div>
+        </div>
+      </header>
+    </>
   );
 };
-
